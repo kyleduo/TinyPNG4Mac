@@ -151,8 +151,8 @@
                                 <rect key="frame" x="8" y="8" width="200" height="84"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0jP-SA-wtB">
-                                        <rect key="frame" x="10" y="47" width="80" height="17"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Resuce size:" id="076-Wf-yL9">
+                                        <rect key="frame" x="10" y="47" width="81" height="17"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Reduce size:" id="076-Wf-yL9">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -175,7 +175,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ChT-cA-M9x">
-                                        <rect key="frame" x="90" y="47" width="98" height="17"/>
+                                        <rect key="frame" x="91" y="47" width="97" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="0KB" id="zGa-wu-t8Z">
                                             <font key="font" metaFont="systemBold"/>
                                             <color key="textColor" red="0.95841346153846152" green="0.20195189327713772" blue="0.10032788172374871" alpha="0.84999999999999998" colorSpace="calibratedRGB"/>

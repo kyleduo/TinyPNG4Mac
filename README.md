@@ -12,7 +12,7 @@ This is a client of TinyPNG for Mac, with which you can compress pngs without op
 
 ### Download
 
-\>\>\>\>\>\>[app](./archive/tinypng.app.zip)\<\<\<\<\<\<
+\>\>\>\>\>\>[app](./archive/tinypng)\<\<\<\<\<\<
 
 Check "Anywhere" if you can not open this app. Just for the first time, and I suggest you uncheck it after you open this app for security.
 

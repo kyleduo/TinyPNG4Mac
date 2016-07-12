@@ -31,12 +31,10 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			apiKey.stringValue = savedKey
 			TPClient.sApiKey = savedKey
 			keySaved = true
-			apiKey.editable = savedKey == ""
 		}
 		if let savedPath = TPConfig.savedPath() {
 			outputPathField.stringValue = savedPath
 			TPClient.sOutputPath = savedPath
-			outputPathField.editable = false
 		}
 		
 		

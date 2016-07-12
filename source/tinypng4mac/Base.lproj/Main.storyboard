@@ -249,7 +249,7 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="box" id="X7r-Gl-0hN"/>
                             </imageView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
-                                <rect key="frame" x="99" y="185" width="123" height="18"/>
+                                <rect key="frame" x="99" y="180" width="123" height="18"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drag .PNGs here!" id="cXq-XC-8Ss">
                                     <font key="font" metaFont="systemBold" size="14"/>
                                     <color key="textColor" name="highlightColor" catalog="System" colorSpace="catalog"/>
@@ -427,7 +427,7 @@
                             <constraint firstItem="Bi0-RR-5fH" firstAttribute="leading" secondItem="dGm-CK-56C" secondAttribute="leading" id="c0t-Xq-sxC"/>
                             <constraint firstItem="FK5-1A-UoS" firstAttribute="leading" secondItem="dGm-CK-56C" secondAttribute="leading" id="e0f-8i-Ba0"/>
                             <constraint firstItem="Fq4-Bl-UgO" firstAttribute="centerY" secondItem="F5f-sg-JvA" secondAttribute="centerY" constant="-14" id="eMH-dJ-iqX"/>
-                            <constraint firstItem="IX1-JP-bbZ" firstAttribute="top" secondItem="Fq4-Bl-UgO" secondAttribute="bottom" constant="7" id="jIT-eI-dZM"/>
+                            <constraint firstItem="IX1-JP-bbZ" firstAttribute="top" secondItem="Fq4-Bl-UgO" secondAttribute="bottom" constant="12" id="jIT-eI-dZM"/>
                             <constraint firstItem="fcw-HM-Ub9" firstAttribute="centerX" secondItem="dGm-CK-56C" secondAttribute="centerX" id="l3c-D6-25Q"/>
                             <constraint firstItem="Bi0-RR-5fH" firstAttribute="top" secondItem="dGm-CK-56C" secondAttribute="top" constant="24" id="lQ3-Cs-awE"/>
                             <constraint firstAttribute="trailing" secondItem="FK5-1A-UoS" secondAttribute="trailing" id="lk1-0n-0MO"/>

@@ -21,3 +21,11 @@
 "Later" = "稍后";
 
 "Register" = "注册";
+
+"Initialed" = "初始化";
+"Prepared" = "准备中";
+"Uploading" = "上传中";
+"Processing" = "处理中";
+"Downloading" = "下载中";
+"Finish" = "完成";
+"ERROR" = "错误";

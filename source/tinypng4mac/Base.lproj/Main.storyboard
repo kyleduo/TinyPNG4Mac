@@ -248,7 +248,7 @@
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="box" id="X7r-Gl-0hN"/>
                             </imageView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
                                 <rect key="frame" x="99" y="180" width="123" height="18"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drag .PNGs here!" id="cXq-XC-8Ss">
                                     <font key="font" metaFont="systemBold" size="14"/>

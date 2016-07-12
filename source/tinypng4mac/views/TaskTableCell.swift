@@ -27,25 +27,25 @@ class TaskTableCell: NSTableCellView {
 			var progress = 0
 			switch taskStatus {
 				case .INITIAL:
-					statusText = "initialed"
+					statusText = NSLocalizedString("Initialed", comment: "Initialed")
 					progress = 1
 				case .PREPARE:
-					statusText = "Prepared"
+					statusText = NSLocalizedString("Prepared", comment: "Prepared")
 					progress = 2
 				case .UPLOADING:
-					statusText = "Uploading"
+					statusText = NSLocalizedString("Uploading", comment: "Uploading")
 					progress = 3
 				case .PROCESSING:
-					statusText = "Processing"
+					statusText = NSLocalizedString("Processing", comment: "Processing")
 					progress = 4
 				case .DOWNLOADING:
-					statusText = "Downloading"
+					statusText = NSLocalizedString("Downloading", comment: "Downloading")
 					progress = 5
 				case .FINISH:
-					statusText = "Finish"
+					statusText = NSLocalizedString("Finish", comment: "Finish")
 					progress = 6
 				case .ERROR:
-					statusText = "ERROR"
+					statusText = NSLocalizedString("ERROR", comment: "ERROR")
 			}
 			
 			if taskStatus == .FINISH {

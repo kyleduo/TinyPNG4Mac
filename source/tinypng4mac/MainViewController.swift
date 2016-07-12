@@ -129,6 +129,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	@objc func resetConfiguration(notification: NSNotification) {
 		TPClient.sApiKey = ""
 		apiKey.stringValue = ""
+		apiKey.editable = true
 		keySaved = false
 		changePanel(true, animated: true)
 	}
@@ -227,6 +228,9 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 				if newKey != TPClient.sApiKey {
 					print("newKey: " + newKey)
 					saveApiKey(newKey)
+					if TPClient.sOutputPath != "" {
+						self.changePanel(false, animated: true)
+					}
 				}
 			}
 		} else if obj.object === self.outputPathField {

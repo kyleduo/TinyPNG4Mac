@@ -21,3 +21,11 @@
 "Later" = "Later";
 
 "Register" = "Register";
+
+"Initialed" = "Initialed";
+"Prepared" = "Prepared";
+"Uploading" = "Uploading";
+"Processing" = "Processing";
+"Downloading" = "Downloading";
+"Finish" = "Finish";
+"ERROR" = "ERROR";

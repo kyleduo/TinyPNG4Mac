@@ -192,7 +192,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		var tasks = [TPTaskInfo]()
 		let manager = NSFileManager.defaultManager()
 		for file in files {
-			let attributes = try? manager.attributesOfItemAtPath(file.path!) //结果为AnyObject类型
+			let attributes = try? manager.attributesOfItemAtPath(file.path!)
 			let size = attributes![NSFileSize]!
 			let task = TPTaskInfo(originFile: file, fileName:file.lastPathComponent!, originSize: size.doubleValue!)
 			tasks.append(task)

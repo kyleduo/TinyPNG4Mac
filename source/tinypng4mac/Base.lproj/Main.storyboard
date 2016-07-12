@@ -241,13 +241,21 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="drop_background" id="RMy-ld-N0b"/>
                             </imageView>
                             <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Fq4-Bl-UgO">
-                                <rect key="frame" x="116" y="196" width="88" height="88"/>
+                                <rect key="frame" x="116" y="210" width="88" height="88"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="88" id="UhP-4F-EhG"/>
                                     <constraint firstAttribute="width" constant="88" id="dff-jF-VA1"/>
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="box" id="X7r-Gl-0hN"/>
                             </imageView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
+                                <rect key="frame" x="99" y="185" width="123" height="18"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drag .PNGs here!" id="cXq-XC-8Ss">
+                                    <font key="font" metaFont="systemBold" size="14"/>
+                                    <color key="textColor" name="highlightColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                            </textField>
                             <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FK5-1A-UoS" customClass="DragContainer" customModule="TinyPNG4Mac" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="80" width="320" height="320"/>
                                 <subviews>
@@ -406,6 +414,7 @@
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="F5f-sg-JvA" secondAttribute="trailing" id="1BR-i3-LH4"/>
                             <constraint firstItem="F5f-sg-JvA" firstAttribute="top" secondItem="dGm-CK-56C" secondAttribute="top" id="2PL-Av-0eh"/>
+                            <constraint firstItem="IX1-JP-bbZ" firstAttribute="centerX" secondItem="Fq4-Bl-UgO" secondAttribute="centerX" id="7G2-ar-TJN"/>
                             <constraint firstItem="Fq4-Bl-UgO" firstAttribute="centerX" secondItem="F5f-sg-JvA" secondAttribute="centerX" id="C3f-fB-vCU"/>
                             <constraint firstItem="6R4-nY-g9G" firstAttribute="leading" secondItem="dGm-CK-56C" secondAttribute="leading" id="CTf-8P-o1Y"/>
                             <constraint firstItem="fcw-HM-Ub9" firstAttribute="top" secondItem="dGm-CK-56C" secondAttribute="top" constant="4" id="Em6-ra-awU"/>
@@ -417,7 +426,8 @@
                             <constraint firstAttribute="trailing" secondItem="Bi0-RR-5fH" secondAttribute="trailing" id="YqG-vA-TrE"/>
                             <constraint firstItem="Bi0-RR-5fH" firstAttribute="leading" secondItem="dGm-CK-56C" secondAttribute="leading" id="c0t-Xq-sxC"/>
                             <constraint firstItem="FK5-1A-UoS" firstAttribute="leading" secondItem="dGm-CK-56C" secondAttribute="leading" id="e0f-8i-Ba0"/>
-                            <constraint firstItem="Fq4-Bl-UgO" firstAttribute="centerY" secondItem="F5f-sg-JvA" secondAttribute="centerY" id="eMH-dJ-iqX"/>
+                            <constraint firstItem="Fq4-Bl-UgO" firstAttribute="centerY" secondItem="F5f-sg-JvA" secondAttribute="centerY" constant="-14" id="eMH-dJ-iqX"/>
+                            <constraint firstItem="IX1-JP-bbZ" firstAttribute="top" secondItem="Fq4-Bl-UgO" secondAttribute="bottom" constant="7" id="jIT-eI-dZM"/>
                             <constraint firstItem="fcw-HM-Ub9" firstAttribute="centerX" secondItem="dGm-CK-56C" secondAttribute="centerX" id="l3c-D6-25Q"/>
                             <constraint firstItem="Bi0-RR-5fH" firstAttribute="top" secondItem="dGm-CK-56C" secondAttribute="top" constant="24" id="lQ3-Cs-awE"/>
                             <constraint firstAttribute="trailing" secondItem="FK5-1A-UoS" secondAttribute="trailing" id="lk1-0n-0MO"/>

@@ -47,4 +47,24 @@ class TPStore {
 	func count() -> Int {
 		return tasks.count
 	}
+	
+	func moveToLast(task: TPTaskInfo) {
+		let index = indexOf(task);
+		let t = tasks.removeAtIndex(index)
+		self.tasks.append(t)
+		print(self.tasks)
+	}
+	
+	func sort() {
+		tasks.sortInPlace { (first, second) -> Bool in
+			let fi = indexOf(first)
+			let si = indexOf(second)
+			if first.status == .ERROR && second.status != .ERROR {
+				return true
+			} else if first.status != .FINISH && second.status == .FINISH {
+				return true
+			}
+			return fi < si
+		}
+	}
 }

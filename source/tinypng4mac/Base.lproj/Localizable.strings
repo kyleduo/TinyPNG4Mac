@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  tinypng4mac
+
+  Created by kyle on 16/7/12.
+  Copyright © 2016年 kyleduo. All rights reserved.
+ */
+
+"Images will put in there after compress." = "Images will put in there after compress.";
+
+"Select output path." = "Select output path.";
+
+"0 tasks" = "0 tasks";
+
+"tasks desc" = "%d task(s) saved %@ (%@)";
+
+"Input developer API Key. If you do not have, click register button." = "Input developer API Key. If you do not have, click register button.";
+
+"Save" = "Save";
+
+"Later" = "Later";
+
+"Register" = "Register";

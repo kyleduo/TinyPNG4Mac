@@ -1,0 +1,9 @@
+/* 
+  Localizable.strings
+  tinypng4mac
+
+  Created by kyle on 16/7/12.
+  Copyright © 2016年 kyleduo. All rights reserved.
+ */
+
+SSS = "图片将保存在选择的文件夹内";

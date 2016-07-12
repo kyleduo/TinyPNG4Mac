@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		272C50A01D2D545300EEECC2 /* SpinnerProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */; };
+		272C50AD1D2EB03100EEECC2 /* InputKeyAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */; };
 		277AAF531D23F24900788F37 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF521D23F24900788F37 /* AppDelegate.swift */; };
-		277AAF551D23F24900788F37 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF541D23F24900788F37 /* ViewController.swift */; };
 		277AAF571D23F24900788F37 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 277AAF561D23F24900788F37 /* Assets.xcassets */; };
 		277AAF5A1D23F24900788F37 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 277AAF581D23F24900788F37 /* Main.storyboard */; };
 		277AAF621D250DD100788F37 /* DragContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF611D250DD100788F37 /* DragContainer.swift */; };
@@ -18,27 +19,36 @@
 		277AAF6C1D25517E00788F37 /* TPStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF6B1D25517E00788F37 /* TPStore.swift */; };
 		277AAF711D26478A00788F37 /* TaskTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF701D26478A00788F37 /* TaskTableCell.swift */; };
 		277AAF741D267CF700788F37 /* Formator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF731D267CF700788F37 /* Formator.swift */; };
-		277AAF761D2698B600788F37 /* KeyStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF751D2698B600788F37 /* KeyStore.swift */; };
+		277AAF761D2698B600788F37 /* TPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF751D2698B600788F37 /* TPConfig.swift */; };
 		277AAF781D269D7C00788F37 /* IOHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF771D269D7C00788F37 /* IOHelper.swift */; };
+		27A949C81D2C00120043DECE /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949C71D2C00120043DECE /* MainWindowController.swift */; };
+		27A949CB1D2C02BA0043DECE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949CA1D2C02BA0043DECE /* MainViewController.swift */; };
+		27C12A171D35411800F0FD81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 27C12A151D35411800F0FD81 /* Localizable.strings */; };
 		D429C4171C6CB7F6DA876C02 /* Pods_tinypng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE08103B66B036F5C6097433 /* Pods_tinypng.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		277AAF4F1D23F24900788F37 /* tinypng.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tinypng.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerProgressIndicator.swift; sourceTree = "<group>"; };
+		272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputKeyAlert.swift; sourceTree = "<group>"; };
+		277AAF4F1D23F24900788F37 /* TinyPNG4Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyPNG4Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		277AAF521D23F24900788F37 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		277AAF541D23F24900788F37 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		277AAF561D23F24900788F37 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		277AAF591D23F24900788F37 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		277AAF5B1D23F24900788F37 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		277AAF611D250DD100788F37 /* DragContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DragContainer.swift; sourceTree = "<group>"; };
-		277AAF631D25201900788F37 /* TPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TPClient.swift; path = ../TPClient.swift; sourceTree = "<group>"; };
+		277AAF631D25201900788F37 /* TPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TPClient.swift; sourceTree = "<group>"; };
 		277AAF661D254C0700788F37 /* TPQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TPQueue.swift; sourceTree = "<group>"; };
 		277AAF691D254D4F00788F37 /* TPTaskInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TPTaskInfo.swift; sourceTree = "<group>"; };
 		277AAF6B1D25517E00788F37 /* TPStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TPStore.swift; sourceTree = "<group>"; };
 		277AAF701D26478A00788F37 /* TaskTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TaskTableCell.swift; sourceTree = "<group>"; };
 		277AAF731D267CF700788F37 /* Formator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Formator.swift; sourceTree = "<group>"; };
-		277AAF751D2698B600788F37 /* KeyStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyStore.swift; sourceTree = "<group>"; };
+		277AAF751D2698B600788F37 /* TPConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TPConfig.swift; sourceTree = "<group>"; };
 		277AAF771D269D7C00788F37 /* IOHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IOHelper.swift; sourceTree = "<group>"; };
+		27A949C71D2C00120043DECE /* MainWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainWindowController.swift; sourceTree = "<group>"; };
+		27A949CA1D2C02BA0043DECE /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		27A949CC1D2C07290043DECE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		27C12A191D35414500F0FD81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		27C12A1A1D3541DA00F0FD81 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		5F660CC1598251522D1D4B00 /* Pods-tinypng.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tinypng.debug.xcconfig"; path = "Pods/Target Support Files/Pods-tinypng/Pods-tinypng.debug.xcconfig"; sourceTree = "<group>"; };
 		728F9E91892F38D06FEFCA93 /* Pods-tinypng.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tinypng.release.xcconfig"; path = "Pods/Target Support Files/Pods-tinypng/Pods-tinypng.release.xcconfig"; sourceTree = "<group>"; };
 		BE08103B66B036F5C6097433 /* Pods_tinypng.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tinypng.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,7 +88,7 @@
 		277AAF501D23F24900788F37 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				277AAF4F1D23F24900788F37 /* tinypng.app */,
+				277AAF4F1D23F24900788F37 /* TinyPNG4Mac.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -91,10 +101,12 @@
 				277AAF681D254D2E00788F37 /* model */,
 				277AAF651D254BD600788F37 /* tpclient */,
 				277AAF521D23F24900788F37 /* AppDelegate.swift */,
-				277AAF541D23F24900788F37 /* ViewController.swift */,
 				277AAF561D23F24900788F37 /* Assets.xcassets */,
 				277AAF581D23F24900788F37 /* Main.storyboard */,
 				277AAF5B1D23F24900788F37 /* Info.plist */,
+				27A949C71D2C00120043DECE /* MainWindowController.swift */,
+				27A949CA1D2C02BA0043DECE /* MainViewController.swift */,
+				27C12A151D35411800F0FD81 /* Localizable.strings */,
 			);
 			path = tinypng4mac;
 			sourceTree = "<group>";
@@ -122,18 +134,20 @@
 			children = (
 				277AAF701D26478A00788F37 /* TaskTableCell.swift */,
 				277AAF611D250DD100788F37 /* DragContainer.swift */,
+				272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */,
+				272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */,
 			);
-			name = views;
+			path = views;
 			sourceTree = "<group>";
 		};
 		277AAF721D267CEC00788F37 /* utils */ = {
 			isa = PBXGroup;
 			children = (
 				277AAF731D267CF700788F37 /* Formator.swift */,
-				277AAF751D2698B600788F37 /* KeyStore.swift */,
+				277AAF751D2698B600788F37 /* TPConfig.swift */,
 				277AAF771D269D7C00788F37 /* IOHelper.swift */,
 			);
-			name = utils;
+			path = utils;
 			sourceTree = "<group>";
 		};
 		99559CB4A0420EDCE9264015 /* Frameworks */ = {
@@ -147,9 +161,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		277AAF4E1D23F24900788F37 /* tinypng */ = {
+		277AAF4E1D23F24900788F37 /* TinyPNG4Mac */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 277AAF5E1D23F24900788F37 /* Build configuration list for PBXNativeTarget "tinypng" */;
+			buildConfigurationList = 277AAF5E1D23F24900788F37 /* Build configuration list for PBXNativeTarget "TinyPNG4Mac" */;
 			buildPhases = (
 				4009D64FE12E4FFBA9DBF593 /* Check Pods Manifest.lock */,
 				277AAF4B1D23F24900788F37 /* Sources */,
@@ -162,9 +176,9 @@
 			);
 			dependencies = (
 			);
-			name = tinypng;
+			name = TinyPNG4Mac;
 			productName = tinypng;
-			productReference = 277AAF4F1D23F24900788F37 /* tinypng.app */;
+			productReference = 277AAF4F1D23F24900788F37 /* TinyPNG4Mac.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -189,13 +203,14 @@
 			knownRegions = (
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 277AAF461D23F24900788F37;
 			productRefGroup = 277AAF501D23F24900788F37 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				277AAF4E1D23F24900788F37 /* tinypng */,
+				277AAF4E1D23F24900788F37 /* TinyPNG4Mac */,
 			);
 		};
 /* End PBXProject section */
@@ -206,6 +221,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				277AAF571D23F24900788F37 /* Assets.xcassets in Resources */,
+				27C12A171D35411800F0FD81 /* Localizable.strings in Resources */,
 				277AAF5A1D23F24900788F37 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -265,8 +281,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				277AAF551D23F24900788F37 /* ViewController.swift in Sources */,
+				272C50AD1D2EB03100EEECC2 /* InputKeyAlert.swift in Sources */,
+				27A949CB1D2C02BA0043DECE /* MainViewController.swift in Sources */,
+				272C50A01D2D545300EEECC2 /* SpinnerProgressIndicator.swift in Sources */,
 				277AAF711D26478A00788F37 /* TaskTableCell.swift in Sources */,
+				27A949C81D2C00120043DECE /* MainWindowController.swift in Sources */,
 				277AAF641D25201900788F37 /* TPClient.swift in Sources */,
 				277AAF531D23F24900788F37 /* AppDelegate.swift in Sources */,
 				277AAF741D267CF700788F37 /* Formator.swift in Sources */,
@@ -275,7 +294,7 @@
 				277AAF6C1D25517E00788F37 /* TPStore.swift in Sources */,
 				277AAF621D250DD100788F37 /* DragContainer.swift in Sources */,
 				277AAF781D269D7C00788F37 /* IOHelper.swift in Sources */,
-				277AAF761D2698B600788F37 /* KeyStore.swift in Sources */,
+				277AAF761D2698B600788F37 /* TPConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,8 +305,18 @@
 			isa = PBXVariantGroup;
 			children = (
 				277AAF591D23F24900788F37 /* Base */,
+				27A949CC1D2C07290043DECE /* zh-Hans */,
 			);
 			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		27C12A151D35411800F0FD81 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				27C12A191D35414500F0FD81 /* Base */,
+				27C12A1A1D3541DA00F0FD81 /* zh-Hans */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -413,7 +442,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		277AAF5E1D23F24900788F37 /* Build configuration list for PBXNativeTarget "tinypng" */ = {
+		277AAF5E1D23F24900788F37 /* Build configuration list for PBXNativeTarget "TinyPNG4Mac" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				277AAF5F1D23F24900788F37 /* Debug */,

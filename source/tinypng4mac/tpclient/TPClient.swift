@@ -16,6 +16,11 @@ class TPClient {
 	
 	static let sharedClient = TPClient()
 	static var sApiKey = ""
+	static var sOutputPath = "" {
+		didSet {
+			IOHeler.sOutputPath = sOutputPath
+		}
+	}
 	
 	private init() {}
 	
@@ -76,6 +81,12 @@ class TPClient {
 				.responseJSON { response in
 					let json = JSON(response.result.value!)
 					if json != nil {
+						if let error = json["error"].string {
+							print("error: " + task.fileName + error)
+							task.errorMessage = json["message"].string
+							self.updateStatus(task, newStatus: .ERROR)
+							return
+						}
 						let output = json["output"]
 						if output != nil {
 							let resultUrl = output["url"]
@@ -83,16 +94,18 @@ class TPClient {
 							task.resultSize = output["size"].doubleValue
 							task.compressRate = task.resultSize / task.originSize
 							self.onUploadFinish(task)
-
 						} else {
+							task.errorMessage = "error response"
 							self.updateStatus(task, newStatus: .ERROR)
 						}
 					} else {
+						task.errorMessage = "error response"
 						self.updateStatus(task, newStatus: .ERROR)
 					}
 			}
 			return true
 		} catch {
+			task.errorMessage = "error execution"
 			self.updateStatus(task, newStatus: .ERROR)
 			return false
 		}
@@ -107,13 +120,17 @@ class TPClient {
 	}
 	
 	private func downloadCompressImage(task: TPTaskInfo) {Alamofire.download(.GET, task.resultUrl, destination: { temporaryURL, response in
-			self.updateStatus(task, newStatus: .FINISH)
+			IOHeler.deleteOnExists(task.outputFile!)
 			return task.outputFile!
 		})
 		.response { (request, response, _, error) in
-			self.runningTasks -= 1
-			
-			print("finish: " + task.fileName + " tasks: " + String(self.runningTasks))
+			if (error != nil) {
+				task.errorMessage = error?.description
+				self.updateStatus(task, newStatus: .ERROR)
+			} else {
+				self.updateStatus(task, newStatus: .FINISH)
+				print("finish: " + task.fileName + " tasks: " + String(self.runningTasks))
+			}
 			
 			self.checkExecution()
 		}
@@ -121,7 +138,7 @@ class TPClient {
 	
 	private func updateStatus(task: TPTaskInfo, newStatus: TPTaskStatus) {
 		task.status = newStatus
-		if newStatus == .ERROR {
+		if newStatus == .ERROR || newStatus == .FINISH {
 			self.runningTasks -= 1
 		}
 		NSOperationQueue.mainQueue().addOperationWithBlock {

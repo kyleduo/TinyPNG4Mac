@@ -25,5 +25,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
 	override func awakeFromNib() {
 	}
+	
+	@IBAction func viewInGithub(sender: AnyObject) {
+		NSWorkspace.sharedWorkspace().openURL(NSURL.init(string: "https://github.com/kyleduo/TinyPNG4Mac")!)
+	}
+	@IBAction func clearConfiguration(sender: AnyObject) {
+		TPConfig.removeKey()
+		NSNotificationCenter.defaultCenter().postNotificationName("resetConfiguration", object: nil)
+
+	}
 }
 

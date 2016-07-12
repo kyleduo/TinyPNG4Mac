@@ -27,14 +27,14 @@ class DragContainer: NSView {
 		super.awakeFromNib()
 		
 		self.registerForDraggedTypes([NSFilenamesPboardType, NSURLPboardType, NSPasteboardTypeTIFF]);
-		self.layer?.backgroundColor = NSColor(white: normalColor, alpha: 1).CGColor;
-		self.layer?.borderWidth = 1;
-		self.layer?.borderColor = NSColor(white: borderColor, alpha: 1).CGColor;
-		self.layer?.cornerRadius = 4;
+	}
+	
+	override func drawRect(dirtyRect: NSRect) {
+		
 	}
 	
 	override func draggingEntered(sender: NSDraggingInfo) -> NSDragOperation {
-		self.layer?.backgroundColor = NSColor(white: highlightColor, alpha: 1).CGColor;
+//		self.layer?.backgroundColor = NSColor(white: highlightColor, alpha: 1).CGColor;
 		let res = checkExtension(sender)
 		if let delegate = self.delegate {
 			delegate.draggingEntered();
@@ -46,14 +46,14 @@ class DragContainer: NSView {
 	}
 	
 	override func draggingExited(sender: NSDraggingInfo?) {
-		self.layer?.backgroundColor = NSColor(white: normalColor, alpha: 1).CGColor;
+//		self.layer?.backgroundColor = NSColor(white: normalColor, alpha: 1).CGColor;
 		if let delegate = self.delegate {
 			delegate.draggingExit();
 		}
 	}
 	
 	override func prepareForDragOperation(sender: NSDraggingInfo) -> Bool {
-		self.layer?.backgroundColor = NSColor(white: normalColor, alpha: 1).CGColor;
+//		self.layer?.backgroundColor = NSColor(white: normalColor, alpha: 1).CGColor;
 		return true
 	}
 	

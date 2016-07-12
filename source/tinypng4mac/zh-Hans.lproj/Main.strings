@@ -1,0 +1,98 @@
+
+/* Class = "NSMenuItem"; title = "tinypng"; ObjectID = "1Xt-HY-uBw"; */
+"1Xt-HY-uBw.title" = "TinyPNG4Mac";
+
+/* Class = "NSMenuItem"; title = "Quit tinypng"; ObjectID = "4sb-4s-VLi"; */
+"4sb-4s-VLi.title" = "退出 TinyPNG4Mac";
+
+/* Class = "NSMenuItem"; title = "About tinypng"; ObjectID = "5kV-Vb-QxS"; */
+"5kV-Vb-QxS.title" = "关于 TinyPNG4Mac";
+
+/* Class = "NSMenuItem"; title = "Copy"; ObjectID = "8nJ-WL-BlY"; */
+"8nJ-WL-BlY.title" = "复制";
+
+/* Class = "NSMenuItem"; title = "Close"; ObjectID = "96b-Cm-nr0"; */
+"96b-Cm-nr0.title" = "关闭";
+
+/* Class = "NSTextFieldCell"; title = "Label"; ObjectID = "CcM-g9-hZQ"; */
+"CcM-g9-hZQ.title" = "Label";
+
+/* Class = "NSMenu"; title = "Help"; ObjectID = "F2S-fz-NVQ"; */
+"F2S-fz-NVQ.title" = "帮助";
+
+/* Class = "NSMenuItem"; title = "tinypng Help"; ObjectID = "FKE-Sm-Kum"; */
+"FKE-Sm-Kum.title" = "TinyPNG4Mac 帮助";
+
+/* Class = "NSMenuItem"; title = "Cut"; ObjectID = "IAJ-cQ-Yjo"; */
+"IAJ-cQ-Yjo.title" = "剪切";
+
+/* Class = "NSWindow"; title = "TinyPNG - Mac Client"; ObjectID = "IQv-IB-iLA"; */
+"IQv-IB-iLA.title" = "TinyPNG - Mac Client";
+
+/* Class = "NSMenuItem"; title = "Redo"; ObjectID = "Lc1-Oy-Ldt"; */
+"Lc1-Oy-Ldt.title" = "重做";
+
+/* Class = "NSMenuItem"; title = "Delete"; ObjectID = "Q7N-7u-zgM"; */
+"Q7N-7u-zgM.title" = "删除";
+
+/* Class = "NSViewController"; title = "TPClient"; ObjectID = "XfG-lQ-9wD"; */
+"XfG-lQ-9wD.title" = "TPClient";
+
+/* Class = "NSButtonCell"; title = "Show"; ObjectID = "fiQ-QR-uCu"; */
+"fiQ-QR-uCu.title" = "Show";
+
+/* Class = "NSMenuItem"; title = "Paste"; ObjectID = "i1l-vI-8lL"; */
+"i1l-vI-8lL.title" = "粘贴";
+
+/* Class = "NSMenuItem"; title = "Select All"; ObjectID = "iE2-yF-qX0"; */
+"iE2-yF-qX0.title" = "全选";
+
+/* Class = "NSMenuItem"; title = "File"; ObjectID = "it9-im-Pph"; */
+"it9-im-Pph.title" = "文件";
+
+/* Class = "NSMenu"; title = "File"; ObjectID = "nL2-nV-WLb"; */
+"nL2-nV-WLb.title" = "文件";
+
+/* Class = "NSMenu"; title = "Edit"; ObjectID = "oVW-b3-NWF"; */
+"oVW-b3-NWF.title" = "编辑";
+
+/* Class = "NSMenuItem"; title = "Edit"; ObjectID = "p9P-II-2uM"; */
+"p9P-II-2uM.title" = "编辑";
+
+/* Class = "NSMenuItem"; title = "Paste and Match Style"; ObjectID = "rmC-28-GIr"; */
+"rmC-28-GIr.title" = "粘贴并匹配样式";
+
+/* Class = "NSMenuItem"; title = "Undo"; ObjectID = "sFl-Zo-rnb"; */
+"sFl-Zo-rnb.title" = "重做";
+
+"7df-rK-orR.title" = "重置API Key";
+
+/* Class = "NSTextFieldCell"; title = "API Key:"; ObjectID = "tJg-5O-cpK"; */
+"tJg-5O-cpK.title" = "API Key:";
+
+/* Class = "NSMenu"; title = "tinypng"; ObjectID = "uQy-DD-JDr"; */
+"uQy-DD-JDr.title" = "TinyPNG4Mac";
+
+/* Class = "NSTextFieldCell"; title = "0.0%"; ObjectID = "ucL-df-UuW"; */
+"ucL-df-UuW.title" = "0.0%";
+
+/* Class = "NSTextFieldCell"; title = "Output Path:"; ObjectID = "wAc-5q-1kG"; */
+"wAc-5q-1kG.title" = "保存到:";
+
+/* Class = "NSMenuItem"; title = "Help"; ObjectID = "wpr-3q-Mcd"; */
+"wpr-3q-Mcd.title" = "帮助";
+
+/* Class = "NSTextFieldCell"; title = "Text Cell"; ObjectID = "yFS-CL-4F9"; */
+"yFS-CL-4F9.title" = "Text Cell";
+
+/* Class = "NSTextFieldCell"; title = "0KB"; ObjectID = "zGa-wu-t8Z"; */
+"zGa-wu-t8Z.title" = "0KB";
+
+/* Class = "NSMenu"; title = "tinypng"; ObjectID = "u2I-2p-g3Y"; */
+"u2I-2p-g3Y.title" = "开源";
+
+/* Class = "NSMenu"; title = "tinypng"; ObjectID = "jyf-OB-7kf"; */
+"jyf-OB-7kf.title" = "开源";
+
+/* Class = "NSMenuItem"; title = "tinypng"; ObjectID = "jyf-OB-7kf"; */
+"vpN-FL-fVc.title" = "在Github中查看";

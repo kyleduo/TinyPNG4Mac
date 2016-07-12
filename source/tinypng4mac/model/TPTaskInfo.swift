@@ -18,6 +18,7 @@ class TPTaskInfo: NSObject {
 	var compressRate: Double
 	var resultSize: Double
 	var uuid: String
+	var errorMessage: String?
 	
 	init(originFile: NSURL, fileName: String, originSize: Double) {
 		self.originFile = originFile
@@ -31,6 +32,7 @@ class TPTaskInfo: NSObject {
 		self.compressRate = 1
 		self.resultSize = 0
 		self.uuid = NSUUID().UUIDString
+		self.errorMessage = nil
 	}
 }
 

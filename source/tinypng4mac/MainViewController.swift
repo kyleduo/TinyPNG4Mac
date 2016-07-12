@@ -31,7 +31,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			apiKey.stringValue = savedKey
 			TPClient.sApiKey = savedKey
 			keySaved = true
-			apiKey.editable = false
+			apiKey.editable = savedKey == ""
 		}
 		if let savedPath = TPConfig.savedPath() {
 			outputPathField.stringValue = savedPath
@@ -225,7 +225,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		}
 		if obj.object === self.apiKey {
 			if let newKey = obj.object?.stringValue {
-				if newKey != TPClient.sApiKey {
+				if newKey != TPClient.sApiKey && newKey != "" {
 					print("newKey: " + newKey)
 					saveApiKey(newKey)
 					if TPClient.sOutputPath != "" {
@@ -235,7 +235,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			}
 		} else if obj.object === self.outputPathField {
 			if let newOutpath = obj.object?.stringValue {
-				if newOutpath != TPClient.sOutputPath {
+				if newOutpath != TPClient.sOutputPath && newOutpath != "" {
 					print("newOutpath: " + newOutpath)
 					saveOutputPath(newOutpath)
 				}

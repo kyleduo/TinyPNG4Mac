@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		272C50A01D2D545300EEECC2 /* SpinnerProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */; };
 		272C50AD1D2EB03100EEECC2 /* InputKeyAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */; };
+		2730E9011D3680A80030A459 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2730E9001D3680A80030A459 /* Credits.rtf */; };
 		277AAF531D23F24900788F37 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF521D23F24900788F37 /* AppDelegate.swift */; };
 		277AAF571D23F24900788F37 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 277AAF561D23F24900788F37 /* Assets.xcassets */; };
 		277AAF5A1D23F24900788F37 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 277AAF581D23F24900788F37 /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerProgressIndicator.swift; sourceTree = "<group>"; };
 		272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputKeyAlert.swift; sourceTree = "<group>"; };
+		2730E9001D3680A80030A459 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		277AAF4F1D23F24900788F37 /* TinyPNG4Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinyPNG4Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		277AAF521D23F24900788F37 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		277AAF561D23F24900788F37 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				27A949C71D2C00120043DECE /* MainWindowController.swift */,
 				27A949CA1D2C02BA0043DECE /* MainViewController.swift */,
 				27C12A151D35411800F0FD81 /* Localizable.strings */,
+				2730E9001D3680A80030A459 /* Credits.rtf */,
 			);
 			path = tinypng4mac;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 				277AAF571D23F24900788F37 /* Assets.xcassets in Resources */,
 				27C12A171D35411800F0FD81 /* Localizable.strings in Resources */,
 				277AAF5A1D23F24900788F37 /* Main.storyboard in Resources */,
+				2730E9011D3680A80030A459 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -358,6 +358,14 @@
                                                                         <constraint firstAttribute="height" constant="16" id="bND-6C-JLT"/>
                                                                     </constraints>
                                                                 </customView>
+                                                                <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LuB-vO-cOE">
+                                                                    <rect key="frame" x="285" y="19" width="16" height="16"/>
+                                                                    <constraints>
+                                                                        <constraint firstAttribute="width" constant="16" id="sN6-TY-4Ts"/>
+                                                                        <constraint firstAttribute="height" constant="16" id="vbV-iA-8wO"/>
+                                                                    </constraints>
+                                                                    <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon_finish" id="MDJ-Td-VXQ"/>
+                                                                </imageView>
                                                             </subviews>
                                                             <constraints>
                                                                 <constraint firstItem="c8G-p9-kpA" firstAttribute="leading" secondItem="j8i-Ad-2S2" secondAttribute="leading" id="7RZ-nx-bXS"/>
@@ -366,12 +374,15 @@
                                                                 <constraint firstItem="mYs-1G-Pt8" firstAttribute="centerY" secondItem="H7A-f0-c2x" secondAttribute="centerY" id="YL7-Am-xEz"/>
                                                                 <constraint firstAttribute="trailing" secondItem="k4b-cK-7xA" secondAttribute="trailing" constant="16" id="Zy2-bz-jdU"/>
                                                                 <constraint firstItem="mYs-1G-Pt8" firstAttribute="leading" secondItem="H7A-f0-c2x" secondAttribute="leading" constant="16" id="c9p-kb-z0w"/>
+                                                                <constraint firstItem="LuB-vO-cOE" firstAttribute="centerY" secondItem="k4b-cK-7xA" secondAttribute="centerY" id="cAB-8t-ZYI"/>
                                                                 <constraint firstItem="j8i-Ad-2S2" firstAttribute="top" secondItem="H7A-f0-c2x" secondAttribute="top" constant="6" id="cfo-F8-lny"/>
                                                                 <constraint firstItem="j8i-Ad-2S2" firstAttribute="leading" secondItem="mYs-1G-Pt8" secondAttribute="trailing" constant="8" id="jPF-7M-gZY"/>
                                                                 <constraint firstItem="k4b-cK-7xA" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="j8i-Ad-2S2" secondAttribute="trailing" constant="8" id="oGo-dJ-VFN"/>
                                                                 <constraint firstItem="k4b-cK-7xA" firstAttribute="centerY" secondItem="H7A-f0-c2x" secondAttribute="centerY" id="yqq-bd-GOG"/>
+                                                                <constraint firstItem="LuB-vO-cOE" firstAttribute="centerX" secondItem="k4b-cK-7xA" secondAttribute="centerX" id="z74-Pe-ZBL"/>
                                                             </constraints>
                                                             <connections>
+                                                                <outlet property="finishIndicator" destination="LuB-vO-cOE" id="9L3-Qk-ZIQ"/>
                                                                 <outlet property="name" destination="j8i-Ad-2S2" id="Fqs-oz-NyP"/>
                                                                 <outlet property="preview" destination="mYs-1G-Pt8" id="rRi-vF-NZ0"/>
                                                                 <outlet property="progressBar" destination="k4b-cK-7xA" id="7R3-JX-tsh"/>
@@ -453,6 +464,7 @@
         <image name="box" width="88" height="88"/>
         <image name="drop_background" width="320" height="320"/>
         <image name="icon_finder" width="32" height="32"/>
+        <image name="icon_finish" width="16" height="16"/>
         <image name="icon_setting" width="32" height="32"/>
     </resources>
 </document>

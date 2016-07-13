@@ -13,6 +13,7 @@ class TaskTableCell: NSTableCellView {
 	@IBOutlet weak var preview: NSImageView!
 	@IBOutlet weak var progressBar: SpinnerProgressIndicator!
 	@IBOutlet weak var status: NSTextField!
+	@IBOutlet weak var finishIndicator: NSImageView!
 	
 	override func awakeFromNib() {
 		super.awakeFromNib()
@@ -54,20 +55,23 @@ class TaskTableCell: NSTableCellView {
 				self.status.textColor = NSColor(deviceRed:0.55, green:1, blue:0.65, alpha:1)
 				self.name.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)
 				self.name.font = NSFont.systemFontOfSize(16)
+				self.finishIndicator.hidden = false
 			} else if taskStatus == .ERROR {
 				debugPrint(task?.errorMessage)
 				self.status.stringValue = statusText
 				self.status.textColor = NSColor(deviceRed:0.86, green:0.27, blue:0.26, alpha:1)
 				self.name.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)
 				self.name.font = NSFont.systemFontOfSize(16)
+				self.finishIndicator.hidden = true
 			} else {
 				self.status.stringValue = statusText
 				self.status.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)
 				self.name.textColor = NSColor.whiteColor()
 				self.name.font = NSFont.boldSystemFontOfSize(16)
+				self.finishIndicator.hidden = true
 			}
 			
-//			self.progressBar.hidden = taskStatus == .ERROR || taskStatus == .FINISH
+			self.progressBar.hidden = taskStatus == .FINISH
 			self.progressBar.progress = Double(progress)
 		}
 	}

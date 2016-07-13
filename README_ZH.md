@@ -22,7 +22,7 @@ TinyPNG client for Mac
 
 ### 下载
 
-\>\>\>\>\>\> [点击这里下载](./archive/TinyPNG4Mac.app.zip) \<\<\<\<\<\<
+\>\>\>\>\>\> [点击这里下载](https://github.com/kyleduo/TinyPNG4Mac/raw/master/archive/TinyPNG4Mac.app.zip) \<\<\<\<\<\<
 
 第一次打开可能出现“无法打开”的提示，请到`设置 -> 安全性与隐私`里面勾选`所有来源`。出于安全考虑，建议打开之后关闭这个选项。
 

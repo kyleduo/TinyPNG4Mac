@@ -34,6 +34,10 @@ Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this
 ![](./preview/preview_panel.png)
 ![](./preview/preview_tasks.png)
 
+### Thanks
+
+[droptogif](https://github.com/mortenjust/droptogif) -- A very useful client for convert video to gif. I learnt how to create window from that project.
+
 ### License
 
 Developed by [@kyleduo](https://github.com/kyleduo) and available under the [MIT](http://opensource.org/licenses/MIT) license.

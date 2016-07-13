@@ -32,6 +32,11 @@ TinyPNG client for Mac
 ![](./preview/preview_panel.png)
 ![](./preview/preview_tasks.png)
 
+
+### 致谢
+
+[droptogif](https://github.com/mortenjust/droptogif) -- 实用的视频转Gif的工具。我在里面学习了如何创建Window。
+
 ### 协议
 
 Developed by [@kyleduo](https://github.com/kyleduo) and available under the [MIT](http://opensource.org/licenses/MIT) license.

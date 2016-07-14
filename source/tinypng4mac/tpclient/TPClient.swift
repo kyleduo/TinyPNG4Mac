@@ -54,7 +54,7 @@ class TPClient {
 	}
 	
 	func executeTask(task: TPTaskInfo) -> Bool {
-		var imageData: NSData = NSData()
+		var imageData: NSData!
 		do {
 			let fileHandler = try NSFileHandle(forReadingFromURL:task.originFile)
 			imageData = fileHandler.readDataToEndOfFile()

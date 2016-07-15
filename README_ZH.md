@@ -32,10 +32,11 @@ TinyPNG client for Mac
 
 ### 预览
 
-![](./preview/preview2.png)
-![](./preview/preview_panel.png)
-![](./preview/preview_tasks.png)
+![](./preview/preview.jpg)
 
+#### Gif
+
+![](./preview/preview.gif)
 
 ### 致谢
 

@@ -35,9 +35,11 @@ Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this
 
 ### Preview
 
-![](./preview/preview2.png)
-![](./preview/preview_panel.png)
-![](./preview/preview_tasks.png)
+![](./preview/preview.jpg)
+
+#### Gif
+
+![](./preview/preview.gif)
 
 ### Thanks
 

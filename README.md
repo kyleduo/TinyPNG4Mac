@@ -3,9 +3,14 @@ TinyPNG client for Mac
 
 ![](./preview/icon.png)
 
-This is a client of TinyPNG for Mac, with which you can compress pngs without open browser and manually download images, all you need to do is just drag and drop.
+This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can compress pngs without open browser and manually download images, all you need to do is just drag and drop.
 
 [中文](./README_ZH.md)
+
+
+### Version 0.93
+
+1. Support **JPG** and **JPEG**.
 
 ### Version 0.9 brings a lot of change.
 

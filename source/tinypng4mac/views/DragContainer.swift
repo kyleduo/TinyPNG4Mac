@@ -17,7 +17,7 @@ protocol DragContainerDelegate {
 class DragContainer: NSView {
 	var delegate : DragContainerDelegate?
 	
-	let acceptTypes = ["png"]
+	let acceptTypes = ["png", "jpg", "jpeg"]
 	
 	let normalColor: CGFloat = 0.95
 	let highlightColor: CGFloat = 0.99

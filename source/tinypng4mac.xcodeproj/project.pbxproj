@@ -25,7 +25,6 @@
 		27A949C81D2C00120043DECE /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949C71D2C00120043DECE /* MainWindowController.swift */; };
 		27A949CB1D2C02BA0043DECE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949CA1D2C02BA0043DECE /* MainViewController.swift */; };
 		27C12A171D35411800F0FD81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 27C12A151D35411800F0FD81 /* Localizable.strings */; };
-		D429C4171C6CB7F6DA876C02 /* Pods_tinypng.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BE08103B66B036F5C6097433 /* Pods_tinypng.framework */; };
 		EE308335605F7F6BA3CE78B2 /* Pods_TinyPNG4Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA4EB8EE196F9FB732ABF8E /* Pods_TinyPNG4Mac.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,7 +54,6 @@
 		27A949CC1D2C07290043DECE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		27C12A191D35414500F0FD81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		27C12A1A1D3541DA00F0FD81 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		BE08103B66B036F5C6097433 /* Pods_tinypng.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tinypng.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +61,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D429C4171C6CB7F6DA876C02 /* Pods_tinypng.framework in Frameworks */,
 				EE308335605F7F6BA3CE78B2 /* Pods_TinyPNG4Mac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -159,7 +156,6 @@
 		99559CB4A0420EDCE9264015 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BE08103B66B036F5C6097433 /* Pods_tinypng.framework */,
 				0EA4EB8EE196F9FB732ABF8E /* Pods_TinyPNG4Mac.framework */,
 			);
 			name = Frameworks;

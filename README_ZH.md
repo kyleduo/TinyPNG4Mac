@@ -5,7 +5,12 @@ TinyPNG client for Mac
 
 这是[TinyPNG](https://tinypng.com)的Mac客户端。TinyPNG提供了PNG图片的“几乎无损”压缩服务。使用TinyPNG4Mac，你可以通过简单的拖拽完成对PNG图片的压缩，无需打开浏览器，无需手动下载图片。
 
-### Version 0.93
+### Version 0.9.3
+
+1. 升级到Swift 3
+2. 将`Pod/`添加到`.gitignore`
+
+### Version 0.9.2
 
 1. 支持 **JPG** 和 **JPEG**.
 

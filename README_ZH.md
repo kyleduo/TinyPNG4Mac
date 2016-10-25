@@ -9,6 +9,7 @@ TinyPNG client for Mac
 
 1. 升级到Swift 3
 2. 将`Pod/`添加到`.gitignore`
+3. 上传和下载时显示进度
 
 ### Version 0.9.2
 

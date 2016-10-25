@@ -12,6 +12,7 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 
 1. Update to **Swift 3**
 2. Add `Pods/` to `.gitignore`
+3. Display progress when uploading/downloaing.
 
 ### Version 0.9.2
 

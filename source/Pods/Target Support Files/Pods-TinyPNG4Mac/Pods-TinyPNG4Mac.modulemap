@@ -1,0 +1,6 @@
+framework module Pods_TinyPNG4Mac {
+  umbrella header "Pods-TinyPNG4Mac-umbrella.h"
+
+  export *
+  module * { export * }
+}

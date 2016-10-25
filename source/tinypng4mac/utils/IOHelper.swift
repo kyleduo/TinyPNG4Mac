@@ -13,32 +13,32 @@ class IOHeler {
 	
 	static var sOutputPath = ""
 	
-	static func getOutputPath() -> NSURL {
-		let fileManager = NSFileManager.defaultManager()
-		var path: NSURL!
+	static func getOutputPath() -> URL {
+		let fileManager = FileManager.default
+		var path: URL!
 		if sOutputPath == "" {
-			let directoryURL = fileManager.URLsForDirectory(.DesktopDirectory, inDomains: .UserDomainMask)[0]
-			path = directoryURL.URLByAppendingPathComponent(sOutPutFolderName, isDirectory: true)
+			let directoryURL = fileManager.urls(for: .desktopDirectory, in: .userDomainMask)[0]
+			path = directoryURL.appendingPathComponent(sOutPutFolderName, isDirectory: true)
 		} else {
-			path = NSURL.fileURLWithPath(sOutputPath)
+			path = URL(fileURLWithPath: sOutputPath)
 		}
-		if !fileManager.fileExistsAtPath(path!.path!) {
-			try! fileManager.createDirectoryAtURL(path!, withIntermediateDirectories: true, attributes: nil)
+		if !fileManager.fileExists(atPath: path!.path) {
+			try! fileManager.createDirectory(at: path!, withIntermediateDirectories: true, attributes: nil)
 		}
 		return path!
 	}
 	
-	static func getDefaultOutputPath() -> NSURL {
-		let fileManager = NSFileManager.defaultManager()
-		let directoryURL = fileManager.URLsForDirectory(.DesktopDirectory, inDomains: .UserDomainMask)[0]
-		let path = directoryURL.URLByAppendingPathComponent(sOutPutFolderName, isDirectory: true)
+	static func getDefaultOutputPath() -> URL {
+		let fileManager = FileManager.default
+		let directoryURL = fileManager.urls(for: .desktopDirectory, in: .userDomainMask)[0]
+		let path = directoryURL.appendingPathComponent(sOutPutFolderName, isDirectory: true)
 		return path
 	}
 	
-	static func deleteOnExists(file: NSURL) {
-		let fileManager = NSFileManager.defaultManager()
-		if fileManager.fileExistsAtPath(file.path!) {
-			try! fileManager.removeItemAtURL(file)
+	static func deleteOnExists(_ file: URL) {
+		let fileManager = FileManager.default
+		if fileManager.fileExists(atPath: file.path) {
+			try! fileManager.removeItem(at: file)
 		}
 	}
 }

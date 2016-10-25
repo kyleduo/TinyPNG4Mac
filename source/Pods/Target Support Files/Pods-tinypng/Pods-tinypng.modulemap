@@ -1,6 +1,0 @@
-framework module Pods_tinypng {
-  umbrella header "Pods-tinypng-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -9,7 +9,7 @@
 import Foundation
 
 class Formator {
-	static func formatSize(byte: Double) -> String {
+	static func formatSize(_ byte: Double) -> String {
 		if byte < 1024 {
 			return String.init(format: "%.2fB", byte)
 		} else if byte < 1024 * 1024 {
@@ -21,7 +21,7 @@ class Formator {
 		}
 	}
 	
-	static func formatRate(rate: Double) -> String {
+	static func formatRate(_ rate: Double) -> String {
 		return String.init(format: "%.1f%%", rate * 100)
 	}
 }

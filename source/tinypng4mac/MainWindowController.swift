@@ -14,9 +14,9 @@ class MainWindowController: NSWindowController {
 		super.windowDidLoad()
 		
 		if let window = self.window {
-			let button = window.standardWindowButton(NSWindowButton.ZoomButton)
-			button?.hidden = true
-			window.titleVisibility = .Hidden
+			let button = window.standardWindowButton(NSWindowButton.zoomButton)
+			button?.isHidden = true
+			window.titleVisibility = .hidden
 			window.titlebarAppearsTransparent = true
 		}
 	}

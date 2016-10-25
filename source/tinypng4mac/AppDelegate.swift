@@ -11,27 +11,27 @@ import Cocoa
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
 	
-	func applicationDidFinishLaunching(aNotification: NSNotification) {
+	func applicationDidFinishLaunching(_ aNotification: Notification) {
 		// Insert code here to initialize your application
 	}
 
-	func applicationWillTerminate(aNotification: NSNotification) {
+	func applicationWillTerminate(_ aNotification: Notification) {
 		// Insert code here to tear down your application
 	}
 	
-	func applicationShouldTerminateAfterLastWindowClosed(sender: NSApplication) -> Bool {
+	func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
 		return true
 	}
 
 	override func awakeFromNib() {
 	}
 	
-	@IBAction func viewInGithub(sender: AnyObject) {
-		NSWorkspace.sharedWorkspace().openURL(NSURL.init(string: "https://github.com/kyleduo/TinyPNG4Mac")!)
+	@IBAction func viewInGithub(_ sender: AnyObject) {
+		NSWorkspace.shared().open(URL.init(string: "https://github.com/kyleduo/TinyPNG4Mac")!)
 	}
-	@IBAction func clearConfiguration(sender: AnyObject) {
+	@IBAction func clearConfiguration(_ sender: AnyObject) {
 		TPConfig.removeKey()
-		NSNotificationCenter.defaultCenter().postNotificationName("resetConfiguration", object: nil)
+		NotificationCenter.default.post(name: Notification.Name(rawValue: "resetConfiguration"), object: nil)
 
 	}
 }

@@ -24,8 +24,8 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	
 	override func viewDidLoad() {
 		
-		NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(MainViewController.statusChanged), name:"statusChanged", object: nil)
-		NSNotificationCenter.defaultCenter().addObserver(self, selector:#selector(MainViewController.resetConfiguration), name:"resetConfiguration", object: nil)
+		NotificationCenter.default.addObserver(self, selector:#selector(MainViewController.statusChanged), name:NSNotification.Name(rawValue: "statusChanged"), object: nil)
+		NotificationCenter.default.addObserver(self, selector:#selector(MainViewController.resetConfiguration), name:NSNotification.Name(rawValue: "resetConfiguration"), object: nil)
 		
 		if let savedKey = TPConfig.savedkey() {
 			apiKey.stringValue = savedKey
@@ -44,10 +44,10 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	override func awakeFromNib() {
 		dropContainer.delegate = self
 		
-		taskTableView.setDelegate(self)
-		taskTableView.setDataSource(self)
-		taskTableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyle.None
-		taskTableView.enclosingScrollView?.scrollerStyle = NSScrollerStyle.Legacy
+		taskTableView.delegate = self
+		taskTableView.dataSource = self
+		taskTableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyle.none
+		taskTableView.enclosingScrollView?.scrollerStyle = NSScrollerStyle.legacy
 		
 		apiKey.delegate = self
 		outputPathField.delegate = self
@@ -65,14 +65,14 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		}
 	}
 	
-	func saveApiKey(key: String) {
+	func saveApiKey(_ key: String) {
 		TPConfig.saveKey(key)
 		TPClient.sApiKey = key
 		apiKey.stringValue = key
 		keySaved = true
 	}
 	
-	func saveOutputPath(path: String) {
+	func saveOutputPath(_ path: String) {
 		TPConfig.savePath(path)
 		TPClient.sOutputPath = path
 		outputPathField.stringValue = path
@@ -94,18 +94,18 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	}
 	
 	func lockTextField() {
-		apiKey.editable = false
-		outputPathField.editable = false
+		apiKey.isEditable = false
+		outputPathField.isEditable = false
 	}
 	
 	func unlockTextField() {
-		apiKey.editable = true
-		outputPathField.editable = true
+		apiKey.isEditable = true
+		outputPathField.isEditable = true
 	}
 	
-	@objc func statusChanged(notification: NSNotification) {
+	@objc func statusChanged(_ notification: Notification) {
 		let task = notification.object as! TPTaskInfo
-		if task.status == .FINISH {
+		if task.status == .finish {
 			if !keySaved {
 				TPConfig.saveKey(TPClient.sApiKey)
 				keySaved = true
@@ -124,15 +124,15 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		taskTableView.reloadData()
 	}
 	
-	@objc func resetConfiguration(notification: NSNotification) {
+	@objc func resetConfiguration(_ notification: Notification) {
 		TPClient.sApiKey = ""
 		apiKey.stringValue = ""
-		apiKey.editable = true
+		apiKey.isEditable = true
 		keySaved = false
 		changePanel(true, animated: true)
 	}
 	
-	@IBAction func clickSelectPath(sender: AnyObject) {
+	@IBAction func clickSelectPath(_ sender: AnyObject) {
 		let openPanel = NSOpenPanel();
 		openPanel.title = NSLocalizedString("Select output path.", comment: "Select output path.")
 		openPanel.message = NSLocalizedString("Images will put in there after compress.", comment: "Images will put in there after compress.")
@@ -143,27 +143,27 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		openPanel.canCreateDirectories = true;
 		openPanel.delegate = self;
 		
-		openPanel.beginWithCompletionHandler { (result) -> Void in
+		openPanel.begin { (result) -> Void in
 			if(result == NSFileHandlingPanelOKButton){
-				let path = openPanel.URL!.path!
-				print("selected folder is \(path)");
+				let path = openPanel.url!.path
+				debugPrint("selected folder is \(path)");
 				self.saveOutputPath(path)
 			}
 		}
 	}
 	
-	@IBAction func clickSettings(sender: AnyObject) {
-		let window = NSApplication.sharedApplication().windows.first!
+	@IBAction func clickSettings(_ sender: AnyObject) {
+		let window = NSApplication.shared().windows.first!
 		let height = window.frame.height
 		changePanel(height == 320, animated: true)
 	}
 	
-	@IBAction func clickFinder(sender: AnyObject) {
-		NSWorkspace.sharedWorkspace().openURL(IOHeler.getOutputPath())
+	@IBAction func clickFinder(_ sender: AnyObject) {
+		NSWorkspace.shared().open(IOHeler.getOutputPath() as URL)
 	}
 	
-	func changePanel(open: Bool, animated: Bool) {
-		let window = NSApplication.sharedApplication().windows.first!
+	func changePanel(_ open: Bool, animated: Bool) {
+		let window = NSApplication.shared().windows.first!
 		let frame = window.frame
 		let height = window.frame.height
 		var t = height
@@ -182,62 +182,61 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	func draggingExit() {
 	}
 	
-	func draggingFileAccept(files:Array<NSURL>) {
+	func draggingFileAccept(_ files:Array<URL>) {
 		if TPClient.sApiKey == "" {
 			showInputPanel()
 			return;
 		}
 		var tasks = [TPTaskInfo]()
-		let manager = NSFileManager.defaultManager()
+		let manager = FileManager.default
 		for file in files {
-			let attributes = try? manager.attributesOfItemAtPath(file.path!)
-			let size = attributes![NSFileSize]!
-			let task = TPTaskInfo(originFile: file, fileName:file.lastPathComponent!, originSize: size.doubleValue!)
+			let attributes = try? manager.attributesOfItem(atPath: file.path)
+			let size = attributes![FileAttributeKey.size]!
+			let task = TPTaskInfo(originFile: file, fileName:file.lastPathComponent, originSize: (size as AnyObject).doubleValue!)
 			tasks.append(task)
 		}
 		TPClient.sharedClient.add(tasks)
 		taskTableView.reloadData()
 		TPClient.sharedClient.checkExecution()
 		
-		apiKey.editable = false
-		outputPathField.editable = false
+		apiKey.isEditable = false
+		outputPathField.isEditable = false
 	}
 	
-	func numberOfRowsInTableView(tableView: NSTableView) -> Int {
+	func numberOfRows(in tableView: NSTableView) -> Int {
 		return TPStore.sharedStore.count()
 	}
 	
-	func tableView(tableView: NSTableView, viewForTableColumn tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		let cell = tableView.makeViewWithIdentifier("task_cell", owner: self) as? TaskTableCell
+	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
+		let cell = tableView.make(withIdentifier: "task_cell", owner: self) as? TaskTableCell
 		cell!.task = TPStore.sharedStore.get(row)!
 		return cell
 	}
 	
-	override func controlTextDidEndEditing(obj: NSNotification) {
+	override func controlTextDidEndEditing(_ obj: Notification) {
 		if let textField = obj.object as? NSTextField {
-			if !textField.editable {
+			if !textField.isEditable {
 				return;
 			}
-		} else {
-			return;
-		}
-		if obj.object === self.apiKey {
-			if let newKey = obj.object?.stringValue {
+			let value = textField.stringValue
+			if textField == self.apiKey {
+				let newKey = value
 				if newKey != TPClient.sApiKey && newKey != "" {
-					print("newKey: " + newKey)
+					debugPrint("newKey: " + newKey)
 					saveApiKey(newKey)
 					if TPClient.sOutputPath != "" {
 						self.changePanel(false, animated: true)
 					}
 				}
-			}
-		} else if obj.object === self.outputPathField {
-			if let newOutpath = obj.object?.stringValue {
+			} else if textField == self.outputPathField {
+				let newOutpath = value
 				if newOutpath != TPClient.sOutputPath && newOutpath != "" {
-					print("newOutpath: " + newOutpath)
+					debugPrint("newOutpath: " + newOutpath)
 					saveOutputPath(newOutpath)
 				}
 			}
+		} else {
+			return;
 		}
 	}
 }

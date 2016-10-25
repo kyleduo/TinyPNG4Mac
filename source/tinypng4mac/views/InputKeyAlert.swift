@@ -19,28 +19,28 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 		super.init()
 		
 		self.messageText = NSLocalizedString("Input developer API Key. If you do not have, click register button.", comment: "Input developer API Key. If you do not have, click register button.")
-		let view = NSView.init(frame: CGRectMake(0, 0, 300, 54))
-		self.input = NSTextField.init(frame: CGRectMake(0, 30, 300, 24))
+		let view = NSView.init(frame: CGRect(x: 0, y: 0, width: 300, height: 54))
+		self.input = NSTextField.init(frame: CGRect(x: 0, y: 30, width: 300, height: 24))
 		self.input?.delegate = self
 		view.addSubview(self.input!)
 		let button = self.createRegisterButton()
 		view.addSubview(button)
 		self.accessoryView = view
-		submitButton = self.addButtonWithTitle(NSLocalizedString("Save", comment: "Save"))
-		submitButton?.enabled = false
-		cancelButton = self.addButtonWithTitle(NSLocalizedString("Later", comment: "Later"))
+		submitButton = self.addButton(withTitle: NSLocalizedString("Save", comment: "Save"))
+		submitButton?.isEnabled = false
+		cancelButton = self.addButton(withTitle: NSLocalizedString("Later", comment: "Later"))
 	}
 	
 	func createRegisterButton() -> NSButton {
-		let button = NSButton.init(frame: CGRectMake(0, 0, 56, 24))
-		button.setButtonType(NSButtonType.MomentaryLightButton)
-		button.bordered = false
+		let button = NSButton.init(frame: CGRect(x: 0, y: 0, width: 56, height: 24))
+		button.setButtonType(NSButtonType.momentaryLight)
+		button.isBordered = false
 		let paragraphStyle = NSMutableParagraphStyle.init()
-		paragraphStyle.alignment = NSTextAlignment.Center
+		paragraphStyle.alignment = NSTextAlignment.center
 		let title = NSMutableAttributedString.init(string: NSLocalizedString("Register", comment: "Register"))
-		title.addAttributes([NSForegroundColorAttributeName: NSColor.blueColor(),
+		title.addAttributes([NSForegroundColorAttributeName: NSColor.blue,
 			NSParagraphStyleAttributeName:paragraphStyle,
-			NSUnderlineStyleAttributeName:NSUnderlineStyle.StyleSingle.rawValue], range: NSMakeRange(0, title.length))
+			NSUnderlineStyleAttributeName:NSUnderlineStyle.styleSingle.rawValue], range: NSMakeRange(0, title.length))
 		button.attributedTitle = title
 		button.target = self
 		button.action = #selector(InputKeyAlert.gotoRegister)
@@ -48,22 +48,22 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 	}
 	
 	func gotoRegister() {
-		NSWorkspace.sharedWorkspace().openURL(NSURL.init(string: "https://tinypng.com/developers/subscription")!)
+		NSWorkspace.shared().open(URL.init(string: "https://tinypng.com/developers/subscription")!)
 	}
 	
-	func show(window: NSWindow!, saveAction: ((String?) -> Void)?) {
+	func show(_ window: NSWindow!, saveAction: ((String?) -> Void)?) {
 		isShowing = true
-		self.beginSheetModalForWindow(window) { (response) in
+		self.beginSheetModal(for: window, completionHandler: { (response) in
 			self.isShowing = false
 			if response == NSAlertFirstButtonReturn {
 				saveAction?(self.input?.stringValue)
 			}
-		}
+		}) 
 	}
 	
-	override func controlTextDidChange(obj: NSNotification) {
+	override func controlTextDidChange(_ obj: Notification) {
 		if let text = input?.stringValue {
-			self.submitButton?.enabled = text.characters.count > 0
+			self.submitButton?.isEnabled = text.characters.count > 0
 		}
 	}
 }

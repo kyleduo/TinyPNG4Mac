@@ -8,7 +8,13 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 [中文](./README_ZH.md)
 
 
-### Version 0.93
+### Version 0.9.3
+
+1. Update to **Swift 3**
+2. Add `Pods/` to `.gitignore`
+3. Display progress when uploading/downloaing.
+
+### Version 0.9.2
 
 1. Support **JPG** and **JPEG**.
 

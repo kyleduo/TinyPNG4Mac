@@ -15,7 +15,7 @@ class TPQueue {
 		queue = [TPTaskInfo]()
 	}
 	
-	func enqueue(object: TPTaskInfo) {
+	func enqueue(_ object: TPTaskInfo) {
 		queue.append(object)
 	}
 	

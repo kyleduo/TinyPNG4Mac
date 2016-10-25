@@ -10,35 +10,35 @@ import Foundation
 
 class TPStore {
 	static let sharedStore = TPStore()
-	private var tasks = [TPTaskInfo]()
+	fileprivate var tasks = [TPTaskInfo]()
 	
-	private init() {}
+	fileprivate init() {}
 	
-	func add(task: TPTaskInfo) {
+	func add(_ task: TPTaskInfo) {
 		self.tasks.append(task)
 	}
 	
-	func add(tasks: [TPTaskInfo]) {
+	func add(_ tasks: [TPTaskInfo]) {
 		self.tasks = self.tasks + tasks
 	}
 	
-	func get(index: Int) -> TPTaskInfo? {
+	func get(_ index: Int) -> TPTaskInfo? {
 		if index >= 0 && index < tasks.count {
 			return tasks[index]
 		}
 		return nil
 	}
 	
-	func remove(task: TPTaskInfo) -> TPTaskInfo? {
-		let index = self.tasks.indexOf({$0.uuid == task.uuid})
+	func remove(_ task: TPTaskInfo) -> TPTaskInfo? {
+		let index = self.tasks.index(where: {$0.uuid == task.uuid})
 		if let i = index {
-			return self.tasks.removeAtIndex(i)
+			return self.tasks.remove(at: i)
 		}
 		return nil;
 	}
 	
-	func indexOf(task: TPTaskInfo) -> Int {
-		if let i = self.tasks.indexOf({$0.uuid == task.uuid}) {
+	func indexOf(_ task: TPTaskInfo) -> Int {
+		if let i = self.tasks.index(where: {$0.uuid == task.uuid}) {
 			return i
 		}
 		return -1
@@ -48,20 +48,20 @@ class TPStore {
 		return tasks.count
 	}
 	
-	func moveToLast(task: TPTaskInfo) {
+	func moveToLast(_ task: TPTaskInfo) {
 		let index = indexOf(task);
-		let t = tasks.removeAtIndex(index)
+		let t = tasks.remove(at: index)
 		self.tasks.append(t)
-		print(self.tasks)
+		debugPrint(self.tasks)
 	}
 	
 	func sort() {
-		tasks.sortInPlace { (first, second) -> Bool in
+		tasks.sort { (first, second) -> Bool in
 			let fi = indexOf(first)
 			let si = indexOf(second)
-			if first.status == .ERROR && second.status != .ERROR {
+			if first.status == .error && second.status != .error {
 				return true
-			} else if first.status != .FINISH && second.status == .FINISH {
+			} else if first.status != .finish && second.status == .finish {
 				return true
 			}
 			return fi < si

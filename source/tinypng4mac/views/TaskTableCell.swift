@@ -59,7 +59,7 @@ class TaskTableCell: NSTableCellView {
 				self.name.font = NSFont.systemFont(ofSize: 16)
 				self.finishIndicator.isHidden = false
 			} else if taskStatus == .error {
-				debugPrint(task?.errorMessage)
+				debugPrint(task?.errorMessage ?? "nil")
 				self.status.stringValue = statusText
 				self.status.textColor = NSColor(deviceRed:0.86, green:0.27, blue:0.26, alpha:1)
 				self.name.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)

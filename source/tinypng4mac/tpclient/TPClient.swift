@@ -81,7 +81,7 @@ class TPClient {
 				})
 				.responseJSON(completionHandler: { (response) in
 					let json = JSON(response.result.value!)
-					if json != nil {
+					if json != JSON.null {
 						if let error = json["error"].string {
 							debugPrint("error: " + task.fileName + error)
 							task.errorMessage = json["message"].string
@@ -89,7 +89,7 @@ class TPClient {
 							return
 						}
 						let output = json["output"]
-						if output != nil {
+						if output != JSON.null {
 							let resultUrl = output["url"]
 							task.resultUrl = String(describing: resultUrl)
 							task.resultSize = output["size"].doubleValue

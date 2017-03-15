@@ -80,8 +80,8 @@ class TPClient {
 					}
 				})
 				.responseJSON(completionHandler: { (response) in
-					let json = JSON(response.result.value!)
-					if json != JSON.null {
+                    if let value = response.result.value {
+                        let json = JSON(value)
 						if let error = json["error"].string {
 							debugPrint("error: " + task.fileName + error)
 							task.errorMessage = json["message"].string

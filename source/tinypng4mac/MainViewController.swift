@@ -127,7 +127,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			}
 			totalSize += task.originSize
 			totalRecudeSize += (task.originSize - task.resultSize)
-			totalReduce.stringValue = String.localizedStringWithFormat(NSLocalizedString("tasks desc", comment: "tasks desc"), TPStore.sharedStore.count(), Formator.formatSize(totalRecudeSize), Formator.formatRate(totalRecudeSize / totalSize))
+			totalReduce.stringValue = String.localizedStringWithFormat(NSLocalizedString("tasks desc", comment: "tasks desc"), TPClient.sharedClient.finishTasksCount, Formator.formatSize(totalRecudeSize), Formator.formatRate(totalRecudeSize / totalSize))
 			
 			if TPClient.sharedClient.queue.isEmpty() {
 				// all finished

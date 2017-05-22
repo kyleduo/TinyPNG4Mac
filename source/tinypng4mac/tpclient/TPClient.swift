@@ -33,6 +33,7 @@ class TPClient {
 	let queue = TPQueue()
 	let lock: NSLock = NSLock()
 	var runningTasks = 0
+	var finishTasksCount = 0
 	
 	func add(_ tasks: [TPTaskInfo]) {
 		TPStore.sharedStore.add(tasks);
@@ -162,6 +163,9 @@ class TPClient {
 		task.progress = progress
 		if newStatus == .error || newStatus == .finish {
 			self.runningTasks -= 1
+			if newStatus == .finish {
+				self.finishTasksCount += 1
+			}
 		}
 		callback.taskStatusChanged(task: task)
 	}

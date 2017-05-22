@@ -86,34 +86,34 @@ class TPClient {
 					}
 				})
 				.responseJSON(completionHandler: { (response) in
-					let json = JSON(response.result.value!)
-					if json != JSON.null {
-						if let error = json["error"].string {
-							debugPrint("error: " + task.fileName + error)
-							task.errorMessage = json["message"].string
-							self.updateStatus(task, newStatus: .error)
-							return
-						}
-						let output = json["output"]
-						if output != JSON.null {
-							let resultUrl = output["url"]
-							task.resultUrl = String(describing: resultUrl)
-							task.resultSize = output["size"].doubleValue
-							task.compressRate = task.resultSize / task.originSize
-							self.onUploadFinish(task)
+					if let jsonstr = response.result.value {
+						let json = JSON(jsonstr)
+						if json != JSON.null {
+							if let error = json["error"].string {
+								debugPrint("error: " + task.fileName + error)
+								self.markError(task, errorMessage: json["message"].string)
+								return
+							}
+							let output = json["output"]
+							if output != JSON.null {
+								let resultUrl = output["url"]
+								task.resultUrl = String(describing: resultUrl)
+								task.resultSize = output["size"].doubleValue
+								task.compressRate = task.resultSize / task.originSize
+								self.onUploadFinish(task)
+							} else {
+								self.markError(task, errorMessage: "response data error")
+							}
 						} else {
-							task.errorMessage = "error response"
-							self.updateStatus(task, newStatus: .error)
+							self.markError(task, errorMessage: "response format error")
 						}
 					} else {
-						task.errorMessage = "error response"
-						self.updateStatus(task, newStatus: .error)
+						self.markError(task, errorMessage: response.result.description)
 					}
 				})
 			return true
 		} catch {
-			task.errorMessage = "error execution"
-			self.updateStatus(task, newStatus: .error)
+			self.markError(task, errorMessage: "execute error")
 			return false
 		}
 	}
@@ -139,12 +139,10 @@ class TPClient {
 			.downloadProgress(closure: { (progress) in
 				self.updateStatus(task, newStatus: .downloading, progress: progress)
 			})
-			.response {
-				response in
+			.response { response in
 				let error = response.error
 				if (error != nil) {
-					task.errorMessage = "error" //error?.description
-					self.updateStatus(task, newStatus: .error)
+					self.markError(task, errorMessage: "download error")
 				} else {
 					self.updateStatus(task, newStatus: .finish)
 					debugPrint("finish: " + task.fileName + " tasks: " + String(self.runningTasks))
@@ -154,16 +152,17 @@ class TPClient {
 			}
 	}
 	
+	fileprivate func markError(_ task: TPTaskInfo, errorMessage: String?) {
+		task.errorMessage = errorMessage
+		updateStatus(task, newStatus: .error)
+	}
+	
 	fileprivate func updateStatus(_ task: TPTaskInfo, newStatus: TPTaskStatus, progress: Progress) {
-		print(task.fileName + " old:" + String(describing: task.status) + " -> new: " + String(describing: newStatus))
 		task.status = newStatus
 		task.progress = progress
 		if newStatus == .error || newStatus == .finish {
 			self.runningTasks -= 1
 		}
-//		OperationQueue.main.addOperation {
-//			NotificationCenter.default.post(name: Notification.Name(rawValue: "statusChanged"), object: task)
-//		}
 		callback.taskStatusChanged(task: task)
 	}
 	

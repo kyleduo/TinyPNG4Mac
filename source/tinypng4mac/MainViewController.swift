@@ -12,6 +12,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	
 	@IBOutlet weak var apiKey: NSTextField!
 	@IBOutlet weak var outputPathField: NSTextField!
+	@IBOutlet weak var outputPathSelectButton: NSButton!
 	@IBOutlet weak var taskTableView: NSTableView!
 	@IBOutlet weak var dropContainer: DragContainer!
 	@IBOutlet weak var totalReduce: NSTextField!
@@ -101,15 +102,19 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		})
 	}
 	
-	func lockTextField() {
+	func lockUI() {
 		apiKey.isEditable = false
 		outputPathField.isEditable = false
+		replaceSwitch.isEnabled = false
+		outputPathSelectButton.isEnabled = false
 	}
 	
 	func unlockUI() {
 		apiKey.isEditable = true
-		outputPathField.isEditable = true
 		replaceSwitch.isEnabled = true
+		outputPathSelectButton.isEnabled = true
+		
+		outputPathField.isEditable = !TPConfig.shouldReplace()
 	}
 	
 	// MARK: - tpclient callback
@@ -167,9 +172,6 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	}
 	
 	@IBAction func clickSettings(_ sender: AnyObject) {
-		if TPClient.sharedClient.runningTasks > 0 {
-			return
-		}
 		let window = NSApplication.shared().windows.first!
 		let height = window.frame.height
 		changePanel(height == 320, animated: true)
@@ -230,9 +232,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		icon.animator().alphaValue = 0
 		desc.animator().alphaValue = 0
 		
-		apiKey.isEditable = false
-		outputPathField.isEditable = false
-		replaceSwitch.isEnabled = false
+		lockUI()
 		changePanel(false, animated: true)
 	}
 	

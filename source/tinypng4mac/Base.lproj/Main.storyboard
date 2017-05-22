@@ -483,6 +483,7 @@
                         <outlet property="dropContainer" destination="FK5-1A-UoS" id="rq3-HY-lkJ"/>
                         <outlet property="icon" destination="Fq4-Bl-UgO" id="IIB-zH-pAt"/>
                         <outlet property="outputPathField" destination="fT1-QL-4Nq" id="lr2-ir-Isq"/>
+                        <outlet property="outputPathSelectButton" destination="0K4-Mk-HkB" id="937-Tl-7dv"/>
                         <outlet property="replaceSwitch" destination="zRv-TO-bMw" id="YAz-sO-KJH"/>
                         <outlet property="taskTableView" destination="fWd-5L-B1V" id="4AE-2m-kM9"/>
                         <outlet property="totalReduce" destination="D8d-TS-a2j" id="uaD-e2-A6h"/>

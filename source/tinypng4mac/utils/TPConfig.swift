@@ -44,5 +44,6 @@ class TPConfig {
 	
 	static func removeKey() {
 		UserDefaults.standard.removeObject(forKey: KEY_API)
+		UserDefaults.standard.removeObject(forKey: KEY_REPLACE)
 	}
 }

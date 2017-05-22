@@ -10,6 +10,10 @@ import Foundation
 import Alamofire
 import SwiftyJSON
 
+protocol TPClientCallback {
+	func taskStatusChanged(task: TPTaskInfo)
+}
+
 class TPClient {
 	let MAX_TASKS: Int = 5
 	let BASE_URL = "https://api.tinify.com/shrink"
@@ -21,6 +25,8 @@ class TPClient {
 			IOHeler.sOutputPath = sOutputPath
 		}
 	}
+	
+	var callback:TPClientCallback!
 	
 	fileprivate init() {}
 	
@@ -81,7 +87,7 @@ class TPClient {
 				})
 				.responseJSON(completionHandler: { (response) in
 					let json = JSON(response.result.value!)
-					if json != nil {
+					if json != JSON.null {
 						if let error = json["error"].string {
 							debugPrint("error: " + task.fileName + error)
 							task.errorMessage = json["message"].string
@@ -89,7 +95,7 @@ class TPClient {
 							return
 						}
 						let output = json["output"]
-						if output != nil {
+						if output != JSON.null {
 							let resultUrl = output["url"]
 							task.resultUrl = String(describing: resultUrl)
 							task.resultSize = output["size"].doubleValue
@@ -115,8 +121,12 @@ class TPClient {
 	fileprivate func onUploadFinish(_ task: TPTaskInfo) {
 		debugPrint("downloading: " + task.fileName)
 		self.updateStatus(task, newStatus: .downloading)
-		let folder = IOHeler.getOutputPath()
-		task.outputFile = folder.appendingPathComponent(task.fileName)
+		if TPConfig.shouldReplace() {
+			task.outputFile = task.originFile;
+		} else {
+			let folder = IOHeler.getOutputPath()
+			task.outputFile = folder.appendingPathComponent(task.fileName)
+		}
 		downloadCompressImage(task)
 	}
 	
@@ -145,14 +155,16 @@ class TPClient {
 	}
 	
 	fileprivate func updateStatus(_ task: TPTaskInfo, newStatus: TPTaskStatus, progress: Progress) {
+		print(task.fileName + " old:" + String(describing: task.status) + " -> new: " + String(describing: newStatus))
 		task.status = newStatus
 		task.progress = progress
 		if newStatus == .error || newStatus == .finish {
 			self.runningTasks -= 1
 		}
-		OperationQueue.main.addOperation {
-			NotificationCenter.default.post(name: Notification.Name(rawValue: "statusChanged"), object: task)
-		}
+//		OperationQueue.main.addOperation {
+//			NotificationCenter.default.post(name: Notification.Name(rawValue: "statusChanged"), object: task)
+//		}
+		callback.taskStatusChanged(task: task)
 	}
 	
 	fileprivate func updateStatus(_ task: TPTaskInfo, newStatus: TPTaskStatus) {

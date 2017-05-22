@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1D843D7CE0609BA7B4F65DB9 /* Pods_TinyPNG4Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 811CF203124A83759CC63BFF /* Pods_TinyPNG4Mac.framework */; };
+		272AC1AD1ED2BA5C0005E7D5 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949CA1D2C02BA0043DECE /* MainViewController.swift */; };
 		272C50A01D2D545300EEECC2 /* SpinnerProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */; };
 		272C50AD1D2EB03100EEECC2 /* InputKeyAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */; };
 		2730E9011D3680A80030A459 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2730E9001D3680A80030A459 /* Credits.rtf */; };
@@ -23,15 +25,10 @@
 		277AAF761D2698B600788F37 /* TPConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF751D2698B600788F37 /* TPConfig.swift */; };
 		277AAF781D269D7C00788F37 /* IOHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277AAF771D269D7C00788F37 /* IOHelper.swift */; };
 		27A949C81D2C00120043DECE /* MainWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949C71D2C00120043DECE /* MainWindowController.swift */; };
-		27A949CB1D2C02BA0043DECE /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949CA1D2C02BA0043DECE /* MainViewController.swift */; };
 		27C12A171D35411800F0FD81 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 27C12A151D35411800F0FD81 /* Localizable.strings */; };
-		EE308335605F7F6BA3CE78B2 /* Pods_TinyPNG4Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA4EB8EE196F9FB732ABF8E /* Pods_TinyPNG4Mac.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0EA4EB8EE196F9FB732ABF8E /* Pods_TinyPNG4Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPNG4Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2715698A1DBF7E9900EAEF98 /* Pods-TinyPNG4Mac.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-TinyPNG4Mac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPNG4Mac/Pods-TinyPNG4Mac.debug.xcconfig"; sourceTree = "<group>"; };
-		2715698B1DBF7E9900EAEF98 /* Pods-TinyPNG4Mac.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-TinyPNG4Mac.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPNG4Mac/Pods-TinyPNG4Mac.release.xcconfig"; sourceTree = "<group>"; };
 		272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerProgressIndicator.swift; sourceTree = "<group>"; };
 		272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputKeyAlert.swift; sourceTree = "<group>"; };
 		2730E9001D3680A80030A459 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -54,6 +51,9 @@
 		27A949CC1D2C07290043DECE /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		27C12A191D35414500F0FD81 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		27C12A1A1D3541DA00F0FD81 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		3EC4E906FA6863DD0D5839DA /* Pods-TinyPNG4Mac.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPNG4Mac.release.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPNG4Mac/Pods-TinyPNG4Mac.release.xcconfig"; sourceTree = "<group>"; };
+		811CF203124A83759CC63BFF /* Pods_TinyPNG4Mac.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TinyPNG4Mac.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B8A32DFEB3E5214A1AADE38D /* Pods-TinyPNG4Mac.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TinyPNG4Mac.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TinyPNG4Mac/Pods-TinyPNG4Mac.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,29 +61,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EE308335605F7F6BA3CE78B2 /* Pods_TinyPNG4Mac.framework in Frameworks */,
+				1D843D7CE0609BA7B4F65DB9 /* Pods_TinyPNG4Mac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		05369B0BEBAC9710C48081B8 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				2715698A1DBF7E9900EAEF98 /* Pods-TinyPNG4Mac.debug.xcconfig */,
-				2715698B1DBF7E9900EAEF98 /* Pods-TinyPNG4Mac.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		277AAF461D23F24900788F37 = {
 			isa = PBXGroup;
 			children = (
 				277AAF511D23F24900788F37 /* tinypng4mac */,
 				277AAF501D23F24900788F37 /* Products */,
-				05369B0BEBAC9710C48081B8 /* Pods */,
-				99559CB4A0420EDCE9264015 /* Frameworks */,
+				598597DBDE3F9EA48148E86C /* Pods */,
+				9D9DE7AAFF16AD3FF311386F /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -153,10 +144,19 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
-		99559CB4A0420EDCE9264015 /* Frameworks */ = {
+		598597DBDE3F9EA48148E86C /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				0EA4EB8EE196F9FB732ABF8E /* Pods_TinyPNG4Mac.framework */,
+				B8A32DFEB3E5214A1AADE38D /* Pods-TinyPNG4Mac.debug.xcconfig */,
+				3EC4E906FA6863DD0D5839DA /* Pods-TinyPNG4Mac.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		9D9DE7AAFF16AD3FF311386F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				811CF203124A83759CC63BFF /* Pods_TinyPNG4Mac.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -168,12 +168,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 277AAF5E1D23F24900788F37 /* Build configuration list for PBXNativeTarget "TinyPNG4Mac" */;
 			buildPhases = (
-				4009D64FE12E4FFBA9DBF593 /* Check Pods Manifest.lock */,
+				560DF08D8EECAFD36EAA6AF5 /* [CP] Check Pods Manifest.lock */,
 				277AAF4B1D23F24900788F37 /* Sources */,
 				277AAF4C1D23F24900788F37 /* Frameworks */,
 				277AAF4D1D23F24900788F37 /* Resources */,
-				4A43550B9E2203DF748DA005 /* Embed Pods Frameworks */,
-				FB2BCA09237C8540CC3DD31F /* Copy Pods Resources */,
+				5B420B6B1C8EFF2B07BE8D63 /* [CP] Embed Pods Frameworks */,
+				C444391B23F5566C92F691F0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -234,29 +234,29 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4009D64FE12E4FFBA9DBF593 /* Check Pods Manifest.lock */ = {
+		560DF08D8EECAFD36EAA6AF5 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		4A43550B9E2203DF748DA005 /* Embed Pods Frameworks */ = {
+		5B420B6B1C8EFF2B07BE8D63 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -264,14 +264,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyPNG4Mac/Pods-TinyPNG4Mac-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FB2BCA09237C8540CC3DD31F /* Copy Pods Resources */ = {
+		C444391B23F5566C92F691F0 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -287,13 +287,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				272C50AD1D2EB03100EEECC2 /* InputKeyAlert.swift in Sources */,
-				27A949CB1D2C02BA0043DECE /* MainViewController.swift in Sources */,
 				272C50A01D2D545300EEECC2 /* SpinnerProgressIndicator.swift in Sources */,
 				277AAF711D26478A00788F37 /* TaskTableCell.swift in Sources */,
 				27A949C81D2C00120043DECE /* MainWindowController.swift in Sources */,
 				277AAF641D25201900788F37 /* TPClient.swift in Sources */,
 				277AAF531D23F24900788F37 /* AppDelegate.swift in Sources */,
 				277AAF741D267CF700788F37 /* Formator.swift in Sources */,
+				272AC1AD1ED2BA5C0005E7D5 /* MainViewController.swift in Sources */,
 				277AAF671D254C0700788F37 /* TPQueue.swift in Sources */,
 				277AAF6A1D254D4F00788F37 /* TPTaskInfo.swift in Sources */,
 				277AAF6C1D25517E00788F37 /* TPStore.swift in Sources */,
@@ -418,7 +418,7 @@
 		};
 		277AAF5F1D23F24900788F37 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2715698A1DBF7E9900EAEF98 /* Pods-TinyPNG4Mac.debug.xcconfig */;
+			baseConfigurationReference = B8A32DFEB3E5214A1AADE38D /* Pods-TinyPNG4Mac.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -433,7 +433,7 @@
 		};
 		277AAF601D23F24900788F37 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2715698B1DBF7E9900EAEF98 /* Pods-TinyPNG4Mac.release.xcconfig */;
+			baseConfigurationReference = 3EC4E906FA6863DD0D5839DA /* Pods-TinyPNG4Mac.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;

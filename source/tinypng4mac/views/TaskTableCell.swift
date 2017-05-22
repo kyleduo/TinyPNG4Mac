@@ -54,22 +54,22 @@ class TaskTableCell: NSTableCellView {
 			if taskStatus == .finish {
 				let text = "-\(Formator.formatSize(task!.originSize - task!.resultSize)) (\(Formator.formatRate(1 - task!.compressRate)))"
 				self.status.stringValue = text
-				self.status.textColor = NSColor(deviceRed:0.55, green:1, blue:0.65, alpha:1)
-				self.name.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)
-				self.name.font = NSFont.systemFont(ofSize: 16)
+				self.status.textColor = NSColor(deviceRed:0.41, green:0.95, blue:0.78, alpha:1.00)
+				self.name.textColor = NSColor(deviceRed:1, green:1, blue:1, alpha:0.9)
+				self.name.font = NSFont.systemFont(ofSize: 14)
 				self.finishIndicator.isHidden = false
 			} else if taskStatus == .error {
-				debugPrint(task?.errorMessage)
+				debugPrint(task?.errorMessage as Any)
 				self.status.stringValue = statusText
-				self.status.textColor = NSColor(deviceRed:0.86, green:0.27, blue:0.26, alpha:1)
+				self.status.textColor = NSColor(deviceRed:0.99, green:0.44, blue:0.44, alpha:1.00)
 				self.name.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)
-				self.name.font = NSFont.systemFont(ofSize: 16)
+				self.name.font = NSFont.systemFont(ofSize: 14)
 				self.finishIndicator.isHidden = true
 			} else {
 				self.status.stringValue = statusText
 				self.status.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)
 				self.name.textColor = NSColor.white
-				self.name.font = NSFont.boldSystemFont(ofSize: 16)
+				self.name.font = NSFont.boldSystemFont(ofSize: 14)
 				self.finishIndicator.isHidden = true
 			}
 			

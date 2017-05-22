@@ -12,7 +12,7 @@
 
 "0 tasks" = "0 个任务";
 
-"tasks desc" = "%d 张图片节省了 %@(%@)空间";
+"tasks desc" = "%d 张图片节省了 %@(%@)";
 
 "Input developer API Key. If you do not have, click register button." = "填写开发者API Key，如果还没有，点击下面的【注册】按钮。";
 

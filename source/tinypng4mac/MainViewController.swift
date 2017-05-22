@@ -8,13 +8,17 @@
 
 import Cocoa
 
-class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableViewDelegate, NSTableViewDataSource, NSTextFieldDelegate, DragContainerDelegate {
+class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableViewDelegate, NSTableViewDataSource, NSTextFieldDelegate, DragContainerDelegate, TPClientCallback {
 	
 	@IBOutlet weak var apiKey: NSTextField!
 	@IBOutlet weak var outputPathField: NSTextField!
 	@IBOutlet weak var taskTableView: NSTableView!
 	@IBOutlet weak var dropContainer: DragContainer!
 	@IBOutlet weak var totalReduce: NSTextField!
+	@IBOutlet weak var replaceSwitch: NSButton!
+	@IBOutlet weak var icon: NSImageView!
+	@IBOutlet weak var desc: NSTextField!
+	@IBOutlet weak var background: NSView!
 	
 	var totalSize: Double = 0
 	var totalRecudeSize: Double = 0
@@ -22,9 +26,9 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	
 	var inputKeyAlert: InputKeyAlert?;
 	
+	// MARK: - lifecycle
+	
 	override func viewDidLoad() {
-		
-		NotificationCenter.default.addObserver(self, selector:#selector(MainViewController.statusChanged), name:NSNotification.Name(rawValue: "statusChanged"), object: nil)
 		NotificationCenter.default.addObserver(self, selector:#selector(MainViewController.resetConfiguration), name:NSNotification.Name(rawValue: "resetConfiguration"), object: nil)
 		
 		if let savedKey = TPConfig.savedkey() {
@@ -37,8 +41,19 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			TPClient.sOutputPath = savedPath
 		}
 		
+		let gradientLayer = CAGradientLayer()
+		gradientLayer.colors = [NSColor(deviceRed:0.08, green:0.66, blue:0.84, alpha:1.00).cgColor, NSColor(deviceRed:0.05, green:0.47, blue:0.73, alpha:1.00).cgColor]
+		gradientLayer.locations = [NSNumber(value: 0), NSNumber(value: 1)]
+		gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
+		gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
+		gradientLayer.frame = CGRect(x:0, y:0, width:320, height:320)
+		background.layer = gradientLayer
+		background.wantsLayer = true
 		
 		totalReduce.stringValue = NSLocalizedString("0 tasks", comment: "0 tasks")
+		replaceSwitch.state = TPConfig.shouldReplace() ? NSOnState : NSOffState
+		
+		TPClient.sharedClient.callback = self
 	}
 	
 	override func awakeFromNib() {
@@ -64,6 +79,8 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			changePanel(false, animated: false)
 		}
 	}
+	
+	// MARK: - save configuration
 	
 	func saveApiKey(_ key: String) {
 		TPConfig.saveKey(key)
@@ -98,13 +115,15 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		outputPathField.isEditable = false
 	}
 	
-	func unlockTextField() {
+	func unlockUI() {
 		apiKey.isEditable = true
 		outputPathField.isEditable = true
+		replaceSwitch.isEnabled = true
 	}
 	
-	@objc func statusChanged(_ notification: Notification) {
-		let task = notification.object as! TPTaskInfo
+	// MARK: - tpclient callback
+	
+	func taskStatusChanged(task: TPTaskInfo) {
 		if task.status == .finish {
 			if !keySaved {
 				TPConfig.saveKey(TPClient.sApiKey)
@@ -116,13 +135,15 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			
 			if TPClient.sharedClient.queue.isEmpty() {
 				// all finished
-				unlockTextField()
+				unlockUI()
 			}
 		}
 		
 		TPStore.sharedStore.sort()
 		taskTableView.reloadData()
 	}
+	
+	// MARK: - notification
 	
 	@objc func resetConfiguration(_ notification: Notification) {
 		TPClient.sApiKey = ""
@@ -131,6 +152,8 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		keySaved = false
 		changePanel(true, animated: true)
 	}
+	
+	// MARK: - ui action
 	
 	@IBAction func clickSelectPath(_ sender: AnyObject) {
 		let openPanel = NSOpenPanel();
@@ -153,6 +176,9 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	}
 	
 	@IBAction func clickSettings(_ sender: AnyObject) {
+		if TPClient.sharedClient.runningTasks > 0 {
+			return
+		}
 		let window = NSApplication.shared().windows.first!
 		let height = window.frame.height
 		changePanel(height == 320, animated: true)
@@ -166,15 +192,26 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		let window = NSApplication.shared().windows.first!
 		let frame = window.frame
 		let height = window.frame.height
-		var t = height
+		var target = height
 		if open {
-			t = 400
+			target = 417
 		} else {
-			t = 320
+			target = 320
 		}
-		let newFrame = CGRect.init(x: frame.origin.x, y: frame.origin.y + (height - t), width: frame.size.width, height: t)
+		if frame.size.height == target {
+			return
+		}
+		let newFrame = CGRect.init(x: frame.origin.x, y: frame.origin.y + (height - target), width: frame.size.width, height: target)
 		window.setFrame(newFrame, display: true, animate: animated)
 	}
+	
+	@IBAction func clickReplaceSwitch(_ sender: NSButton) {
+		let isOn = sender.state == NSOnState
+		TPConfig.saveReplace(isOn)
+		outputPathField.isEditable = !isOn
+	}
+	
+	// MARK: - dragging
 	
 	func draggingEntered() {
 	}
@@ -201,7 +238,11 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		
 		apiKey.isEditable = false
 		outputPathField.isEditable = false
+		replaceSwitch.isEnabled = false
+		changePanel(false, animated: true)
 	}
+	
+	// MARK: - tableview
 	
 	func numberOfRows(in tableView: NSTableView) -> Int {
 		return TPStore.sharedStore.count()
@@ -212,6 +253,8 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		cell!.task = TPStore.sharedStore.get(row)!
 		return cell
 	}
+	
+	// MARK: - textfield
 	
 	override func controlTextDidEndEditing(_ obj: Notification) {
 		if let textField = obj.object as? NSTextField {

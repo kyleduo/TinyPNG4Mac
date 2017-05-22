@@ -48,7 +48,7 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 	}
 	
 	func gotoRegister() {
-		NSWorkspace.shared().open(URL.init(string: "https://tinypng.com/developers/subscription")!)
+		NSWorkspace.shared().open(URL.init(string: "https://tinypng.com/developers")!)
 	}
 	
 	func show(_ window: NSWindow!, saveAction: ((String?) -> Void)?) {

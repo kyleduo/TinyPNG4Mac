@@ -11,6 +11,7 @@ import Foundation
 class TPConfig {
 	static let KEY_API = "saved_api_key"
 	static let KEY_OUTPUT_FILE = "output_path"
+	static let KEY_REPLACE = "replace"
 	
 	static func saveKey(_ key: String) {
 		UserDefaults.standard.set(key, forKey: KEY_API)
@@ -31,6 +32,14 @@ class TPConfig {
 			TPConfig.savePath(path!)
 		}
 		return path
+	}
+	
+	static func saveReplace(_ replace: Bool) {
+		UserDefaults.standard.set(replace, forKey: KEY_REPLACE);
+	}
+	
+	static func shouldReplace() -> Bool! {
+		return UserDefaults.standard.bool(forKey: KEY_REPLACE)
 	}
 	
 	static func removeKey() {

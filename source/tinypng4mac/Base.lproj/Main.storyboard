@@ -303,7 +303,7 @@
                                         </connections>
                                     </button>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="Wlb-vO-jQD">
-                                        <rect key="frame" x="256" y="12" width="24" height="24"/>
+                                        <rect key="frame" x="252" y="12" width="24" height="24"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="24" id="372-OH-CEV"/>
                                             <constraint firstAttribute="height" constant="24" id="aMm-Cl-9P5"/>
@@ -318,7 +318,7 @@
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="ThG-Q2-7EJ" firstAttribute="leading" secondItem="Wlb-vO-jQD" secondAttribute="trailing" constant="4" id="9BD-m0-aC4"/>
+                                    <constraint firstItem="ThG-Q2-7EJ" firstAttribute="leading" secondItem="Wlb-vO-jQD" secondAttribute="trailing" constant="8" id="9BD-m0-aC4"/>
                                     <constraint firstAttribute="width" constant="320" id="9XX-J0-wlN"/>
                                     <constraint firstAttribute="height" constant="320" id="LBg-6c-iG7"/>
                                     <constraint firstItem="Wlb-vO-jQD" firstAttribute="centerY" secondItem="ThG-Q2-7EJ" secondAttribute="centerY" id="P4v-m8-c1P"/>
@@ -495,8 +495,8 @@
     </scenes>
     <resources>
         <image name="icon" width="240" height="240"/>
-        <image name="icon_finder" width="32" height="32"/>
+        <image name="icon_finder" width="64" height="64"/>
         <image name="icon_finish" width="16" height="16"/>
-        <image name="icon_setting" width="32" height="32"/>
+        <image name="icon_setting" width="64" height="64"/>
     </resources>
 </document>

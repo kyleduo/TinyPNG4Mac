@@ -41,13 +41,13 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			TPClient.sOutputPath = savedPath
 		}
 		
-		let gradientLayer = CAGradientLayer()
-		gradientLayer.colors = [NSColor(deviceRed:0.08, green:0.66, blue:0.84, alpha:1.00).cgColor, NSColor(deviceRed:0.05, green:0.47, blue:0.73, alpha:1.00).cgColor]
-		gradientLayer.locations = [NSNumber(value: 0), NSNumber(value: 1)]
-		gradientLayer.startPoint = CGPoint(x: 0.5, y: 1)
-		gradientLayer.endPoint = CGPoint(x: 0.5, y: 0)
-		gradientLayer.frame = CGRect(x:0, y:0, width:320, height:320)
-		background.layer = gradientLayer
+		let bg = CAGradientLayer()
+		bg.colors = [NSColor(deviceRed:0.08, green:0.66, blue:0.84, alpha:1.00).cgColor, NSColor(deviceRed:0.05, green:0.47, blue:0.73, alpha:1.00).cgColor]
+		bg.locations = [NSNumber(value: 0), NSNumber(value: 1)]
+		bg.startPoint = CGPoint(x: 0.5, y: 1)
+		bg.endPoint = CGPoint(x: 0.5, y: 0)
+		bg.frame = CGRect(x:0, y:0, width:320, height:320)
+		background.layer = bg
 		background.wantsLayer = true
 		
 		totalReduce.stringValue = NSLocalizedString("0 tasks", comment: "0 tasks")
@@ -235,6 +235,9 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		TPClient.sharedClient.add(tasks)
 		taskTableView.reloadData()
 		TPClient.sharedClient.checkExecution()
+		
+		icon.animator().alphaValue = 0
+		desc.animator().alphaValue = 0
 		
 		apiKey.isEditable = false
 		outputPathField.isEditable = false

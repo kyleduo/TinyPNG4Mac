@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		1D843D7CE0609BA7B4F65DB9 /* Pods_TinyPNG4Mac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 811CF203124A83759CC63BFF /* Pods_TinyPNG4Mac.framework */; };
 		272AC1AD1ED2BA5C0005E7D5 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27A949CA1D2C02BA0043DECE /* MainViewController.swift */; };
+		272AC1AF1ED335470005E7D5 /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272AC1AE1ED335470005E7D5 /* GradientView.swift */; };
 		272C50A01D2D545300EEECC2 /* SpinnerProgressIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */; };
 		272C50AD1D2EB03100EEECC2 /* InputKeyAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */; };
 		2730E9011D3680A80030A459 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2730E9001D3680A80030A459 /* Credits.rtf */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		272AC1AE1ED335470005E7D5 /* GradientView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpinnerProgressIndicator.swift; sourceTree = "<group>"; };
 		272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputKeyAlert.swift; sourceTree = "<group>"; };
 		2730E9001D3680A80030A459 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				277AAF611D250DD100788F37 /* DragContainer.swift */,
 				272C509F1D2D545300EEECC2 /* SpinnerProgressIndicator.swift */,
 				272C50AC1D2EB03100EEECC2 /* InputKeyAlert.swift */,
+				272AC1AE1ED335470005E7D5 /* GradientView.swift */,
 			);
 			path = views;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 			files = (
 				272C50AD1D2EB03100EEECC2 /* InputKeyAlert.swift in Sources */,
 				272C50A01D2D545300EEECC2 /* SpinnerProgressIndicator.swift in Sources */,
+				272AC1AF1ED335470005E7D5 /* GradientView.swift in Sources */,
 				277AAF711D26478A00788F37 /* TaskTableCell.swift in Sources */,
 				27A949C81D2C00120043DECE /* MainWindowController.swift in Sources */,
 				277AAF641D25201900788F37 /* TPClient.swift in Sources */,

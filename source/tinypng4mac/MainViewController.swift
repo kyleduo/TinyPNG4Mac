@@ -18,7 +18,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	@IBOutlet weak var replaceSwitch: NSButton!
 	@IBOutlet weak var icon: NSImageView!
 	@IBOutlet weak var desc: NSTextField!
-	@IBOutlet weak var background: NSView!
+	@IBOutlet weak var background: GradientView!
 	
 	var totalSize: Double = 0
 	var totalRecudeSize: Double = 0
@@ -40,15 +40,6 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 			outputPathField.stringValue = savedPath
 			TPClient.sOutputPath = savedPath
 		}
-		
-		let bg = CAGradientLayer()
-		bg.colors = [NSColor(deviceRed:0.08, green:0.66, blue:0.84, alpha:1.00).cgColor, NSColor(deviceRed:0.05, green:0.47, blue:0.73, alpha:1.00).cgColor]
-		bg.locations = [NSNumber(value: 0), NSNumber(value: 1)]
-		bg.startPoint = CGPoint(x: 0.5, y: 1)
-		bg.endPoint = CGPoint(x: 0.5, y: 0)
-		bg.frame = CGRect(x:0, y:0, width:320, height:320)
-		background.layer = bg
-		background.wantsLayer = true
 		
 		totalReduce.stringValue = NSLocalizedString("0 tasks", comment: "0 tasks")
 		replaceSwitch.state = TPConfig.shouldReplace() ? NSOnState : NSOffState

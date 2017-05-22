@@ -258,7 +258,7 @@
                                     <constraint firstItem="zRv-TO-bMw" firstAttribute="centerY" secondItem="NnK-w1-6b9" secondAttribute="centerY" id="vhH-ld-Iyv"/>
                                 </constraints>
                             </visualEffectView>
-                            <view wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="F5f-sg-JvA">
+                            <view wantsLayer="YES" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="F5f-sg-JvA" customClass="GradientView" customModule="TinyPNG4Mac" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="97" width="320" height="320"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="320" id="TZi-1T-Q24"/>

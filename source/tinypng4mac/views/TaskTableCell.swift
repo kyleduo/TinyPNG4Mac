@@ -67,7 +67,7 @@ class TaskTableCell: NSTableCellView {
 				self.finishIndicator.isHidden = true
 			} else {
 				self.status.stringValue = statusText
-				self.status.textColor = NSColor(deviceRed:0.87, green:0.87, blue:0.87, alpha:1)
+				self.status.textColor = NSColor(deviceRed:1, green:1, blue:1, alpha:0.6)
 				self.name.textColor = NSColor.white
 				self.name.font = NSFont.boldSystemFont(ofSize: 14)
 				self.finishIndicator.isHidden = true

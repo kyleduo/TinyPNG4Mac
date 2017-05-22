@@ -275,7 +275,7 @@
                                     <constraint firstAttribute="height" constant="88" id="UhP-4F-EhG"/>
                                     <constraint firstAttribute="width" constant="88" id="dff-jF-VA1"/>
                                 </constraints>
-                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="box" id="X7r-Gl-0hN"/>
+                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon" id="X7r-Gl-0hN"/>
                             </imageView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.40000000000000002" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
                                 <rect key="frame" x="57" y="197" width="206" height="18"/>
@@ -494,7 +494,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="box" width="88" height="88"/>
+        <image name="icon" width="240" height="240"/>
         <image name="icon_finder" width="32" height="32"/>
         <image name="icon_finish" width="16" height="16"/>
         <image name="icon_setting" width="32" height="32"/>

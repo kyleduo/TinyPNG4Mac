@@ -1,5 +1,6 @@
 # TinyPNG4Mac
-![](./preview/icon.png)
+
+![preview](./preview/preview.png)
 
 This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can compress pngs without open browser and manually download images, all you need to do is just drag and drop.
 
@@ -21,26 +22,15 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 
 
 
-
-### Preview
-
-![](./preview/preview.png)
-
-
-
 ### Download
 
 \>\>\>\>\>\> [Link](https://github.com/kyleduo/TinyPNG4Mac/releases) \<\<\<\<\<\<
 
 Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this app. Just for the first time, and I suggest you uncheck it after you open this app for security.
 
-
-
 ### Thanks
 
 [droptogif](https://github.com/mortenjust/droptogif) -- A very useful client for convert video to gif. I learnt how to create window from that project.
-
-
 
 ### History
 

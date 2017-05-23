@@ -1,9 +1,7 @@
 # TinyPNG4Mac
-![](./preview/icon.png)
+![preview](./preview/preview.png)
 
 这是[TinyPNG](https://tinypng.com)的Mac客户端。TinyPNG提供了PNG图片的“几乎无损”压缩服务。使用TinyPNG4Mac，你可以通过简单的拖拽完成对PNG图片的压缩，无需打开浏览器，无需手动下载图片。
-
-
 
 ### 1.0.0版本
 
@@ -20,26 +18,15 @@
 3. 拖拽图片到窗口中。
 
 
-
-### 预览
-
-![](./preview/preview.png)
-
-
-
 ### 下载
 
 \>\>\>\>\>\> [点击这里下载](https://github.com/kyleduo/TinyPNG4Mac/releases) \<\<\<\<\<\<
 
 第一次打开可能出现“无法打开”的提示，请到`设置 -> 安全性与隐私`里面勾选`所有来源`。出于安全考虑，建议打开之后关闭这个选项。
 
-
-
 ### 致谢
 
 [droptogif](https://github.com/mortenjust/droptogif) -- 实用的视频转Gif的工具。我在里面学习了如何创建Window。
-
-
 
 ### 版本历史
 
@@ -60,8 +47,6 @@
 > 3. 支持自定义保存路径；
 > 4. 任务列表排序；
 > 5. 支持中文。
-
-
 
 ### 协议
 

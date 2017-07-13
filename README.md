@@ -24,7 +24,9 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 
 ### Download
 
-\>\>\>\>\>\> [Link](https://github.com/kyleduo/TinyPNG4Mac/releases) \<\<\<\<\<\<
+[From Github](https://github.com/kyleduo/TinyPNG4Mac/releases)
+
+[七牛下载](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_0.zip)
 
 Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this app. Just for the first time, and I suggest you uncheck it after you open this app for security.
 

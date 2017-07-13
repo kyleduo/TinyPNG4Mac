@@ -20,7 +20,9 @@
 
 ### 下载
 
-\>\>\>\>\>\> [点击这里下载](https://github.com/kyleduo/TinyPNG4Mac/releases) \<\<\<\<\<\<
+[直接下载](https://github.com/kyleduo/TinyPNG4Mac/releases) 
+
+[七牛下载](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_0.zip)
 
 第一次打开可能出现“无法打开”的提示，请到`设置 -> 安全性与隐私`里面勾选`所有来源`。出于安全考虑，建议打开之后关闭这个选项。
 

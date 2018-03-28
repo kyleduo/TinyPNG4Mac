@@ -33,29 +33,29 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 	
 	func createRegisterButton() -> NSButton {
 		let button = NSButton.init(frame: CGRect(x: 0, y: 0, width: 56, height: 24))
-		button.setButtonType(NSButtonType.momentaryLight)
+		button.setButtonType(NSButton.ButtonType.momentaryLight)
 		button.isBordered = false
 		let paragraphStyle = NSMutableParagraphStyle.init()
 		paragraphStyle.alignment = NSTextAlignment.center
 		let title = NSMutableAttributedString.init(string: NSLocalizedString("Register", comment: "Register"))
-		title.addAttributes([NSForegroundColorAttributeName: NSColor.blue,
-			NSParagraphStyleAttributeName:paragraphStyle,
-			NSUnderlineStyleAttributeName:NSUnderlineStyle.styleSingle.rawValue], range: NSMakeRange(0, title.length))
+		title.addAttributes([NSAttributedStringKey.foregroundColor: NSColor.blue,
+			NSAttributedStringKey.paragraphStyle:paragraphStyle,
+			NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue], range: NSMakeRange(0, title.length))
 		button.attributedTitle = title
 		button.target = self
 		button.action = #selector(InputKeyAlert.gotoRegister)
 		return button
 	}
 	
-	func gotoRegister() {
-		NSWorkspace.shared().open(URL.init(string: "https://tinypng.com/developers")!)
+	@objc func gotoRegister() {
+		NSWorkspace.shared.open(URL.init(string: "https://tinypng.com/developers")!)
 	}
 	
 	func show(_ window: NSWindow!, saveAction: ((String?) -> Void)?) {
 		isShowing = true
 		self.beginSheetModal(for: window, completionHandler: { (response) in
 			self.isShowing = false
-			if response == NSAlertFirstButtonReturn {
+			if response == NSApplication.ModalResponse.alertFirstButtonReturn {
 				saveAction?(self.input?.stringValue)
 			}
 		}) 
@@ -63,7 +63,7 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 	
 	override func controlTextDidChange(_ obj: Notification) {
 		if let text = input?.stringValue {
-			self.submitButton?.isEnabled = text.characters.count > 0
+			self.submitButton?.isEnabled = text.count > 0
 		}
 	}
 }

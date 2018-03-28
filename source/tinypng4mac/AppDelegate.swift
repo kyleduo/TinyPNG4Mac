@@ -27,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 	}
 	
 	@IBAction func viewInGithub(_ sender: AnyObject) {
-		NSWorkspace.shared().open(URL.init(string: "https://github.com/kyleduo/TinyPNG4Mac")!)
+		NSWorkspace.shared.open(URL.init(string: "https://github.com/kyleduo/TinyPNG4Mac")!)
 	}
 	@IBAction func clearConfiguration(_ sender: AnyObject) {
 		TPConfig.removeKey()

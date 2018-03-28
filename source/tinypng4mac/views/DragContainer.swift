@@ -18,15 +18,18 @@ class DragContainer: NSView {
 	var delegate : DragContainerDelegate?
 	
 	let acceptTypes = ["png", "jpg", "jpeg"]
+    let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 	
-	let normalColor: CGFloat = 0.95
-	let highlightColor: CGFloat = 0.99
-	let borderColor: CGFloat = 0.85
+    let normalAlpha: CGFloat = 0
+    let highlightAlpha: CGFloat = 0.2
 	
 	override func awakeFromNib() {
 		super.awakeFromNib()
 		
-		self.register(forDraggedTypes: [NSFilenamesPboardType, NSURLPboardType, NSPasteboardTypeTIFF]);
+        self.registerForDraggedTypes([
+            NSPasteboard.PasteboardType.backwardsCompatibleFileURL,
+            NSPasteboard.PasteboardType(rawValue: kUTTypeItem as String)
+            ]);
 	}
 	
 	override func draw(_ dirtyRect: NSRect) {
@@ -34,7 +37,7 @@ class DragContainer: NSView {
 	}
 	
 	override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
-//		self.layer?.backgroundColor = NSColor(white: highlightColor, alpha: 1).CGColor;
+        self.layer?.backgroundColor = NSColor(white: 1, alpha: highlightAlpha).cgColor;
 		let res = checkExtension(sender)
 		if let delegate = self.delegate {
 			delegate.draggingEntered();
@@ -46,14 +49,14 @@ class DragContainer: NSView {
 	}
 	
 	override func draggingExited(_ sender: NSDraggingInfo?) {
-//		self.layer?.backgroundColor = NSColor(white: normalColor, alpha: 1).CGColor;
+        self.layer?.backgroundColor = NSColor(white: 1, alpha: normalAlpha).cgColor;
 		if let delegate = self.delegate {
 			delegate.draggingExit();
 		}
 	}
 	
 	override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
-//		self.layer?.backgroundColor = NSColor(white: normalColor, alpha: 1).CGColor;
+        self.layer?.backgroundColor = NSColor(white: 1, alpha: normalAlpha).cgColor;
 		return true
 	}
 	
@@ -77,7 +80,7 @@ class DragContainer: NSView {
 	}
 	
 	func checkExtension(_ draggingInfo: NSDraggingInfo) -> Bool {
-		if let board = draggingInfo.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? NSArray {
+        if let board = draggingInfo.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? NSArray {
 			for path in board {
 				let url = URL(fileURLWithPath: path as! String)
 				let fileExtension = url.pathExtension.lowercased()
@@ -88,5 +91,4 @@ class DragContainer: NSView {
 		}
 		return false
 	}
-
 }

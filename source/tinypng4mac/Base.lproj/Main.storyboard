@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="12120"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="13771"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -138,12 +138,15 @@
         <scene sceneID="R2V-B0-nI4">
             <objects>
                 <windowController id="B8D-0N-5wS" customClass="MainWindowController" customModule="TinyPNG4Mac" customModuleProvider="target" sceneMemberID="viewController">
-                    <window key="window" title="TinyPNG - Mac Client" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA">
+                    <window key="window" title="TinyPNG - Mac Client" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" oneShot="NO" releasedWhenClosed="NO" showsToolbarButton="NO" visibleAtLaunch="NO" animationBehavior="default" id="IQv-IB-iLA" customClass="TPWindow" customModule="TinyPNG4Mac" customModuleProvider="target">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" fullSizeContentView="YES"/>
                         <rect key="contentRect" x="541" y="360" width="320" height="320"/>
                         <rect key="screenRect" x="0.0" y="0.0" width="1680" height="1027"/>
                         <value key="minSize" type="size" width="320" height="320"/>
                         <value key="maxSize" type="size" width="320" height="400"/>
+                        <connections>
+                            <outlet property="delegate" destination="B8D-0N-5wS" id="Yzm-Eu-cWY"/>
+                        </connections>
                     </window>
                     <connections>
                         <segue destination="f1c-SR-qaC" kind="relationship" relationship="window.shadowedContentViewController" id="b1L-a1-5Ds"/>
@@ -164,7 +167,7 @@
                             <visualEffectView appearanceType="vibrantLight" blendingMode="behindWindow" material="appearanceBased" state="active" translatesAutoresizingMaskIntoConstraints="NO" id="6R4-nY-g9G">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j7S-Iz-wE1">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="j7S-Iz-wE1">
                                         <rect key="frame" x="18" y="42" width="104" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Output Path:" id="wAc-5q-1kG">
                                             <font key="font" metaFont="system"/>
@@ -172,7 +175,7 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NnK-w1-6b9">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="NnK-w1-6b9">
                                         <rect key="frame" x="18" y="16" width="104" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Replace Origion:" id="7il-ST-uVu">
                                             <font key="font" metaFont="system"/>
@@ -180,7 +183,7 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iOT-w7-ALe">
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="iOT-w7-ALe">
                                         <rect key="frame" x="18" y="67" width="104" height="17"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="API Key:" id="tJg-5O-cpK">
                                             <font key="font" metaFont="system"/>
@@ -188,8 +191,8 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fT1-QL-4Nq">
-                                        <rect key="frame" x="132" y="39" width="144" height="22"/>
+                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fT1-QL-4Nq">
+                                        <rect key="frame" x="132" y="39" width="146" height="22"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="99a-9k-u4D">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
@@ -197,10 +200,9 @@
                                         </textFieldCell>
                                     </textField>
                                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="0K4-Mk-HkB">
-                                        <rect key="frame" x="282" y="39" width="22" height="22"/>
+                                        <rect key="frame" x="284" y="39" width="20" height="22"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="22" id="7fY-qZ-d52"/>
-                                            <constraint firstAttribute="width" constant="22" id="nQ4-zg-uvC"/>
                                         </constraints>
                                         <buttonCell key="cell" type="square" title="..." bezelStyle="shadowlessSquare" alignment="center" state="on" borderStyle="border" inset="2" id="IP1-rv-1RP">
                                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -210,7 +212,7 @@
                                             <action selector="clickSelectPath:" target="f1c-SR-qaC" id="6zI-cZ-R32"/>
                                         </connections>
                                     </button>
-                                    <textField verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vPz-Tz-wUm">
+                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vPz-Tz-wUm">
                                         <rect key="frame" x="132" y="65" width="172" height="22"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="OCF-de-u9Q">
                                             <font key="font" metaFont="system"/>
@@ -219,9 +221,8 @@
                                         </textFieldCell>
                                     </textField>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="zRv-TO-bMw">
-                                        <rect key="frame" x="132" y="15" width="18" height="18"/>
+                                        <rect key="frame" x="132" y="15" width="22" height="18"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="14" id="CU5-ED-hWI"/>
                                             <constraint firstAttribute="height" constant="14" id="mm5-iS-Q2I"/>
                                         </constraints>
                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OVU-oE-vul">
@@ -244,6 +245,7 @@
                                     <constraint firstItem="iOT-w7-ALe" firstAttribute="top" secondItem="6R4-nY-g9G" secondAttribute="top" constant="16" id="TCK-an-uSj"/>
                                     <constraint firstItem="NnK-w1-6b9" firstAttribute="height" secondItem="iOT-w7-ALe" secondAttribute="height" id="Y1f-du-yRe"/>
                                     <constraint firstItem="vPz-Tz-wUm" firstAttribute="leading" secondItem="fT1-QL-4Nq" secondAttribute="leading" id="aUc-uY-0MX"/>
+                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zRv-TO-bMw" secondAttribute="trailing" constant="20" symbolic="YES" id="aqP-9r-PsI"/>
                                     <constraint firstItem="vPz-Tz-wUm" firstAttribute="trailing" secondItem="0K4-Mk-HkB" secondAttribute="trailing" id="dVZ-FP-X3U"/>
                                     <constraint firstItem="vPz-Tz-wUm" firstAttribute="leading" secondItem="iOT-w7-ALe" secondAttribute="trailing" constant="12" id="fyb-On-NzP"/>
                                     <constraint firstItem="NnK-w1-6b9" firstAttribute="bottom" secondItem="6R4-nY-g9G" secondAttribute="bottom" constant="-16" id="hHG-bQ-lkQ"/>
@@ -277,7 +279,7 @@
                                 </constraints>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon" id="X7r-Gl-0hN"/>
                             </imageView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.40000000000000002" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
                                 <rect key="frame" x="57" y="197" width="206" height="18"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drop .JPG/.PNG images here!" id="cXq-XC-8Ss">
                                     <font key="font" metaFont="systemBold" size="14"/>
@@ -339,7 +341,7 @@
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="deviceWhite"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn width="317" minWidth="40" maxWidth="1000" id="5uH-R6-sDa">
+                                                <tableColumn identifier="" width="317" minWidth="40" maxWidth="1000" id="5uH-R6-sDa">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
                                                         <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -364,7 +366,7 @@
                                                                     </constraints>
                                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="JHH-DJ-f0H"/>
                                                                 </imageView>
-                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j8i-Ad-2S2">
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="j8i-Ad-2S2">
                                                                     <rect key="frame" x="70" y="30" width="46" height="18"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" title="A.png" id="wj2-uY-zLZ">
                                                                         <font key="font" metaFont="systemBold" size="14"/>
@@ -372,7 +374,7 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c8G-p9-kpA">
+                                                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c8G-p9-kpA">
                                                                     <rect key="frame" x="70" y="10" width="35" height="16"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="LZa-jE-EIr">
                                                                         <font key="font" metaFont="cellTitle"/>
@@ -434,7 +436,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
                             </scrollView>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fcw-HM-Ub9">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fcw-HM-Ub9">
                                 <rect key="frame" x="106" y="396" width="107" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="TinyPNG for Mac" id="8Ac-Uq-uCZ">
                                     <font key="font" metaFont="system"/>
@@ -442,7 +444,7 @@
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
-                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" allowsCharacterPickerTouchBarItem="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D8d-TS-a2j">
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D8d-TS-a2j">
                                 <rect key="frame" x="14" y="113" width="57" height="17"/>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" title="Reduce: " id="400-FH-fhZ">
                                     <font key="font" metaFont="system"/>
@@ -459,6 +461,7 @@
                             <constraint firstItem="6R4-nY-g9G" firstAttribute="leading" secondItem="dGm-CK-56C" secondAttribute="leading" id="CTf-8P-o1Y"/>
                             <constraint firstItem="fcw-HM-Ub9" firstAttribute="top" secondItem="dGm-CK-56C" secondAttribute="top" constant="4" id="Em6-ra-awU"/>
                             <constraint firstItem="D8d-TS-a2j" firstAttribute="leading" secondItem="dGm-CK-56C" secondAttribute="leading" constant="16" id="IxJ-1h-ecN"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="D8d-TS-a2j" secondAttribute="trailing" constant="20" symbolic="YES" id="Lf0-yv-AbY"/>
                             <constraint firstItem="D8d-TS-a2j" firstAttribute="centerY" secondItem="ThG-Q2-7EJ" secondAttribute="centerY" id="MOJ-k5-zLm"/>
                             <constraint firstItem="FK5-1A-UoS" firstAttribute="top" secondItem="dGm-CK-56C" secondAttribute="top" id="Rg2-bt-F0o"/>
                             <constraint firstAttribute="bottom" secondItem="6R4-nY-g9G" secondAttribute="bottom" priority="1" constant="-17" id="U9z-Hl-dU5"/>

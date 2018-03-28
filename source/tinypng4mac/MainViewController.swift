@@ -43,7 +43,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		}
 		
 		totalReduce.stringValue = NSLocalizedString("0 tasks", comment: "0 tasks")
-		replaceSwitch.state = TPConfig.shouldReplace() ? NSOnState : NSOffState
+		replaceSwitch.state = TPConfig.shouldReplace() ? NSControl.StateValue.on : NSControl.StateValue.off
 		
 		TPClient.sharedClient.callback = self
 	}
@@ -53,8 +53,8 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		
 		taskTableView.delegate = self
 		taskTableView.dataSource = self
-		taskTableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyle.none
-		taskTableView.enclosingScrollView?.scrollerStyle = NSScrollerStyle.legacy
+		taskTableView.selectionHighlightStyle = NSTableView.SelectionHighlightStyle.none
+		taskTableView.enclosingScrollView?.scrollerStyle = NSScroller.Style.legacy
 		
 		apiKey.delegate = self
 		outputPathField.delegate = self
@@ -62,9 +62,9 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	
 	override func viewDidAppear() {
 		super.viewDidAppear()
-		if TPClient.sApiKey.characters.count == 0 || TPClient.sOutputPath.characters.count == 0 {
+		if TPClient.sApiKey.count == 0 || TPClient.sOutputPath.count == 0 {
 			changePanel(true, animated: false)
-			if TPClient.sApiKey.characters.count == 0 {
+			if TPClient.sApiKey.count == 0 {
 				self.showInputPanel()
 			}
 		} else {
@@ -163,7 +163,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		openPanel.delegate = self;
 		
 		openPanel.begin { (result) -> Void in
-			if(result == NSFileHandlingPanelOKButton){
+			if(result.rawValue == NSFileHandlingPanelOKButton){
 				let path = openPanel.url!.path
 				debugPrint("selected folder is \(path)");
 				self.saveOutputPath(path)
@@ -172,17 +172,17 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	}
 	
 	@IBAction func clickSettings(_ sender: AnyObject) {
-		let window = NSApplication.shared().windows.first!
+		let window = NSApplication.shared.windows.first!
 		let height = window.frame.height
 		changePanel(height == 320, animated: true)
 	}
 	
 	@IBAction func clickFinder(_ sender: AnyObject) {
-		NSWorkspace.shared().open(IOHeler.getOutputPath() as URL)
+		NSWorkspace.shared.open(IOHeler.getOutputPath() as URL)
 	}
 	
 	func changePanel(_ open: Bool, animated: Bool) {
-		let window = NSApplication.shared().windows.first!
+		let window = NSApplication.shared.windows.first!
 		let frame = window.frame
 		let height = window.frame.height
 		var target = height
@@ -199,7 +199,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	}
 	
 	@IBAction func clickReplaceSwitch(_ sender: NSButton) {
-		let isOn = sender.state == NSOnState
+		let isOn = sender.state == NSControl.StateValue.on
 		TPConfig.saveReplace(isOn)
 		outputPathField.isEditable = !isOn
 	}
@@ -243,7 +243,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	}
 	
 	func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
-		let cell = tableView.make(withIdentifier: "task_cell", owner: self) as? TaskTableCell
+		let cell = tableView.makeView(withIdentifier: NSUserInterfaceItemIdentifier(rawValue: "task_cell"), owner: self) as? TaskTableCell
 		cell!.task = TPStore.sharedStore.get(row)!
 		return cell
 	}

@@ -20,6 +20,7 @@ class TPTaskInfo: NSObject {
 	var resultSize: Double
 	var uuid: String
 	var errorMessage: String?
+    var index: Int
 	
 	init(originFile: URL, fileName: String, originSize: Double) {
 		self.originFile = originFile
@@ -35,6 +36,7 @@ class TPTaskInfo: NSObject {
 		self.resultSize = 0
 		self.uuid = UUID().uuidString
 		self.errorMessage = nil
+        self.index = 0
 	}
 }
 

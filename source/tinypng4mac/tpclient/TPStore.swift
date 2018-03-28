@@ -15,10 +15,16 @@ class TPStore {
 	fileprivate init() {}
 	
 	func add(_ task: TPTaskInfo) {
+        task.index = self.tasks.count
 		self.tasks.append(task)
 	}
 	
 	func add(_ tasks: [TPTaskInfo]) {
+        var start = self.tasks.count
+        for t in tasks {
+            t.index = start
+            start = start + 1
+        }
 		self.tasks = self.tasks + tasks
 	}
 	
@@ -30,6 +36,9 @@ class TPStore {
 	}
 	
 	func remove(_ task: TPTaskInfo) -> TPTaskInfo? {
+        if self.tasks.count == 0 {
+            return nil;
+        }
 		let index = self.tasks.index(where: {$0.uuid == task.uuid})
 		if let i = index {
 			return self.tasks.remove(at: i)
@@ -56,15 +65,13 @@ class TPStore {
 	}
 	
 	func sort() {
-		tasks.sort { (first, second) -> Bool in
-			let fi = indexOf(first)
-			let si = indexOf(second)
+        self.tasks.sort { (first, second) -> Bool in
 			if first.status == .error && second.status != .error {
 				return true
 			} else if first.status != .finish && second.status == .finish {
 				return true
 			}
-			return fi < si
+			return false
 		}
 	}
 }

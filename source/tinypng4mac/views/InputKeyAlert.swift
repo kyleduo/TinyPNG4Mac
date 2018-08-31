@@ -38,9 +38,9 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 		let paragraphStyle = NSMutableParagraphStyle.init()
 		paragraphStyle.alignment = NSTextAlignment.center
 		let title = NSMutableAttributedString.init(string: NSLocalizedString("Register", comment: "Register"))
-		title.addAttributes([NSAttributedString.Key.foregroundColor: NSColor.blue,
-			NSAttributedString.Key.paragraphStyle:paragraphStyle,
-			NSAttributedString.Key.underlineStyle:NSUnderlineStyle.single.rawValue], range: NSMakeRange(0, title.length))
+		title.addAttributes([NSAttributedStringKey.foregroundColor: NSColor.blue,
+			NSAttributedStringKey.paragraphStyle:paragraphStyle,
+			NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue], range: NSMakeRange(0, title.length))
 		button.attributedTitle = title
 		button.target = self
 		button.action = #selector(InputKeyAlert.gotoRegister)

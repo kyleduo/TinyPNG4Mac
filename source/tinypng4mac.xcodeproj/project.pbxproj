@@ -190,7 +190,6 @@
 				277AAF4C1D23F24900788F37 /* Frameworks */,
 				277AAF4D1D23F24900788F37 /* Resources */,
 				5B420B6B1C8EFF2B07BE8D63 /* [CP] Embed Pods Frameworks */,
-				C444391B23F5566C92F691F0 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -287,21 +286,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyPNG4Mac/Pods-TinyPNG4Mac-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C444391B23F5566C92F691F0 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-TinyPNG4Mac/Pods-TinyPNG4Mac-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */

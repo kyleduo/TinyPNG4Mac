@@ -62,7 +62,7 @@ class DragContainer: NSView {
 	
 	override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
 		var files = Array<URL>()
-		if let board = sender.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? NSArray {
+		if let board = sender.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
 			for path in board {
 				let url = URL(fileURLWithPath: path as! String)
 				let fileExtension = url.pathExtension.lowercased()
@@ -80,7 +80,7 @@ class DragContainer: NSView {
 	}
 	
 	func checkExtension(_ draggingInfo: NSDraggingInfo) -> Bool {
-        if let board = draggingInfo.draggingPasteboard().propertyList(forType: NSFilenamesPboardType) as? NSArray {
+        if let board = draggingInfo.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
 			for path in board {
 				let url = URL(fileURLWithPath: path as! String)
 				let fileExtension = url.pathExtension.lowercased()

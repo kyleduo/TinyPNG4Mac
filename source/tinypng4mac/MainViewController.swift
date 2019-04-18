@@ -250,7 +250,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	
 	// MARK: - textfield
 	
-	override func controlTextDidEndEditing(_ obj: Notification) {
+	func controlTextDidEndEditing(_ obj: Notification) {
 		if let textField = obj.object as? NSTextField {
 			if !textField.isEditable {
 				return;

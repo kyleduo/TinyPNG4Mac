@@ -38,6 +38,10 @@ class TPTaskInfo: NSObject {
 		self.errorMessage = nil
         self.index = 0
 	}
+    
+    override var description: String {
+        return String(format: "Task {}", self.fileName)
+    }
 }
 
 enum TPTaskStatus {

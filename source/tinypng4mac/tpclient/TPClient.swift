@@ -50,9 +50,7 @@ class TPClient {
 				self.updateStatus(t, newStatus: .prepare)
 				runningTasks += 1
 				debugPrint("prepare to upload: " + t.fileName + " tasks: " + String(self.runningTasks))
-				if !executeTask(t) {
-					runningTasks -= 1
-				}
+                executeTask(t)
 			} else {
 				break;
 			}
@@ -60,7 +58,7 @@ class TPClient {
 		lock.unlock()
 	}
 	
-	func executeTask(_ task: TPTaskInfo) -> Bool {
+	func executeTask(_ task: TPTaskInfo) {
 		var imageData: Data!
 		do {
 			let fileHandler = try FileHandle(forReadingFrom:task.originFile as URL)
@@ -112,10 +110,8 @@ class TPClient {
 						self.markError(task, errorMessage: response.result.description)
 					}
 				})
-			return true
 		} catch {
 			self.markError(task, errorMessage: "execute error")
-			return false
 		}
 	}
 	
@@ -156,6 +152,7 @@ class TPClient {
 	fileprivate func markError(_ task: TPTaskInfo, errorMessage: String?) {
 		task.errorMessage = errorMessage
 		updateStatus(task, newStatus: .error)
+        checkExecution()
 	}
 	
 	fileprivate func updateStatus(_ task: TPTaskInfo, newStatus: TPTaskStatus, progress: Progress) {

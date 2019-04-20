@@ -6,11 +6,11 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 
 [中文](./README_ZH.md)
 
-### Version 1.0.0
+### Version 1.0.1
 
-1. New icon and interface
-2. Support "in place"
-3. Improve stability and fix bugs
+1. Migrate to Swift 5.0, thanks [@gewill](https://github.com/gewill)
+2. Downward compatibility to macOS 10.10
+3. Fixed [#19](https://github.com/kyleduo/TinyPNG4Mac/issues/19), [#22](https://github.com/kyleduo/TinyPNG4Mac/issues/22)
 
 
 
@@ -26,7 +26,7 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 
 [From Github](https://github.com/kyleduo/TinyPNG4Mac/releases)
 
-[七牛下载](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_0.zip)
+[七牛下载](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_1.app.zip)
 
 Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this app. Just for the first time, and I suggest you uncheck it after you open this app for security.
 
@@ -36,6 +36,14 @@ Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this
 
 ### History
 
+> **Version 1.0.0**
+>
+> 1. New icon and interface
+> 2. Support "in place"
+> 3. Improve stability and fix bugs
+>
+>
+>
 > **Version 0.9.3**
 >
 > 1. Update to **Swift 3**

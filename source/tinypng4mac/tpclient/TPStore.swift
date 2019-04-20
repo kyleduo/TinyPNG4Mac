@@ -39,7 +39,7 @@ class TPStore {
         if self.tasks.count == 0 {
             return nil;
         }
-		let index = self.tasks.index(where: {$0.uuid == task.uuid})
+		let index = self.tasks.firstIndex(where: {$0.uuid == task.uuid})
 		if let i = index {
 			return self.tasks.remove(at: i)
 		}
@@ -47,7 +47,7 @@ class TPStore {
 	}
 	
 	func indexOf(_ task: TPTaskInfo) -> Int {
-		if let i = self.tasks.index(where: {$0.uuid == task.uuid}) {
+		if let i = self.tasks.firstIndex(where: {$0.uuid == task.uuid}) {
 			return i
 		}
 		return -1

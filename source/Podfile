@@ -7,8 +7,8 @@ inhibit_all_warnings!
 
 target 'TinyPNG4Mac' do
 
-pod 'Alamofire', '~> 4.0'
-pod 'SwiftyJSON'
+pod 'Alamofire', '~> 4.8.2'
+pod 'SwiftyJSON', '~> 5.0'
 
 end
 

@@ -20,6 +20,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	@IBOutlet weak var icon: NSImageView!
 	@IBOutlet weak var desc: NSTextField!
 	@IBOutlet weak var background: GradientView!
+    @IBOutlet weak var acceptXcode : NSButton!
 	
 	var totalSize: Double = 0
 	var totalRecudeSize: Double = 0
@@ -44,6 +45,7 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		
 		totalReduce.stringValue = NSLocalizedString("0 tasks", comment: "0 tasks")
 		replaceSwitch.state = TPConfig.shouldReplace() ? NSControl.StateValue.on : NSControl.StateValue.off
+        acceptXcode.state = TPConfig.shouldAcceptXcode() ? NSControl.StateValue.on : NSControl.StateValue.off;
 		
 		TPClient.sharedClient.callback = self
 	}
@@ -107,11 +109,13 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		outputPathField.isEditable = false
 		replaceSwitch.isEnabled = false
 		outputPathSelectButton.isEnabled = false
+        acceptXcode.isEnabled = false;
 	}
 	
 	func unlockUI() {
 		apiKey.isEditable = true
 		replaceSwitch.isEnabled = true
+        acceptXcode.isEnabled = true;
 		outputPathSelectButton.isEnabled = true
 		
 		outputPathField.isEditable = !TPConfig.shouldReplace()
@@ -203,6 +207,11 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		TPConfig.saveReplace(isOn)
 		outputPathField.isEditable = !isOn
 	}
+    
+    @IBAction func clickAcceptXcodeSwitch(_ sender: NSButton){
+        let isOn = sender.state == NSControl.StateValue.on
+        TPConfig.saveAcceptXcode(isOn)
+    }
 	
 	// MARK: - dragging
 	
@@ -213,6 +222,13 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	}
 	
 	func draggingFileAccept(_ files:Array<URL>) {
+        
+        if TPConfig.shouldAcceptXcode()
+        {
+            acceptXcode_draggingFileAccept(files)
+            return;
+        }
+        
 		if TPClient.sApiKey == "" {
 			showInputPanel()
 			return;

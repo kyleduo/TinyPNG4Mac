@@ -20,5 +20,4 @@ class MainWindowController: NSWindowController {
 			window.titlebarAppearsTransparent = true
 		}
 	}
-	
 }

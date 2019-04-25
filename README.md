@@ -1,3 +1,13 @@
+Feature
+
+Add support accept Xcode container drag. Auto find images in Xcode container and compress all images
+
+Usage
+
+Check the checkbox named Xcode Container in setting
+Drag folder which contains *.xcodeproj to window
+Waiting compress images finish
+
 # TinyPNG4Mac
 
 ![preview](./preview/preview.png)

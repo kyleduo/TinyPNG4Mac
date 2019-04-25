@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14460.31"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -226,6 +226,8 @@
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="zRv-TO-bMw">
                                         <rect key="frame" x="132" y="16" width="22" height="18"/>
                                         <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="14" id="1rE-bw-OVJ"/>
+                                            <constraint firstAttribute="width" constant="18" id="aKs-Oy-qZy"/>
                                             <constraint firstAttribute="height" constant="14" id="mm5-iS-Q2I"/>
                                         </constraints>
                                         <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="OVU-oE-vul">
@@ -236,18 +238,44 @@
                                             <action selector="clickReplaceSwitch:" target="f1c-SR-qaC" id="uVq-TX-SZV"/>
                                         </connections>
                                     </button>
+                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="V7I-WM-z4i">
+                                        <rect key="frame" x="160" y="16" width="118" height="17"/>
+                                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Xcode Container" id="tUN-1b-HU9">
+                                            <font key="font" metaFont="system"/>
+                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        </textFieldCell>
+                                    </textField>
+                                    <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="z34-Pg-Dn4">
+                                        <rect key="frame" x="284" y="16" width="22" height="18"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="18" id="2aX-fE-xCL"/>
+                                            <constraint firstAttribute="height" constant="14" id="SIm-dP-W8u"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="check" bezelStyle="regularSquare" imagePosition="left" inset="2" id="1Oy-Kh-yML">
+                                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        </buttonCell>
+                                        <connections>
+                                            <action selector="clickAcceptXcodeSwitch:" target="f1c-SR-qaC" id="ZoN-F5-XVl"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="fT1-QL-4Nq" firstAttribute="centerY" secondItem="j7S-Iz-wE1" secondAttribute="centerY" id="2uD-e3-aFY"/>
                                     <constraint firstItem="NnK-w1-6b9" firstAttribute="leading" secondItem="6R4-nY-g9G" secondAttribute="leading" constant="20" id="4tL-gR-KtL"/>
                                     <constraint firstItem="NnK-w1-6b9" firstAttribute="trailing" secondItem="j7S-Iz-wE1" secondAttribute="trailing" id="GNR-vn-A9H"/>
+                                    <constraint firstItem="z34-Pg-Dn4" firstAttribute="centerY" secondItem="NnK-w1-6b9" secondAttribute="centerY" id="Gya-JI-hqs"/>
                                     <constraint firstItem="iOT-w7-ALe" firstAttribute="trailing" secondItem="j7S-Iz-wE1" secondAttribute="trailing" id="Iet-eM-Hzc"/>
                                     <constraint firstItem="vPz-Tz-wUm" firstAttribute="centerY" secondItem="iOT-w7-ALe" secondAttribute="centerY" id="Nat-jV-mn1"/>
+                                    <constraint firstItem="V7I-WM-z4i" firstAttribute="leading" secondItem="zRv-TO-bMw" secondAttribute="trailing" constant="10" id="Q2j-qK-otd"/>
+                                    <constraint firstItem="z34-Pg-Dn4" firstAttribute="leading" secondItem="V7I-WM-z4i" secondAttribute="trailing" constant="10" id="Q3E-MF-p1d"/>
                                     <constraint firstItem="j7S-Iz-wE1" firstAttribute="leading" secondItem="6R4-nY-g9G" secondAttribute="leading" constant="20" id="T3q-PR-wtH"/>
                                     <constraint firstItem="iOT-w7-ALe" firstAttribute="top" secondItem="6R4-nY-g9G" secondAttribute="top" constant="16" id="TCK-an-uSj"/>
                                     <constraint firstItem="NnK-w1-6b9" firstAttribute="height" secondItem="iOT-w7-ALe" secondAttribute="height" id="Y1f-du-yRe"/>
+                                    <constraint firstAttribute="trailing" secondItem="z34-Pg-Dn4" secondAttribute="trailing" constant="16" id="Zca-tl-CP5"/>
                                     <constraint firstItem="vPz-Tz-wUm" firstAttribute="leading" secondItem="fT1-QL-4Nq" secondAttribute="leading" id="aUc-uY-0MX"/>
-                                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="zRv-TO-bMw" secondAttribute="trailing" constant="20" symbolic="YES" id="aqP-9r-PsI"/>
+                                    <constraint firstItem="V7I-WM-z4i" firstAttribute="centerY" secondItem="NnK-w1-6b9" secondAttribute="centerY" id="asp-4R-2Bh"/>
                                     <constraint firstItem="vPz-Tz-wUm" firstAttribute="trailing" secondItem="0K4-Mk-HkB" secondAttribute="trailing" id="dVZ-FP-X3U"/>
                                     <constraint firstItem="vPz-Tz-wUm" firstAttribute="leading" secondItem="iOT-w7-ALe" secondAttribute="trailing" constant="12" id="fyb-On-NzP"/>
                                     <constraint firstItem="NnK-w1-6b9" firstAttribute="bottom" secondItem="6R4-nY-g9G" secondAttribute="bottom" constant="-16" id="hHG-bQ-lkQ"/>
@@ -429,11 +457,11 @@
                                     </subviews>
                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                                 </clipView>
-                                <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="lr0-AL-Hdc">
+                                <scroller key="horizontalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="1" horizontal="YES" id="lr0-AL-Hdc">
                                     <rect key="frame" x="0.0" y="233" width="320" height="15"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
-                                <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" doubleValue="0.026480521370164448" horizontal="NO" id="x03-Xj-aQ3">
+                                <scroller key="verticalScroller" hidden="YES" verticalHuggingPriority="750" doubleValue="0.026480521370164448" horizontal="NO" id="x03-Xj-aQ3">
                                     <rect key="frame" x="224" y="17" width="15" height="102"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </scroller>
@@ -482,6 +510,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="acceptXcode" destination="z34-Pg-Dn4" id="nGe-JN-ZeK"/>
                         <outlet property="apiKey" destination="vPz-Tz-wUm" id="jOA-am-GuC"/>
                         <outlet property="background" destination="F5f-sg-JvA" id="NAQ-i2-LL6"/>
                         <outlet property="desc" destination="IX1-JP-bbZ" id="uOv-wM-4eq"/>
@@ -500,9 +529,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icon" width="120" height="120"/>
-        <image name="icon_finder" width="24" height="24"/>
+        <image name="icon" width="240" height="240"/>
+        <image name="icon_finder" width="48" height="48"/>
         <image name="icon_finish" width="16" height="16"/>
-        <image name="icon_setting" width="24" height="24"/>
+        <image name="icon_setting" width="48" height="48"/>
     </resources>
 </document>

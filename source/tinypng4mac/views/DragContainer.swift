@@ -14,10 +14,11 @@ protocol DragContainerDelegate {
 	func draggingFileAccept(_ files:Array<URL>);
 }
 
+public let acceptTypes = ["png", "jpg", "jpeg"]
+
 class DragContainer: NSView {
 	var delegate : DragContainerDelegate?
 	
-	let acceptTypes = ["png", "jpg", "jpeg"]
     let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 	
     let normalAlpha: CGFloat = 0
@@ -61,34 +62,44 @@ class DragContainer: NSView {
 	}
 	
 	override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-		var files = Array<URL>()
+        
+        if TPConfig.shouldAcceptXcode(){
+            return acceptXcode_performDragOperation(_:sender);
+        }
+
+        var files = Array<URL>()
         if let board = sender.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
-			for path in board {
-				let url = URL(fileURLWithPath: path as! String)
-				let fileExtension = url.pathExtension.lowercased()
-				if acceptTypes.contains(fileExtension) {
-					files.append(url)
-				}
-			}
-		}
-		
-		if self.delegate != nil {
-			self.delegate?.draggingFileAccept(files);
-		}
-		
-		return true
+            for path in board {
+                let url = URL(fileURLWithPath: path as! String)
+                let fileExtension = url.pathExtension.lowercased()
+                if acceptTypes.contains(fileExtension) {
+                    files.append(url)
+                }
+            }
+        }
+        
+        if self.delegate != nil {
+            self.delegate?.draggingFileAccept(files);
+        }
+        
+        return true
 	}
 	
 	func checkExtension(_ draggingInfo: NSDraggingInfo) -> Bool {
+        
+        if TPConfig.shouldAcceptXcode(){
+            return acceptXcode_checkExtension(_:draggingInfo);
+        }
+        
         if let board = draggingInfo.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
-			for path in board {
-				let url = URL(fileURLWithPath: path as! String)
-				let fileExtension = url.pathExtension.lowercased()
-				if acceptTypes.contains(fileExtension) {
-					return true
-				}
-			}
-		}
-		return false
+            for path in board {
+                let url = URL(fileURLWithPath: path as! String)
+                let fileExtension = url.pathExtension.lowercased()
+                if acceptTypes.contains(fileExtension) {
+                    return true
+                }
+            }
+        }
+        return false
 	}
 }

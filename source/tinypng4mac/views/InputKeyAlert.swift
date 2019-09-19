@@ -22,6 +22,7 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 		let view = NSView.init(frame: CGRect(x: 0, y: 0, width: 300, height: 54))
 		self.input = NSTextField.init(frame: CGRect(x: 0, y: 30, width: 300, height: 24))
 		self.input?.delegate = self
+        self.input?.usesSingleLineMode = true
 		view.addSubview(self.input!)
 		let button = self.createRegisterButton()
 		view.addSubview(button)
@@ -60,10 +61,10 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 			}
 		}) 
 	}
-	
-	func controlTextDidEndEditing(_ obj: Notification) {
-		if let text = input?.stringValue {
-			self.submitButton?.isEnabled = text.count > 0
-		}
-	}
+    
+    func controlTextDidChange(_ obj: Notification) {
+        if let text = input?.stringValue {
+            self.submitButton?.isEnabled = text.count > 0
+        }
+    }
 }

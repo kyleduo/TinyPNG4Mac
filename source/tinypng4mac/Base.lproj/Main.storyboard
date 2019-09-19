@@ -168,7 +168,7 @@
                                 <rect key="frame" x="0.0" y="-4" width="320" height="104"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="j7S-Iz-wE1">
-                                        <rect key="frame" x="18" y="43" width="104" height="18"/>
+                                        <rect key="frame" x="18" y="43" width="97" height="18"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Output Path:" id="wAc-5q-1kG">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -176,15 +176,15 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="NnK-w1-6b9">
-                                        <rect key="frame" x="18" y="16" width="104" height="18"/>
-                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Replace Origion:" id="7il-ST-uVu">
+                                        <rect key="frame" x="18" y="16" width="97" height="18"/>
+                                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Replace Origin:" id="7il-ST-uVu">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" horizontalCompressionResistancePriority="752" translatesAutoresizingMaskIntoConstraints="NO" id="iOT-w7-ALe">
-                                        <rect key="frame" x="18" y="70" width="104" height="18"/>
+                                        <rect key="frame" x="18" y="70" width="97" height="18"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="18" id="zLS-ML-ggj"/>
                                         </constraints>
@@ -195,7 +195,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fT1-QL-4Nq">
-                                        <rect key="frame" x="132" y="41" width="146" height="22"/>
+                                        <rect key="frame" x="125" y="41" width="153" height="22"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="99a-9k-u4D">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -216,7 +216,7 @@
                                         </connections>
                                     </button>
                                     <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vPz-Tz-wUm">
-                                        <rect key="frame" x="132" y="68" width="172" height="22"/>
+                                        <rect key="frame" x="125" y="68" width="179" height="22"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="OCF-de-u9Q">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -224,7 +224,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="zRv-TO-bMw">
-                                        <rect key="frame" x="132" y="16" width="22" height="18"/>
+                                        <rect key="frame" x="125" y="16" width="22" height="18"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="14" id="mm5-iS-Q2I"/>
                                         </constraints>
@@ -442,7 +442,7 @@
                                 <rect key="frame" x="107" y="396" width="107" height="17"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="TinyPNG for Mac" id="8Ac-Uq-uCZ">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="highlightColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
@@ -450,7 +450,7 @@
                                 <rect key="frame" x="14" y="117" width="57" height="17"/>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" title="Reduce: " id="400-FH-fhZ">
                                     <font key="font" metaFont="system"/>
-                                    <color key="textColor" name="highlightColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>

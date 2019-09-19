@@ -22,6 +22,7 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 		let view = NSView.init(frame: CGRect(x: 0, y: 0, width: 300, height: 54))
 		self.input = NSTextField.init(frame: CGRect(x: 0, y: 30, width: 300, height: 24))
 		self.input?.delegate = self
+        self.input?.usesSingleLineMode = true
 		view.addSubview(self.input!)
 		let button = self.createRegisterButton()
 		view.addSubview(button)
@@ -38,7 +39,7 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 		let paragraphStyle = NSMutableParagraphStyle.init()
 		paragraphStyle.alignment = NSTextAlignment.center
 		let title = NSMutableAttributedString.init(string: NSLocalizedString("Register", comment: "Register"))
-        title.addAttributes([NSAttributedString.Key.foregroundColor: NSColor.blue,
+        title.addAttributes([NSAttributedString.Key.foregroundColor: NSColor.linkColor,
                              NSAttributedString.Key.paragraphStyle:paragraphStyle,
                              NSAttributedString.Key.underlineStyle:NSUnderlineStyle.single.rawValue], range: NSMakeRange(0, title.length))
 		button.attributedTitle = title
@@ -60,10 +61,10 @@ class InputKeyAlert: NSAlert, NSTextFieldDelegate {
 			}
 		}) 
 	}
-	
-	func controlTextDidEndEditing(_ obj: Notification) {
-		if let text = input?.stringValue {
-			self.submitButton?.isEnabled = text.count > 0
-		}
-	}
+    
+    func controlTextDidChange(_ obj: Notification) {
+        if let text = input?.stringValue {
+            self.submitButton?.isEnabled = text.count > 0
+        }
+    }
 }

@@ -21,7 +21,7 @@ class TaskTableCell: NSTableCellView {
 	
 	var task: TPTaskInfo? {
 		didSet {
-			self.name.stringValue = (task?.fileName)!
+            self.name.stringValue = (task?.fileInfo.relativePath)!
 			self.preview.image = NSImage.init(contentsOf: (task?.originFile)! as URL)
 			let taskStatus = (task?.status)!
 			var statusText = ""

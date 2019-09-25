@@ -11,7 +11,7 @@ import Cocoa
 protocol DragContainerDelegate {
 	func draggingEntered();
 	func draggingExit();
-	func draggingFileAccept(_ files:Array<URL>);
+	func draggingFileAccept(_ files:Array<FileInfo>);
 }
 
 class DragContainer: NSView {
@@ -57,7 +57,7 @@ class DragContainer: NSView {
 	}
 	
 	override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
-		var files = Array<URL>()
+		var files = Array<FileInfo>()
         if let board = sender.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
 			for path in board {
                 files.append(contentsOf: collectFiles(path as! String))
@@ -71,20 +71,22 @@ class DragContainer: NSView {
 		return true
 	}
     
-    func collectFiles(_ filePath: String) -> Array<URL> {
-        var files = Array<URL>()
+    func collectFiles(_ filePath: String) -> Array<FileInfo> {
+        var files = Array<FileInfo>()
         let isDirectory = IOHeler.isDirectory(filePath)
         if isDirectory {
             let fileManager = FileManager.default
             let enumerator = fileManager.enumerator(atPath: filePath)
-            while let fileName = enumerator?.nextObject() as? String {
-                let fullFilePath = filePath.appending("/\(fileName)")
+            while let relativePath = enumerator?.nextObject() as? String {
+                let fullFilePath = filePath.appending("/\(relativePath)")
                 if (fileIsAcceptable(fullFilePath)) {
-                    files.append(URL(fileURLWithPath: fullFilePath))
+                    let parent = URL(fileURLWithPath: filePath).lastPathComponent
+                    files.append(FileInfo(URL(fileURLWithPath: fullFilePath), relativePath:"\(parent)/\(relativePath)"))
                 }
             }
         } else if (fileIsAcceptable(filePath)) {
-            files.append(URL(fileURLWithPath: filePath))
+            let url = URL(fileURLWithPath: filePath)
+            files.append(FileInfo(url, relativePath:url.lastPathComponent))
         }
         return files
     }

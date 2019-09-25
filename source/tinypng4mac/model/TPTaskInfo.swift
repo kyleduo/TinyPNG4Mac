@@ -12,7 +12,7 @@ class TPTaskInfo: NSObject {
 	var originFile: URL
 	var outputFile: URL?
 	var resultUrl: String
-	var fileName: String
+	var fileInfo: FileInfo
 	var originSize: Double
 	var status: TPTaskStatus
 	var progress: Progress // progress for uploading and downloading
@@ -22,9 +22,9 @@ class TPTaskInfo: NSObject {
 	var errorMessage: String?
     var index: Int
 	
-	init(originFile: URL, fileName: String, originSize: Double) {
-		self.originFile = originFile
-		self.fileName = fileName
+	init(_ fileInfo: FileInfo, originSize: Double) {
+        self.originFile = fileInfo.filePath
+		self.fileInfo = fileInfo
 		self.originSize = originSize
 		
 		self.status = .initial
@@ -40,7 +40,7 @@ class TPTaskInfo: NSObject {
 	}
     
     override var description: String {
-        return String(format: "Task {}", self.fileName)
+        return String(format: "Task {}", self.fileInfo.relativePath)
     }
 }
 

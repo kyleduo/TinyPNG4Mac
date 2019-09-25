@@ -41,4 +41,11 @@ class IOHeler {
 			try! fileManager.removeItem(at: file)
 		}
 	}
+    
+    static func isDirectory(_ path: String) -> Bool {
+        let fileManager = FileManager.default
+        var isDirectory = ObjCBool(false)
+        let fileExists = fileManager.fileExists(atPath: path, isDirectory: &isDirectory)
+        return fileExists && isDirectory.boolValue
+    }
 }

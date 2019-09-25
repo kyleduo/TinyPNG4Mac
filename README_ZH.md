@@ -20,7 +20,7 @@
 
 [Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases) 
 
-[CDN下载](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_1.app.zip)
+[CDN下载](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_3.zip)
 
 第一次打开可能出现“无法打开”的提示，请到`设置 -> 安全性与隐私`里面勾选`所有来源`。出于安全考虑，建议打开之后关闭这个选项。
 
@@ -29,6 +29,12 @@
 [droptogif](https://github.com/mortenjust/droptogif) -- 实用的视频转Gif的工具。我在里面学习了如何创建Window。
 
 ### 更新信息
+
+**Version 1.0.3**
+
+1. 支持压缩目录下的所有图片 [#14](https://github.com/kyleduo/TinyPNG4Mac/issues/14) [#33](https://github.com/kyleduo/TinyPNG4Mac/issues/33)
+
+----
 
 **Version 1.0.2**
 

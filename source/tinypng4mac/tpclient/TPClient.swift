@@ -49,7 +49,7 @@ class TPClient {
 			if let t = task {
 				self.updateStatus(t, newStatus: .prepare)
 				runningTasks += 1
-				debugPrint("prepare to upload: " + t.fileName + " tasks: " + String(self.runningTasks))
+				debugPrint("prepare to upload: " + t.fileInfo.relativePath + " tasks: " + String(self.runningTasks))
                 executeTask(t)
 			} else {
 				break;
@@ -69,7 +69,7 @@ class TPClient {
 			let authorizationHeader = "Basic " + authData!
 			
 			self.updateStatus(task, newStatus: .uploading)
-			debugPrint("uploading: " + task.fileName)
+			debugPrint("uploading: " + task.fileInfo.relativePath)
 			
 			let headers: HTTPHeaders = [
 				"Authorization": authorizationHeader,
@@ -79,7 +79,7 @@ class TPClient {
 				.uploadProgress(closure: { (progress) in
 					if progress.fractionCompleted == 1 {
 						self.updateStatus(task, newStatus: .processing)
-						debugPrint("processing: " + task.fileName)
+						debugPrint("processing: " + task.fileInfo.relativePath)
 					} else {
 						self.updateStatus(task, newStatus: .uploading, progress: progress)
 					}
@@ -89,7 +89,7 @@ class TPClient {
 						let json = JSON(jsonstr)
 						if json != JSON.null {
 							if let error = json["error"].string {
-								debugPrint("error: " + task.fileName + error)
+								debugPrint("error: " + task.fileInfo.relativePath + error)
 								self.markError(task, errorMessage: json["message"].string)
 								return
 							}
@@ -116,13 +116,13 @@ class TPClient {
 	}
 	
 	fileprivate func onUploadFinish(_ task: TPTaskInfo) {
-		debugPrint("downloading: " + task.fileName)
+		debugPrint("downloading: " + task.fileInfo.relativePath)
 		self.updateStatus(task, newStatus: .downloading)
 		if TPConfig.shouldReplace() {
 			task.outputFile = task.originFile;
 		} else {
 			let folder = IOHeler.getOutputPath()
-			task.outputFile = folder.appendingPathComponent(task.fileName)
+			task.outputFile = folder.appendingPathComponent(task.fileInfo.relativePath)
 		}
 		downloadCompressImage(task)
 	}
@@ -142,7 +142,7 @@ class TPClient {
 					self.markError(task, errorMessage: "download error")
 				} else {
 					self.updateStatus(task, newStatus: .finish)
-					debugPrint("finish: " + task.fileName + " tasks: " + String(self.runningTasks))
+					debugPrint("finish: " + task.fileInfo.relativePath + " tasks: " + String(self.runningTasks))
 				}
 				
 				self.checkExecution()

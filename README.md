@@ -20,7 +20,7 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 
 [Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases)
 
-[CDN](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_1.app.zip)
+[CDN](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_3.zip)
 
 Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this app. Just for the first time, and I suggest you uncheck it after you open this app for security.
 
@@ -29,6 +29,12 @@ Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this
 [droptogif](https://github.com/mortenjust/droptogif) -- A very useful client for convert video to gif. I learnt how to create window from that project.
 
 ### Release Notes
+
+**Version 1.0.3**
+
+1. Support compress folder recursively. [#14](https://github.com/kyleduo/TinyPNG4Mac/issues/14) [#33](https://github.com/kyleduo/TinyPNG4Mac/issues/33)
+
+----
 
 **Version 1.0.2**
 

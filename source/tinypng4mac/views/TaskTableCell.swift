@@ -52,7 +52,13 @@ class TaskTableCell: NSTableCellView {
 			}
 			
 			if taskStatus == .finish {
-				let text = "-\(Formator.formatSize(task!.originSize - task!.resultSize)) (\(Formator.formatRate(1 - task!.compressRate)))"
+                let sizeChange = task!.originSize - task!.resultSize
+                var text: String = ""
+                if sizeChange == 0 {
+                    text = "0.00B"
+                } else {
+                    text = "-\(Formator.formatSize(sizeChange)) (\(Formator.formatRate(1 - task!.compressRate)))"
+                }
 				self.status.stringValue = text
 				self.status.textColor = NSColor(deviceRed:0.41, green:0.95, blue:0.78, alpha:1.00)
 				self.name.textColor = NSColor(deviceRed:1, green:1, blue:1, alpha:0.9)

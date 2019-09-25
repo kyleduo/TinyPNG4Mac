@@ -38,14 +38,10 @@ class DragContainer: NSView {
 	
 	override func draggingEntered(_ sender: NSDraggingInfo) -> NSDragOperation {
         self.layer?.backgroundColor = NSColor(white: 1, alpha: highlightAlpha).cgColor;
-		let res = checkExtension(sender)
 		if let delegate = self.delegate {
 			delegate.draggingEntered();
 		}
-		if res {
-			return NSDragOperation.generic
-		}
-		return NSDragOperation()
+        return NSDragOperation.generic
 	}
 	
 	override func draggingExited(_ sender: NSDraggingInfo?) {
@@ -64,11 +60,7 @@ class DragContainer: NSView {
 		var files = Array<URL>()
         if let board = sender.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
 			for path in board {
-				let url = URL(fileURLWithPath: path as! String)
-				let fileExtension = url.pathExtension.lowercased()
-				if acceptTypes.contains(fileExtension) {
-					files.append(url)
-				}
+                files.append(contentsOf: collectFiles(path as! String))
 			}
 		}
 		
@@ -78,17 +70,28 @@ class DragContainer: NSView {
 		
 		return true
 	}
-	
-	func checkExtension(_ draggingInfo: NSDraggingInfo) -> Bool {
-        if let board = draggingInfo.draggingPasteboard.propertyList(forType: NSFilenamesPboardType) as? NSArray {
-			for path in board {
-				let url = URL(fileURLWithPath: path as! String)
-				let fileExtension = url.pathExtension.lowercased()
-				if acceptTypes.contains(fileExtension) {
-					return true
-				}
-			}
-		}
-		return false
-	}
+    
+    func collectFiles(_ filePath: String) -> Array<URL> {
+        var files = Array<URL>()
+        let isDirectory = IOHeler.isDirectory(filePath)
+        if isDirectory {
+            let fileManager = FileManager.default
+            let enumerator = fileManager.enumerator(atPath: filePath)
+            while let fileName = enumerator?.nextObject() as? String {
+                let fullFilePath = filePath.appending("/\(fileName)")
+                if (fileIsAcceptable(fullFilePath)) {
+                    files.append(URL(fileURLWithPath: fullFilePath))
+                }
+            }
+        } else if (fileIsAcceptable(filePath)) {
+            files.append(URL(fileURLWithPath: filePath))
+        }
+        return files
+    }
+    
+    func fileIsAcceptable(_ path: String) -> Bool {
+        let url = URL(fileURLWithPath: path)
+        let fileExtension = url.pathExtension.lowercased()
+        return acceptTypes.contains(fileExtension)
+    }
 }

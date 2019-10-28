@@ -18,6 +18,12 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 
 ### Download
 
+Homebrew
+
+```
+brew cask install tinypng4mac
+```
+
 [Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases)
 
 [CDN](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_3.zip)

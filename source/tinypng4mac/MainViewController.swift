@@ -180,6 +180,11 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 	@IBAction func clickFinder(_ sender: AnyObject) {
 		NSWorkspace.shared.open(IOHeler.getOutputPath() as URL)
 	}
+    
+    @IBAction func clickRetry(_ sender: AnyObject) {
+        TPClient.sharedClient.checkErrorsToRetry()
+        lockUI()
+    }
 	
 	func changePanel(_ open: Bool, animated: Bool) {
 		let window = NSApplication.shared.windows.first!

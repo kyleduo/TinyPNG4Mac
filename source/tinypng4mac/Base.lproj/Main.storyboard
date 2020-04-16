@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -320,10 +320,26 @@
                                             <action selector="clickFinder:" target="f1c-SR-qaC" id="z6b-Hs-1Iq"/>
                                         </connections>
                                     </button>
+                                    <button translatesAutoresizingMaskIntoConstraints="NO" id="fwj-wk-gxE">
+                                        <rect key="frame" x="203" y="12" width="32" height="32"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="32" id="N65-vc-sxJ"/>
+                                            <constraint firstAttribute="height" constant="32" id="vAy-9L-Xda"/>
+                                        </constraints>
+                                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="icon_retry" imagePosition="only" alignment="center" refusesFirstResponder="YES" imageScaling="proportionallyDown" inset="2" id="BeX-OU-ZNe">
+                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                            <font key="font" metaFont="system"/>
+                                        <connections>
+                                                <action selector="clickRetry:" target="f1c-SR-qaC" id="Ucj-98-YqG"/>
+                                        </connections>
+                                        </buttonCell>
+                                    </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="Wlb-vO-jQD" firstAttribute="leading" secondItem="fwj-wk-gxE" secondAttribute="trailing" constant="5" id="8IJ-Ug-Kv8"/>
                                     <constraint firstItem="ThG-Q2-7EJ" firstAttribute="leading" secondItem="Wlb-vO-jQD" secondAttribute="trailing" constant="4" id="9BD-m0-aC4"/>
                                     <constraint firstAttribute="width" constant="320" id="9XX-J0-wlN"/>
+                                    <constraint firstItem="fwj-wk-gxE" firstAttribute="top" secondItem="Wlb-vO-jQD" secondAttribute="top" id="JIe-uf-5gH"/>
                                     <constraint firstAttribute="height" constant="320" id="LBg-6c-iG7"/>
                                     <constraint firstItem="Wlb-vO-jQD" firstAttribute="centerY" secondItem="ThG-Q2-7EJ" secondAttribute="centerY" id="P4v-m8-c1P"/>
                                     <constraint firstAttribute="trailing" secondItem="ThG-Q2-7EJ" secondAttribute="trailing" constant="12" id="rTC-Vo-3Km"/>
@@ -503,6 +519,7 @@
         <image name="icon" width="120" height="120"/>
         <image name="icon_finder" width="24" height="24"/>
         <image name="icon_finish" width="16" height="16"/>
+        <image name="icon_retry" width="24" height="24"/>
         <image name="icon_setting" width="24" height="24"/>
     </resources>
 </document>

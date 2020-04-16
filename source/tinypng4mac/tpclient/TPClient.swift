@@ -41,6 +41,23 @@ class TPClient {
 			queue.enqueue(task)
 		}
 	}
+    
+    func checkErrorsToRetry() {
+        var tasks = [TPTaskInfo]()
+        for row in 0..<TPStore.sharedStore.count() {
+            let task = TPStore.sharedStore.get(row)
+            let taskStatus = (task?.status)!
+            if taskStatus == .error {
+                tasks.append(task!)
+            }
+        }
+        if tasks.count > 0 {
+            for task in tasks {
+                queue.enqueue(task)
+            }
+            checkExecution()
+        }
+    }
 	
 	func checkExecution() {
 		lock.lock()

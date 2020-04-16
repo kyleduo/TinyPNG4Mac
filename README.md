@@ -26,7 +26,7 @@ brew cask install tinypng4mac
 
 [Release Page](https://github.com/kaishiqi/TinyPNG4Mac/releases)
 
-[CDN](https://static.kaishiqi.com/project/release/tinypng4mac/tinypng4mac_1_0_4.zip)
+[zip file](https://github.com/kaishiqi/TinyPNG4Mac/archive/v1.0.4.zip)
 
 Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this app. Just for the first time, and I suggest you uncheck it after you open this app for security.
 

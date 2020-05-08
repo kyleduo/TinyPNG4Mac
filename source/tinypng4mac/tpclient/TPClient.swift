@@ -144,7 +144,7 @@ class TPClient {
 					self.updateStatus(task, newStatus: .finish)
 					debugPrint("finish: " + task.fileInfo.relativePath + " tasks: " + String(self.runningTasks))
                     do {
-                        try FileManager.default.setAttributes([FileAttributeKey.posixPermissions: NSNumber(value: 0o644)], ofItemAtPath: task.fileInfo.filePath.path)
+                        try FileManager.default.setAttributes([FileAttributeKey.posixPermissions: task.filePermission], ofItemAtPath: task.fileInfo.filePath.path)
                     } catch {
                         debugPrint("FileManager set posixPermissions error")
                     }

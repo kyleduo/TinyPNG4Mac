@@ -223,8 +223,13 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
             print(file.filePath.path)
             print(file.filePath.relativePath)
             let attributes = try? manager.attributesOfItem(atPath: file.filePath.path)
-			let size = attributes![FileAttributeKey.size]!
-			let task = TPTaskInfo(file, originSize: (size as AnyObject).doubleValue!)
+            let size = (attributes![FileAttributeKey.size]! as AnyObject).doubleValue!
+            let permission = TPConfig.shouldReplace() ? attributes![FileAttributeKey.posixPermissions] as! NSNumber? : nil
+			let task = TPTaskInfo(
+                file,
+                originSize: size,
+                filePermission: permission
+            )
 			tasks.append(task)
 		}
 		TPClient.sharedClient.add(tasks)

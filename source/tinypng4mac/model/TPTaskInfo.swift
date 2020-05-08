@@ -12,6 +12,7 @@ class TPTaskInfo: NSObject {
 	var originFile: URL
 	var outputFile: URL?
 	var resultUrl: String
+    var filePermission: NSNumber
 	var fileInfo: FileInfo
 	var originSize: Double
 	var status: TPTaskStatus
@@ -22,7 +23,7 @@ class TPTaskInfo: NSObject {
 	var errorMessage: String?
     var index: Int
 	
-	init(_ fileInfo: FileInfo, originSize: Double) {
+    init(_ fileInfo: FileInfo, originSize: Double, filePermission: NSNumber?) {
         self.originFile = fileInfo.filePath
 		self.fileInfo = fileInfo
 		self.originSize = originSize
@@ -37,6 +38,7 @@ class TPTaskInfo: NSObject {
 		self.uuid = UUID().uuidString
 		self.errorMessage = nil
         self.index = 0
+        self.filePermission = filePermission != nil ? filePermission! : NSNumber(value: 0o644)
 	}
     
     override var description: String {

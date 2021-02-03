@@ -21,7 +21,7 @@ This is a client of [TinyPNG](https://tinypng.com) for Mac, with which you can c
 Homebrew
 
 ```
-brew cask install tinypng4mac
+brew install --cask tinypng4mac
 ```
 
 [Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases)

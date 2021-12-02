@@ -163,11 +163,11 @@ class MainViewController: NSViewController, NSOpenSavePanelDelegate, NSTableView
 		openPanel.delegate = self;
 		
 		openPanel.begin { (result) -> Void in
-			if(result.rawValue == NSFileHandlingPanelOKButton){
-				let path = openPanel.url!.path
-				debugPrint("selected folder is \(path)");
-				self.saveOutputPath(path)
-			}
+            if result == NSApplication.ModalResponse.OK {
+                let path = openPanel.url!.path
+                debugPrint("selected folder is \(path)");
+                self.saveOutputPath(path)
+            }
 		}
 	}
 	

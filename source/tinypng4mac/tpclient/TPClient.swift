@@ -8,7 +8,6 @@
 
 import Foundation
 import Alamofire
-import SwiftyJSON
 
 protocol TPClientCallback {
 	func taskStatusChanged(task: TPTaskInfo)
@@ -75,7 +74,7 @@ class TPClient {
 				"Authorization": authorizationHeader,
 				"Accept": "application/json"
 			]
-			Alamofire.upload(imageData, to: BASE_URL, method: .post, headers: headers)
+			AF.upload(imageData, to: BASE_URL, method: .post, headers: headers)
 				.uploadProgress(closure: { (progress) in
 					if progress.fractionCompleted == 1 {
 						self.updateStatus(task, newStatus: .processing)
@@ -84,31 +83,31 @@ class TPClient {
 						self.updateStatus(task, newStatus: .uploading, progress: progress)
 					}
 				})
-				.responseJSON(completionHandler: { (response) in
-					if let jsonstr = response.result.value {
-						let json = JSON(jsonstr)
-						if json != JSON.null {
-							if let error = json["error"].string {
-								debugPrint("error: " + task.fileInfo.relativePath + error)
-								self.markError(task, errorMessage: json["message"].string)
-								return
-							}
-							let output = json["output"]
-							if output != JSON.null {
-								let resultUrl = output["url"]
-								task.resultUrl = String(describing: resultUrl)
-								task.resultSize = output["size"].doubleValue
-								task.compressRate = task.resultSize / task.originSize
-								self.onUploadFinish(task)
-							} else {
-								self.markError(task, errorMessage: "response data error")
-							}
-						} else {
-							self.markError(task, errorMessage: "response format error")
-						}
-					} else {
-						self.markError(task, errorMessage: response.result.description)
-					}
+				.responseJSON(completionHandler: { response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = value as! [String: AnyObject]
+                        if let error = json["error"] as? String {
+                            debugPrint("error: " + task.fileInfo.relativePath + error)
+                            self.markError(task, errorMessage: json["message"] as? String)
+                            return
+                        }
+                        if let output = json["output"] as? [String: AnyObject] {
+                            let resultUrl = output["url"] as? String ?? ""
+                            task.resultUrl = resultUrl
+                            task.resultSize = output["size"] as? Double ?? 0
+                            task.compressRate = task.resultSize / task.originSize
+                            self.onUploadFinish(task)
+                        } else {
+                            self.markError(task, errorMessage: "response data error")
+                        }
+                        
+                        
+                        break
+                    case .failure(let error):
+                        self.markError(task, errorMessage: error.errorDescription)
+                        break
+                    }
 				})
 		} catch {
 			self.markError(task, errorMessage: "execute error")
@@ -128,27 +127,29 @@ class TPClient {
 	}
 	
 	fileprivate func downloadCompressImage(_ task: TPTaskInfo) {
-		let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+		let destination: DownloadRequest.Destination = { _, _ in
 			return (task.outputFile!, [.createIntermediateDirectories, .removePreviousFile])
 		}
 		
-		Alamofire.download(task.resultUrl, to: destination)
-			.downloadProgress(closure: { (progress) in
+        AF.download(task.resultUrl, to: destination)
+			.downloadProgress(closure: { progress in
 				self.updateStatus(task, newStatus: .downloading, progress: progress)
 			})
 			.response { response in
-				let error = response.error
-				if (error != nil) {
-					self.markError(task, errorMessage: "download error")
-				} else {
-					self.updateStatus(task, newStatus: .finish)
-					debugPrint("finish: " + task.fileInfo.relativePath + " tasks: " + String(self.runningTasks))
+                switch response.result {
+                case .success(_):
+                    self.updateStatus(task, newStatus: .finish)
+                    debugPrint("finish: " + task.fileInfo.relativePath + " tasks: " + String(self.runningTasks))
                     do {
                         try FileManager.default.setAttributes([FileAttributeKey.posixPermissions: task.filePermission], ofItemAtPath: task.fileInfo.filePath.path)
                     } catch {
                         debugPrint("FileManager set posixPermissions error")
                     }
-				}
+                    break
+                case .failure(let error):
+                    self.markError(task, errorMessage: error.errorDescription)
+                    break
+                }
 				
 				self.checkExecution()
 			}

@@ -24,9 +24,7 @@ Homebrew
 brew install --cask tinypng4mac
 ```
 
-[Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases) 
-
-[CDN下载](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_4.zip)
+访问 [Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases) 
 
 第一次打开可能出现“无法打开”的提示，请到`设置 -> 安全性与隐私`里面勾选`所有来源`。出于安全考虑，建议打开之后关闭这个选项。
 
@@ -36,11 +34,15 @@ brew install --cask tinypng4mac
 
 ### 更新信息
 
+**Version 1.0.5**
+
+1. 支持苹果芯片. [#47](https://github.com/kyleduo/TinyPNG4Mac/pull/47) 感谢 [@limuyang2](https://github.com/limuyang2)
+
+----
+
 **Version 1.0.4**
 
 1. 支持保持原文件权限。 [#11](https://github.com/kyleduo/TinyPNG4Mac/issues/11) 感谢 [PR by @Enoooch](https://github.com/kyleduo/TinyPNG4Mac/pull/40) 
-
-----
 
 **Version 1.0.3**
 

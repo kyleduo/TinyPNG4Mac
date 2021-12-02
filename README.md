@@ -24,9 +24,7 @@ Homebrew
 brew install --cask tinypng4mac
 ```
 
-[Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases)
-
-[CDN](https://static.kyleduo.com/project/release/tinypng4mac/tinypng4mac_1_0_4.zip)
+Through [Release Page](https://github.com/kyleduo/TinyPNG4Mac/releases)
 
 Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this app. Just for the first time, and I suggest you uncheck it after you open this app for security.
 
@@ -36,11 +34,15 @@ Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this
 
 ### Release Notes
 
+**Version 1.0.5**
+
+1. Support Apple silicon. [#47](https://github.com/kyleduo/TinyPNG4Mac/pull/47) Thanks [@limuyang2](https://github.com/limuyang2)
+
+----
+
 **Version 1.0.4**
 
 1. Support reserving origin file's permission. [#11](https://github.com/kyleduo/TinyPNG4Mac/issues/11) Thanks [PR by @Enoooch](https://github.com/kyleduo/TinyPNG4Mac/pull/40) 
-
-----
 
 **Version 1.0.3**
 

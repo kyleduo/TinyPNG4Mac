@@ -18,13 +18,23 @@ class TPClient {
 	let BASE_URL = "https://api.tinify.com/shrink"
 	
 	static let sharedClient = TPClient()
-	static var sApiKey = ""
+    static var sApiKey = "" {
+        didSet {
+            keysLock.lock()
+            ApiKeys = sApiKey.split(separator: ",")
+            keysLock.unlock()
+        }
+    }
 	static var sOutputPath = "" {
 		didSet {
 			IOHeler.sOutputPath = sOutputPath
 		}
 	}
-	
+    
+    static private let keysLock = NSLock()
+    static private var ApiKeys = [Substring]()
+    
+    var usingKey: Substring = ""
 	var callback:TPClientCallback!
 	
 	fileprivate init() {}
@@ -62,8 +72,12 @@ class TPClient {
 		do {
 			let fileHandler = try FileHandle(forReadingFrom:task.originFile as URL)
 			imageData = fileHandler.readDataToEndOfFile()
-			
-			let auth = "api:\(TPClient.sApiKey)"
+            
+            TPClient.keysLock.lock()
+            usingKey = TPClient.ApiKeys.first ?? ""
+            TPClient.keysLock.unlock()
+            
+			let auth = "api:\(usingKey)"
 			let authData = auth.data(using: String.Encoding.utf8)?.base64EncodedString(options: NSData.Base64EncodingOptions.lineLength64Characters)
 			let authorizationHeader = "Basic " + authData!
 			
@@ -88,6 +102,16 @@ class TPClient {
                     case .success(let value):
                         let json = value as! [String: AnyObject]
                         if let error = json["error"] as? String {
+                            if let message = json["message"] as? String, message.contains("limit") {
+                                TPClient.keysLock.lock()
+                                TPClient.ApiKeys.removeAll { $0 == self.usingKey }
+                                let key = TPClient.ApiKeys.first
+                                TPClient.keysLock.unlock()
+                                if let _ = key {
+                                    self.executeTask(task)
+                                    return
+                                }
+                            }
                             debugPrint("error: " + task.fileInfo.relativePath + error)
                             self.markError(task, errorMessage: json["message"] as? String)
                             return
@@ -101,7 +125,6 @@ class TPClient {
                         } else {
                             self.markError(task, errorMessage: "response data error")
                         }
-                        
                         
                         break
                     case .failure(let error):

@@ -21,7 +21,16 @@ class TPClient {
     static var sApiKey = "" {
         didSet {
             keysLock.lock()
-            ApiKeys = sApiKey.split(separator: ",")
+            let dateString = formater.string(from: Date())
+            ApiKeys = sApiKey
+                .split(separator: ",")
+                .map { String($0) }
+                .filter {
+                if let outDate = UserDefaults.standard.string(forKey: $0) {
+                    return outDate != dateString
+                }
+                return true
+            }
             keysLock.unlock()
         }
     }
@@ -32,9 +41,14 @@ class TPClient {
 	}
     
     static private let keysLock = NSLock()
-    static private var ApiKeys = [Substring]()
+    static private var ApiKeys = [String]()
+    static private let formater: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM"
+        return f
+    }()
     
-    var usingKey: Substring = ""
+    var usingKey = ""
 	var callback:TPClientCallback!
 	
 	fileprivate init() {}
@@ -105,6 +119,7 @@ class TPClient {
                             if let message = json["message"] as? String, message.contains("limit") {
                                 TPClient.keysLock.lock()
                                 TPClient.ApiKeys.removeAll { $0 == self.usingKey }
+                                UserDefaults.standard.set(TPClient.formater.string(from: Date()), forKey: self.usingKey)
                                 let key = TPClient.ApiKeys.first
                                 TPClient.keysLock.unlock()
                                 if let _ = key {

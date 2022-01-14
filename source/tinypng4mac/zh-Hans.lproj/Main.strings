@@ -65,10 +65,10 @@
 /* Class = "NSMenuItem"; title = "Undo"; ObjectID = "sFl-Zo-rnb"; */
 "sFl-Zo-rnb.title" = "重做";
 
-"7df-rK-orR.title" = "重置API Key";
+"7df-rK-orR.title" = "重置API Keys";
 
 /* Class = "NSTextFieldCell"; title = "API Key:"; ObjectID = "tJg-5O-cpK"; */
-"tJg-5O-cpK.title" = "API Key:";
+"tJg-5O-cpK.title" = "API Keys:";
 
 /* Class = "NSMenu"; title = "tinypng"; ObjectID = "uQy-DD-JDr"; */
 "uQy-DD-JDr.title" = "TinyPNG4Mac";

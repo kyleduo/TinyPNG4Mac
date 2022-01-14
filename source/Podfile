@@ -2,11 +2,11 @@
 # platform :ios, '8.0'
 # Uncomment this line if you're using Swift
 platform :osx, '10.12'
-use_frameworks!
+use_frameworks! :linkage => :static
 inhibit_all_warnings!
 
 target 'TinyPNG4Mac' do
 
-pod 'Alamofire', '~> 5.4.4'
+pod 'Alamofire', '~> 5.5'
 
 end

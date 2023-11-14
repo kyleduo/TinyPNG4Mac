@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="21701"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -194,8 +194,8 @@
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                         </textFieldCell>
                                     </textField>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fT1-QL-4Nq">
-                                        <rect key="frame" x="125" y="41" width="153" height="22"/>
+                                    <textField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fT1-QL-4Nq">
+                                        <rect key="frame" x="125" y="42" width="153" height="21"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="99a-9k-u4D">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -215,8 +215,8 @@
                                             <action selector="clickSelectPath:" target="f1c-SR-qaC" id="6zI-cZ-R32"/>
                                         </connections>
                                     </button>
-                                    <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vPz-Tz-wUm">
-                                        <rect key="frame" x="125" y="68" width="179" height="22"/>
+                                    <textField wantsLayer="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="vPz-Tz-wUm">
+                                        <rect key="frame" x="125" y="69" width="179" height="21"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" usesSingleLineMode="YES" id="OCF-de-u9Q">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -224,7 +224,7 @@
                                         </textFieldCell>
                                     </textField>
                                     <button translatesAutoresizingMaskIntoConstraints="NO" id="zRv-TO-bMw">
-                                        <rect key="frame" x="125" y="16" width="22" height="18"/>
+                                        <rect key="frame" x="125" y="16" width="18" height="18"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="14" id="mm5-iS-Q2I"/>
                                         </constraints>
@@ -282,8 +282,8 @@
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="icon" id="X7r-Gl-0hN"/>
                             </imageView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" alphaValue="0.40000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="IX1-JP-bbZ">
-                                <rect key="frame" x="57" y="197" width="206" height="18"/>
-                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drop .JPG/.PNG images here!" id="cXq-XC-8Ss">
+                                <rect key="frame" x="40" y="198" width="241" height="17"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Drop .jpg/.png/.webp images here!" id="cXq-XC-8Ss">
                                     <font key="font" metaFont="systemBold" size="14"/>
                                     <color key="textColor" name="highlightColor" catalog="System" colorSpace="catalog"/>
                                     <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -338,14 +338,13 @@
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="52" viewBased="YES" id="fWd-5L-B1V">
                                             <rect key="frame" x="0.0" y="0.0" width="320" height="248"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="0.0" height="2"/>
                                             <color key="backgroundColor" white="1" alpha="0.0" colorSpace="deviceWhite"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
-                                                <tableColumn width="317" minWidth="40" maxWidth="1000" id="5uH-R6-sDa">
+                                                <tableColumn width="285" minWidth="40" maxWidth="1000" id="5uH-R6-sDa">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border">
-                                                        <font key="font" metaFont="smallSystem"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -357,7 +356,7 @@
                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                     <prototypeCellViews>
                                                         <customView identifier="task_cell" id="H7A-f0-c2x" customClass="TaskTableCell" customModule="TinyPNG4Mac" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="1" width="317" height="54"/>
+                                                            <rect key="frame" x="10" y="1" width="297" height="54"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                             <subviews>
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="mYs-1G-Pt8">
@@ -369,7 +368,7 @@
                                                                     <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="JHH-DJ-f0H"/>
                                                                 </imageView>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="j8i-Ad-2S2">
-                                                                    <rect key="frame" x="70" y="30" width="46" height="18"/>
+                                                                    <rect key="frame" x="70" y="31" width="46" height="17"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingMiddle" sendsActionOnEndEditing="YES" title="A.png" id="wj2-uY-zLZ">
                                                                         <font key="font" metaFont="systemBold" size="14"/>
                                                                         <color key="textColor" name="controlLightHighlightColor" catalog="System" colorSpace="catalog"/>
@@ -377,7 +376,7 @@
                                                                     </textFieldCell>
                                                                 </textField>
                                                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="c8G-p9-kpA">
-                                                                    <rect key="frame" x="70" y="10" width="35" height="16"/>
+                                                                    <rect key="frame" x="70" y="12" width="35" height="15"/>
                                                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="LZa-jE-EIr">
                                                                         <font key="font" metaFont="cellTitle"/>
                                                                         <color key="textColor" name="highlightColor" catalog="System" colorSpace="catalog"/>
@@ -385,14 +384,14 @@
                                                                     </textFieldCell>
                                                                 </textField>
                                                                 <customView wantsLayer="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k4b-cK-7xA" customClass="SpinnerProgressIndicator" customModule="TinyPNG4Mac" customModuleProvider="target">
-                                                                    <rect key="frame" x="285" y="19" width="16" height="16"/>
+                                                                    <rect key="frame" x="265" y="19" width="16" height="16"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="16" id="WPE-uJ-9io"/>
                                                                         <constraint firstAttribute="height" constant="16" id="bND-6C-JLT"/>
                                                                     </constraints>
                                                                 </customView>
                                                                 <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="LuB-vO-cOE">
-                                                                    <rect key="frame" x="285" y="19" width="16" height="16"/>
+                                                                    <rect key="frame" x="265" y="19" width="16" height="16"/>
                                                                     <constraints>
                                                                         <constraint firstAttribute="width" constant="16" id="sN6-TY-4Ts"/>
                                                                         <constraint firstAttribute="height" constant="16" id="vbV-iA-8wO"/>
@@ -439,7 +438,7 @@
                                 </scroller>
                             </scrollView>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="fcw-HM-Ub9">
-                                <rect key="frame" x="107" y="396" width="107" height="17"/>
+                                <rect key="frame" x="107" y="397" width="107" height="16"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="TinyPNG for Mac" id="8Ac-Uq-uCZ">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -447,7 +446,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="D8d-TS-a2j">
-                                <rect key="frame" x="14" y="117" width="57" height="17"/>
+                                <rect key="frame" x="14" y="117" width="57" height="16"/>
                                 <textFieldCell key="cell" lineBreakMode="truncatingTail" truncatesLastVisibleLine="YES" sendsActionOnEndEditing="YES" title="Reduce: " id="400-FH-fhZ">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>

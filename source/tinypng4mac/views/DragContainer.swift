@@ -17,7 +17,7 @@ protocol DragContainerDelegate {
 class DragContainer: NSView {
 	var delegate : DragContainerDelegate?
 	
-	let acceptTypes = ["png", "jpg", "jpeg"]
+	let acceptTypes = ["png", "jpg", "jpeg", "webp"]
     let NSFilenamesPboardType = NSPasteboard.PasteboardType("NSFilenamesPboardType")
 	
     let normalAlpha: CGFloat = 0

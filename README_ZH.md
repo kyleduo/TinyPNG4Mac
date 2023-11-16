@@ -36,9 +36,10 @@ brew install --cask tinypng4mac
 
 **Version 1.0.7**
 
-1. 升级 Alamofire 到最新版本。
-2. 修改最低支持的 macOS 版本到 10.13。
-3. 将依赖管理方式从 CocoaPods 改成 SPM。
+1. 支持 webp 格式。
+2. 升级 Alamofire 到最新版本。
+3. 修改最低支持的 macOS 版本到 10.13。
+4. 将依赖管理方式从 CocoaPods 改成 SPM。
 
 ----
 

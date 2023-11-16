@@ -36,9 +36,10 @@ Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this
 
 **Version 1.0.7**
 
-1. Update Alamofire to latest version.
-2. Change minimal supported macOS version to 10.13.
-3. Change dependency management from CocoaPods to SPM.
+1. Add support for webp files.
+2. Update Alamofire to latest version.
+3. Change minimal supported macOS version to 10.13.
+4. Change dependency management from CocoaPods to SPM.
 
 ----
 

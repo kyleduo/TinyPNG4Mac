@@ -34,11 +34,17 @@ brew install --cask tinypng4mac
 
 ### 更新信息
 
+**Version 1.0.7**
+
+1. 升级 Alamofire 到最新版本。
+2. 修改最低支持的 macOS 版本到 10.13。
+3. 将依赖管理方式从 CocoaPods 改成 SPM。
+
+----
+
 **Version 1.0.5**
 
 1. 支持苹果芯片. [#47](https://github.com/kyleduo/TinyPNG4Mac/pull/47) 感谢 [@limuyang2](https://github.com/limuyang2)
-
-----
 
 **Version 1.0.4**
 

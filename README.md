@@ -34,11 +34,18 @@ Check "Anywhere" in `Preferences -> Security & privacy` if you can not open this
 
 ### Release Notes
 
+**Version 1.0.7**
+
+1. Update Alamofire to latest version.
+2. Change minimal supported macOS version to 10.13.
+3. Change dependency management from CocoaPods to SPM.
+
+----
+
 **Version 1.0.5**
 
 1. Support Apple silicon. [#47](https://github.com/kyleduo/TinyPNG4Mac/pull/47) Thanks [@limuyang2](https://github.com/limuyang2)
 
-----
 
 **Version 1.0.4**
 

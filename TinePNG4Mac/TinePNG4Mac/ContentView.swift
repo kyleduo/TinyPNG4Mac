@@ -12,9 +12,13 @@ struct ContentView: View {
         
     var body: some View {
         ZStack {
-            Text("Hello")
+            DropFileView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.blue)
+            
+//            Text("Hello")
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                .background(Color.blue)
             
             VStack {
                 Text("TinyPNG for macOS")

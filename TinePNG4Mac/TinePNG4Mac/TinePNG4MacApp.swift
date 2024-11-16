@@ -17,7 +17,7 @@ struct TinePNG4MacApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainContentView()
                 .frame(
                     minWidth: appContext.minSize.width,
                     idealWidth: appContext.minSize.width,

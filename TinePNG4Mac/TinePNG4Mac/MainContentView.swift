@@ -7,16 +7,18 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct MainContentView: View {
     @EnvironmentObject var appContext: AppContext
+    @StateObject var vm: MainViewModel = MainViewModel()
+    @State var dropResult: [URL] = []
 
     var body: some View {
         ZStack {
-            DropFileView()
+            DropFileView(dropResult: $dropResult)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                .background(Color.blue)
 
-            Text("Hello")
+            Text("count: \(dropResult.count)")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.blue)
 
@@ -37,5 +39,5 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    MainContentView()
 }

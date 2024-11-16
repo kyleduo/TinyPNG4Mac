@@ -9,8 +9,8 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 struct DropFileView: View {
-    @State private var droppedFilePath: String = "Drop a file here!"
-
+    @Binding var dropResult: [URL]
+    
     var body: some View {
         Rectangle()
             .fill(Color.clear)
@@ -22,19 +22,28 @@ struct DropFileView: View {
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {
         var ret: Bool = false
+        var urls: [URL] = Array()
+        let group = DispatchGroup() // To wait for all asynchronous calls
+        
         for provider in providers {
-            if provider.canLoadObject(ofClass: URL.self) {
-                let _ = provider.loadObject(ofClass: URL.self) { item, _ in
-                    if let url = item {
-                        print(url)
-                        DispatchQueue.main.async {
-                            droppedFilePath = url.path
-                        }
-                    }
-                }
-                ret = true
+            if !provider.canLoadObject(ofClass: URL.self) {
+                continue
             }
+            group.enter()
+            let _ = provider.loadObject(ofClass: URL.self) { item, _ in
+                if let url = item {
+                    urls.append(url)
+                }
+                group.leave()
+            }
+            ret = true
         }
+        
+        group.notify(queue: .main) {
+            let imageUrls = DocumentUtils.findImageFiles(urls: urls)
+            dropResult = imageUrls
+        }
+        
         return ret
     }
 }

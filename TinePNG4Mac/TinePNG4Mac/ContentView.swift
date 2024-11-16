@@ -9,17 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var appContext: AppContext
-        
+
     var body: some View {
         ZStack {
             DropFileView()
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.blue)
-            
-//            Text("Hello")
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                .background(Color.blue)
-            
+
+            Text("Hello")
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color.blue)
+
+//            Button {
+//                print("click")
+//            } label: {
+//                Text("click!")
+//            }
+
             VStack {
                 Text("TinyPNG for macOS")
                     .frame(height: appContext.windowTitleBarHeight)

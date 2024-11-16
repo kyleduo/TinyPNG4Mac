@@ -12,24 +12,12 @@ struct DropFileView: View {
     @State private var droppedFilePath: String = "Drop a file here!"
 
     var body: some View {
-        VStack {
-            Text(droppedFilePath)
-                .multilineTextAlignment(.center)
-                .padding()
-
-            Rectangle()
-                .fill(Color.white.opacity(0.4))
-                .overlay(
-                    Text("Drop File Here")
-                        .font(.headline)
-                        .foregroundColor(.blue)
-                )
-                .cornerRadius(10)
-                .onDrop(of: [.fileURL], isTargeted: nil) { providers in
-                    handleDrop(providers: providers)
-                }
-        }
-        .padding()
+        Rectangle()
+            .fill(Color.clear)
+            .cornerRadius(10)
+            .onDrop(of: [.fileURL], isTargeted: nil) { providers in
+                handleDrop(providers: providers)
+            }
     }
 
     private func handleDrop(providers: [NSItemProvider]) -> Bool {

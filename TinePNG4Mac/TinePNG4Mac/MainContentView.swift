@@ -18,7 +18,7 @@ struct MainContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                .background(Color.blue)
 
-            Text("count: \(dropResult.count)")
+            Text("count: \(vm.tasks.count)")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.blue)
 
@@ -35,6 +35,37 @@ struct MainContentView: View {
             }
         }
         .ignoresSafeArea()
+        .onChange(of: dropResult) { _, newValue in
+            vm.createTasks(imageURLs: newValue)
+        }
+        .onChange(of: vm.requestPermission) { oldValue, newValue in
+            if oldValue == false && newValue == true {
+                vm.requestPermission = false
+                requestFilePermission()
+            }
+        }
+    }
+    
+    private func requestFilePermission() {
+        DispatchQueue.main.async {
+            let openPanel = NSOpenPanel()
+            openPanel.canChooseFiles = false
+            openPanel.canChooseDirectories = true
+            openPanel.allowsMultipleSelection = false
+            openPanel.prompt = "Select Directory"
+            
+            openPanel.begin { result in
+                if result == .OK, let url = openPanel.url {
+                    print("User granted access to: \(url.path)")
+                    if url.startAccessingSecurityScopedResource() {
+                        print(url)
+                        url.stopAccessingSecurityScopedResource()
+                    }
+                } else {
+                    print("User did not grant access.")
+                }
+            }
+        }
     }
 }
 

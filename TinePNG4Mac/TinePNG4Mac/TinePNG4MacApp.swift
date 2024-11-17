@@ -49,6 +49,8 @@ struct TinePNG4MacApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
+        DocumentUtils.initPaths()
+        
         if let window = NSApp.windows.first {
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = true

@@ -14,7 +14,7 @@ struct DocumentUtils {
     static func initPaths() {
         let fileManager = FileManager.default
 
-        let appDocDirectory = getDocumentsDirectory()
+        let appDocDirectory = getCachesDirectory()
         let appCacheDirectory = getCachesDirectory()
         
         self.backupPath = appDocDirectory.appendingPathComponent("backup")

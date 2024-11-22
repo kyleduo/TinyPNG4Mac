@@ -17,7 +17,9 @@ class MainViewModel: ObservableObject {
             for url in imageURLs {
                 let originUrl = url.path()
                 if !DocumentUtils.hasReadAndWritePermission(path: originUrl) {
-                    requestPermission = true
+                    DispatchQueue.main.async {
+                        self.requestPermission = true
+                    }
                     break
                 }
                 

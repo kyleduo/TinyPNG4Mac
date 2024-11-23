@@ -7,11 +7,11 @@
 import Foundation
 
 /// 图片压缩任务
-class ImageTask {
+class TinyTask {
     var uuid: String
-    var originUrl: String
-    var backupUrl: String?
-    var downloadUrl: String?
+    var originUrl: URL
+    var backupUrl: URL?
+    var downloadUrl: URL?
     var status: TaskStatus
     /// in byte
     var originSize: UInt64?
@@ -20,7 +20,7 @@ class ImageTask {
     var finalSize: UInt64?
     var errorMessage: String?
     
-    init(uuid: String, originUrl: String, backupUrl: String?, downloadUrl: String?, status: TaskStatus, originSize: UInt64?, finalSize: UInt64?) {
+    init(uuid: String, originUrl: URL, backupUrl: URL?, downloadUrl: URL?, status: TaskStatus, originSize: UInt64?, finalSize: UInt64?) {
         self.uuid = uuid
         self.originUrl = originUrl
         self.backupUrl = backupUrl
@@ -31,7 +31,7 @@ class ImageTask {
         self.errorMessage = nil
     }
     
-    init(originUrl: String) {
+    init(originUrl: URL) {
         self.uuid = UUID().uuidString
         self.originUrl = originUrl
         self.backupUrl = nil
@@ -54,5 +54,28 @@ enum TaskStatus {
     case error
     case completed
     case uploading
+    case processing
     case downloading
+}
+
+extension TaskStatus {
+    
+    func displayText() -> String {
+        switch self {
+        case .created:
+            "Pending"
+        case .cancelled:
+            "Cancelled"
+        case .error:
+            "Error"
+        case .completed:
+            "Completed"
+        case .uploading:
+            "Uploading"
+        case .processing:
+            "Processing"
+        case .downloading:
+            "Downloading"
+        }
+    }
 }

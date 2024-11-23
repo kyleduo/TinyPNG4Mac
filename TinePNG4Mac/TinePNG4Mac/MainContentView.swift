@@ -16,24 +16,33 @@ struct MainContentView: View {
 
     var body: some View {
         ZStack {
+            
             DropFileView(dropResult: $dropResult)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(Color("303030"))
+
+//            Text("count: \(vm.tasks.count)")
+//                .frame(maxWidth: .infinity, maxHeight: .infinity)
 //                .background(Color.blue)
 
-            Text("count: \(vm.tasks.count)")
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.blue)
-
-//            Button {
-//                print("click")
-//            } label: {
-//                Text("click!")
-//            }
-
-            VStack {
+            VStack(spacing: 0) {
                 Text("TinyPNG for macOS")
                     .frame(height: appContext.windowTitleBarHeight)
-                Spacer()
+                
+                List {
+                    ForEach(vm.tasks.indices, id: \.self) { index in
+                        let task = vm.tasks[index]
+                        TaskRowView(task: task)
+                            .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
+                            .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 2, trailing: 12))
+                    }
+                }
+                .padding(.horizontal, -8)
+                .frame(maxWidth: 500)
+                .scrollContentBackground(.hidden)
+                .listStyle(PlainListStyle())
+                .environment(\.defaultMinListRowHeight, 0)
             }
         }
         .ignoresSafeArea()

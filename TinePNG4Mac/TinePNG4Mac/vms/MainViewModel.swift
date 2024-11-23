@@ -9,44 +9,45 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 class MainViewModel: ObservableObject {
-    @Published var tasks: [ImageTask] = []
+    @Published var tasks: [TinyTask] = []
     @Published var requestPermission: Bool = false
     
     func createTasks(imageURLs: [URL]) {
         Task {
             for url in imageURLs {
-                let originUrl = url.path(percentEncoded: false)
-                if !DocumentUtils.hasReadAndWritePermission(path: originUrl) {
+                let originUrl = url
+                let originUrlPath = url.path(percentEncoded: false)
+                if !DocumentUtils.hasReadAndWritePermission(path: originUrlPath) {
                     DispatchQueue.main.async {
                         self.requestPermission = true
                     }
                     break
                 }
                 
-                if !DocumentUtils.exists(path: originUrl) {
-                    let task = ImageTask(originUrl: originUrl)
-                    task.setError(message: "File not exists.")
+                if !DocumentUtils.exists(path: originUrlPath) {
+                    let task = TinyTask(originUrl: originUrl)
+                    task.setError(message: "File not exists, skip create task.")
                     appendTask(task: task)
                     continue
                 }
                 
                 let uuid = UUID().uuidString
                 
-                let backupUrl = DocumentUtils.getBackupPath(id: uuid)
-                let backupRet = DocumentUtils.createBackup(id: uuid, sourcePath: originUrl, targetPath: backupUrl)
+                let backupUrl = DocumentUtils.getBackupUrl(id: uuid)
+                let backupRet = DocumentUtils.createBackup(id: uuid, sourcePath: originUrlPath, targetPath: backupUrl.path(percentEncoded: false))
                 if !backupRet {
-                    let task = ImageTask(originUrl: originUrl)
-                    task.setError(message: "Fail to create backup.")
+                    let task = TinyTask(originUrl: originUrl)
+                    task.setError(message: "Fail to create backup, skip creat task.")
                     appendTask(task: task)
                     continue
                 }
                 
-                let downloadUrl = DocumentUtils.getDownloadPath(id: uuid)
+                let downloadUrl = DocumentUtils.getDownloadUrl(id: uuid)
                 
-                let task = ImageTask(originUrl: originUrl)
+                let task = TinyTask(originUrl: originUrl)
                 task.backupUrl = backupUrl
                 task.downloadUrl = downloadUrl
-                task.originSize = DocumentUtils.getFileSize(path: originUrl)
+                task.originSize = DocumentUtils.getFileSize(path: originUrlPath)
               
                 print("task created: \(task)")
                 
@@ -55,7 +56,7 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    private func appendTask(task: ImageTask) {
+    private func appendTask(task: TinyTask) {
         DispatchQueue.main.async {
             self.tasks.append(task)
         }

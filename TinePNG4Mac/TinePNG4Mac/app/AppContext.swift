@@ -8,7 +8,7 @@
 import SwiftUI
 
 class AppContext: ObservableObject {
-    let minSize = CGSize(width: 320, height: 320)
+    let minSize = CGSize(width: 360, height: 360)
     let maxSize = CGSize(width: 640, height: 640)
     
     @Published var windowTitleBarHeight: CGFloat = 28

@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 /// 图片压缩任务
-class TinyTask {
+class TaskInfo {
     var uuid: String
     var originUrl: URL
     var previewImage: NSImage?
@@ -81,5 +81,12 @@ extension TaskStatus {
         case .downloading:
             "Downloading"
         }
+    }
+}
+
+extension TaskInfo: CustomStringConvertible {
+    
+    var description: String {
+        return "Task(id: \(uuid), originUrl: \(originUrl.path(percentEncoded: false))"
     }
 }

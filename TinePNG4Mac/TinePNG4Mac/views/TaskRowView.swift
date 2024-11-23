@@ -12,7 +12,7 @@ struct TaskRowView: View {
     private let rowPadding: CGFloat = 5
     private let imageSize: CGFloat = 50
 
-    var task: TinyTask
+    var task: TaskInfo
 
     var body: some View {
         HStack(spacing: 6) {

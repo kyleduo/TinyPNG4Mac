@@ -33,4 +33,14 @@ extension URL {
         // Format the shortened path in `../xxx/yyy` style
         return "../" + shortComponents.joined(separator: "/")
     }
+
+    func isSameFilePath(as other: URL) -> Bool {
+        // Standardize both URLs to remove trailing slashes
+        let standardizedSelf = standardized.path
+        let standardizedOther = other.standardized.path
+
+        // Compare the paths ignoring any trailing slashes
+        return standardizedSelf.trimmingCharacters(in: CharacterSet(charactersIn: "/")) ==
+            standardizedOther.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+    }
 }

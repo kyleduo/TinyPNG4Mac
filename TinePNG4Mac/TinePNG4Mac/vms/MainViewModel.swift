@@ -9,7 +9,7 @@ import SwiftUI
 import UniformTypeIdentifiers
 
 class MainViewModel: ObservableObject {
-    @Published var tasks: [TinyTask] = []
+    @Published var tasks: [TaskInfo] = []
     @Published var requestPermission: Bool = false
     
     func createTasks(imageURLs: [URL]) {
@@ -25,7 +25,7 @@ class MainViewModel: ObservableObject {
                 }
                 
                 if !DocumentUtils.exists(path: originUrlPath) {
-                    let task = TinyTask(originUrl: originUrl)
+                    let task = TaskInfo(originUrl: originUrl)
                     task.setError(message: "File not exists, skip create task.")
                     appendTask(task: task)
                     continue
@@ -36,7 +36,7 @@ class MainViewModel: ObservableObject {
                 let backupUrl = DocumentUtils.getBackupUrl(id: uuid)
                 let backupRet = DocumentUtils.createBackup(id: uuid, sourcePath: originUrlPath, targetPath: backupUrl.path(percentEncoded: false))
                 if !backupRet {
-                    let task = TinyTask(originUrl: originUrl)
+                    let task = TaskInfo(originUrl: originUrl)
                     task.setError(message: "Fail to create backup, skip creat task.")
                     appendTask(task: task)
                     continue
@@ -47,20 +47,20 @@ class MainViewModel: ObservableObject {
                 
                 let previewImage = loadImagePreviewUsingCGImageSource(from: originUrl, maxDimension: 200)
                 
-                let task = TinyTask(originUrl: originUrl)
+                let task = TaskInfo(originUrl: originUrl)
                 task.backupUrl = backupUrl
                 task.downloadUrl = downloadUrl
                 task.originSize = DocumentUtils.getFileSize(path: originUrlPath)
                 task.previewImage = previewImage
               
-                print("task created: \(task)")
+                print("Task created: \(task)")
                 
                 appendTask(task: task)
             }
         }
     }
     
-    private func appendTask(task: TinyTask) {
+    private func appendTask(task: TaskInfo) {
         DispatchQueue.main.async {
             self.tasks.append(task)
         }

@@ -19,19 +19,25 @@ struct DocumentUtils {
 
     static func initPaths() {
         let fileManager = FileManager.default
-        
-        do {
-            let otherSessionsDir = try fileManager.contentsOfDirectory(atPath: cacheRootDir.path(percentEncoded: false))
-            for dir in otherSessionsDir {
-                let dirUrl = cacheRootDir.appendingPathComponent(dir)
-                let dirPath = dirUrl.path(percentEncoded: false)
-                try fileManager.removeItem(atPath: dirPath)
-                print("Delete \(dirPath)")
+
+        Task {
+            do {
+                let otherSessionsDir = try fileManager.contentsOfDirectory(atPath: cacheRootDir.path(percentEncoded: false))
+                for dir in otherSessionsDir {
+                    let dirUrl = cacheRootDir.appendingPathComponent(dir)
+                    if dirUrl.isSameFilePath(as: sessionRootDir) {
+                        print("same")
+                        continue
+                    }
+                    let dirPath = dirUrl.path(percentEncoded: false)
+                    try fileManager.removeItem(atPath: dirPath)
+                    print("Delete \(dirPath)")
+                }
+            } catch {
+                print("Error delete other session caches")
             }
-        } catch {
-            print("Error delete other session caches")
         }
-        
+
         let pathsToCheck = [
             sessionRootDir,
             backupDir,
@@ -43,9 +49,6 @@ struct DocumentUtils {
                 if !fileManager.fileExists(atPath: path.path) {
                     // Create the directory if it does not exist
                     try fileManager.createDirectory(at: path, withIntermediateDirectories: true, attributes: nil)
-                    print("Directory created: \(path.path)")
-                } else {
-                    print("Directory already exists: \(path.path)")
                 }
             } catch {
                 print("Error creating directory at \(path.path): \(error.localizedDescription)")
@@ -97,10 +100,9 @@ struct DocumentUtils {
             if fileManager.fileExists(atPath: sourcePath) {
                 // Attempt to copy the file to the target path
                 try fileManager.copyItem(atPath: sourcePath, toPath: targetPath)
-                print("File copied successfully to \(targetPath)")
                 return true
             } else {
-                print("Source file does not exist at path: \(sourcePath)")
+                print("Create Backup, Source file does not exist at path: \(sourcePath)")
                 return false
             }
         } catch {

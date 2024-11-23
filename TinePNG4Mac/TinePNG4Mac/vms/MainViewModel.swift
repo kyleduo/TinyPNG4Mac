@@ -44,10 +44,14 @@ class MainViewModel: ObservableObject {
                 
                 let downloadUrl = DocumentUtils.getDownloadUrl(id: uuid)
                 
+                
+                let previewImage = loadImagePreviewUsingCGImageSource(from: originUrl, maxDimension: 200)
+                
                 let task = TinyTask(originUrl: originUrl)
                 task.backupUrl = backupUrl
                 task.downloadUrl = downloadUrl
                 task.originSize = DocumentUtils.getFileSize(path: originUrlPath)
+                task.previewImage = previewImage
               
                 print("task created: \(task)")
                 
@@ -60,5 +64,42 @@ class MainViewModel: ObservableObject {
         DispatchQueue.main.async {
             self.tasks.append(task)
         }
+    }
+    
+    private func loadImagePreviewUsingCGImageSource(from url: URL, maxDimension: CGFloat) -> NSImage? {
+        // Create CGImageSource from the URL
+        guard let imageSource = CGImageSourceCreateWithURL(url as CFURL, nil) else { return nil }
+        
+        // Get image properties to calculate aspect ratio
+        guard let imageProperties = CGImageSourceCopyPropertiesAtIndex(imageSource, 0, nil) as? [CFString: Any],
+              let width = imageProperties[kCGImagePropertyPixelWidth] as? CGFloat,
+              let height = imageProperties[kCGImagePropertyPixelHeight] as? CGFloat else {
+            return nil
+        }
+        
+        // Calculate aspect ratio
+        let aspectRatio = width / height
+        
+        // Determine the size for the thumbnail while preserving the aspect ratio
+        var thumbnailSize: CGSize
+        if width > height {
+            thumbnailSize = CGSize(width: maxDimension, height: maxDimension / aspectRatio)
+        } else {
+            thumbnailSize = CGSize(width: maxDimension * aspectRatio, height: maxDimension)
+        }
+        
+        // Create options to generate thumbnail
+        let options: [CFString: Any] = [
+            kCGImageSourceThumbnailMaxPixelSize: maxDimension,
+            kCGImageSourceCreateThumbnailFromImageIfAbsent: true
+        ]
+        
+        // Generate the thumbnail image
+        guard let cgImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary) else {
+            return nil
+        }
+        
+        // Create an NSImage from the CGImage
+        return NSImage(cgImage: cgImage, size: thumbnailSize)
     }
 }

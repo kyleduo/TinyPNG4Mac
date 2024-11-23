@@ -34,9 +34,9 @@ struct TinePNG4MacApp: App {
                     if let window = NSApp.windows.first {
                         appContext.updateTitleBarHeight(window: window)
                         // 不加 async 可能设置失败。这里设置会导致窗口闪一下，默认值改成获取到的 28.
-                        DispatchQueue.main.async {
-                            window.setContentSize(CGSize(width: 320, height: 320 - appContext.windowTitleBarHeight))
-                        }
+//                        DispatchQueue.main.async {
+//                            window.setContentSize(CGSize(width: 320, height: 320 - appContext.windowTitleBarHeight))
+//                        }
                     }
                 }
                 .environmentObject(appContext)

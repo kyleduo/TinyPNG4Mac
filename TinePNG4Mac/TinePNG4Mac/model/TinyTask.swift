@@ -5,11 +5,13 @@
 //  Created by 张铎 on 2024/11/17.
 //
 import Foundation
+import SwiftUI
 
 /// 图片压缩任务
 class TinyTask {
     var uuid: String
     var originUrl: URL
+    var previewImage: NSImage?
     var backupUrl: URL?
     var downloadUrl: URL?
     var status: TaskStatus
@@ -20,7 +22,7 @@ class TinyTask {
     var finalSize: UInt64?
     var errorMessage: String?
     
-    init(uuid: String, originUrl: URL, backupUrl: URL?, downloadUrl: URL?, status: TaskStatus, originSize: UInt64?, finalSize: UInt64?) {
+    init(uuid: String, originUrl: URL, backupUrl: URL?, downloadUrl: URL?, status: TaskStatus, originSize: UInt64?, finalSize: UInt64?, previewImage: NSImage?) {
         self.uuid = uuid
         self.originUrl = originUrl
         self.backupUrl = backupUrl
@@ -29,6 +31,7 @@ class TinyTask {
         self.originSize = originSize
         self.finalSize = finalSize
         self.errorMessage = nil
+        self.previewImage = previewImage
     }
     
     init(originUrl: URL) {
@@ -40,6 +43,7 @@ class TinyTask {
         self.originSize = 0
         self.finalSize = 0
         self.errorMessage = nil
+        self.previewImage = nil
     }
     
     func setError(message: String) {

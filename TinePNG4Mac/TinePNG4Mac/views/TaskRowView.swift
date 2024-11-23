@@ -16,7 +16,8 @@ struct TaskRowView: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            if let uiImage = NSImage(contentsOf: task.backupUrl!) {
+            if let uiImage = task.previewImage {
+//            if let uiImage = NSImage(contentsOf: task.backupUrl!) {
                 Image(nsImage: uiImage) // For macOS
                     .resizable()
                     .scaledToFill()

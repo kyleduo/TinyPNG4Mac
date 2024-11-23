@@ -21,9 +21,11 @@ struct MainContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color("303030"))
 
-//            Text("count: \(vm.tasks.count)")
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .background(Color.blue)
+            if vm.tasks.isEmpty {
+                Text("Drag and drop images or folder.")
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
 
             VStack(spacing: 0) {
                 Text("TinyPNG for macOS")
@@ -35,10 +37,11 @@ struct MainContentView: View {
                         TaskRowView(task: task)
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets(top: 8, leading: 12, bottom: 2, trailing: 12))
+                            .listRowInsets(EdgeInsets(top: index == 0 ? 8 : 10, leading: 4, bottom: index == vm.tasks.count - 1 ? 12 : 0, trailing: 4))
                     }
                 }
-                .padding(.horizontal, -8)
+//                .padding(.horizontal, -8)
+                .clipped()
                 .frame(maxWidth: 500)
                 .scrollContentBackground(.hidden)
                 .listStyle(PlainListStyle())

@@ -15,7 +15,7 @@ class MainViewModel: ObservableObject {
     func createTasks(imageURLs: [URL]) {
         Task {
             for url in imageURLs {
-                let originUrl = url.path()
+                let originUrl = url.path(percentEncoded: false)
                 if !DocumentUtils.hasReadAndWritePermission(path: originUrl) {
                     DispatchQueue.main.async {
                         self.requestPermission = true

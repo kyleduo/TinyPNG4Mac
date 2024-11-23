@@ -43,11 +43,11 @@ struct DocumentUtils {
     }
 
     static func getBackupPath(id: String) -> String {
-        return backupPath!.appendingPathComponent(id).path()
+        return backupPath!.appendingPathComponent(id).path(percentEncoded: false)
     }
 
     static func getDownloadPath(id: String) -> String {
-        return downloadPath!.appendingPathComponent(id).path()
+        return downloadPath!.appendingPathComponent(id).path(percentEncoded: false)
     }
     
     // Function to get the Application Support Directory

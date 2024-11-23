@@ -8,25 +8,36 @@
 import UniformTypeIdentifiers
 
 struct DocumentUtils {
-    private static var backupPath: URL? = nil
-    private static var downloadPath: URL? = nil
+    private static let fileManager = FileManager.default
+
+    private static let sessionId = UUID().uuidString
+    private static let cacheRootDir = getCachesDirectory()
+    private static let sessionRootDir = getCachesDirectory(sessionId)
+
+    private static var backupDir: URL = sessionRootDir.appendingPathComponent("backup")
+    private static var downloadDir: URL = sessionRootDir.appendingPathComponent("download")
 
     static func initPaths() {
         let fileManager = FileManager.default
-
-        let appDocDirectory = getCachesDirectory()
-        let appCacheDirectory = getCachesDirectory()
         
-        self.backupPath = appDocDirectory.appendingPathComponent("backup")
-        self.downloadPath = appCacheDirectory.appendingPathComponent("download")
-
-        // Define the paths you want to ensure exist
+        do {
+            let otherSessionsDir = try fileManager.contentsOfDirectory(atPath: cacheRootDir.path(percentEncoded: false))
+            for dir in otherSessionsDir {
+                let dirUrl = cacheRootDir.appendingPathComponent(dir)
+                let dirPath = dirUrl.path(percentEncoded: false)
+                try fileManager.removeItem(atPath: dirPath)
+                print("Delete \(dirPath)")
+            }
+        } catch {
+            print("Error delete other session caches")
+        }
+        
         let pathsToCheck = [
-            self.backupPath!,
-            self.downloadPath!
+            sessionRootDir,
+            backupDir,
+            downloadDir,
         ]
 
-        // Iterate through the paths and create directories if they do not exist
         for path in pathsToCheck {
             do {
                 if !fileManager.fileExists(atPath: path.path) {
@@ -43,13 +54,13 @@ struct DocumentUtils {
     }
 
     static func getBackupPath(id: String) -> String {
-        return backupPath!.appendingPathComponent(id).path(percentEncoded: false)
+        return backupDir.appendingPathComponent(id).path(percentEncoded: false)
     }
 
     static func getDownloadPath(id: String) -> String {
-        return downloadPath!.appendingPathComponent(id).path(percentEncoded: false)
+        return downloadDir.appendingPathComponent(id).path(percentEncoded: false)
     }
-    
+
     // Function to get the Application Support Directory
     private static func getAppSupportDirectory() -> URL? {
         let fileManager = FileManager.default
@@ -67,14 +78,13 @@ struct DocumentUtils {
         }
     }
 
-    // Function to get the Documents Directory
-    private static func getDocumentsDirectory() -> URL {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    }
-
-    // Function to get the Caches Directory
-    private static func getCachesDirectory() -> URL {
-        return FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+    private static func getCachesDirectory(_ key: String? = nil) -> URL {
+        let cacheRootDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        if key != nil {
+            return cacheRootDir.appendingPathComponent(key!)
+        } else {
+            return cacheRootDir
+        }
     }
 
     /// 创建备份文件
@@ -104,7 +114,7 @@ struct DocumentUtils {
         let fileManager = FileManager.default
         return fileManager.fileExists(atPath: path)
     }
-    
+
     static func hasReadAndWritePermission(path: String) -> Bool {
         let fileManager = FileManager.default
         return fileManager.isReadableFile(atPath: path) && fileManager.isWritableFile(atPath: path)

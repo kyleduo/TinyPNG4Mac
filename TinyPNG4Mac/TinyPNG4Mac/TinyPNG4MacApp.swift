@@ -12,12 +12,13 @@ import SwiftUI
 struct TinyPNG4MacApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelgate
     @StateObject var appContext = AppContext()
+    @StateObject var vm: MainViewModel = MainViewModel()
 
     @State var firstAppear: Bool = true
 
     var body: some Scene {
         WindowGroup {
-            MainContentView()
+            MainContentView(vm: vm)
                 .frame(
                     minWidth: appContext.minSize.width,
                     idealWidth: appContext.minSize.width,

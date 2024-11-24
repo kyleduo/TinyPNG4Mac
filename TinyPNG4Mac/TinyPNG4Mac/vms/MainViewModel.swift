@@ -10,7 +10,6 @@ import UniformTypeIdentifiers
 
 class MainViewModel: ObservableObject, TPClientCallback {
     @Published var tasks: [TaskInfo] = []
-    @Published var requestPermission: Bool = false
     @Published var monthlyUsedQuota: Int = -1
 
     init() {
@@ -22,12 +21,12 @@ class MainViewModel: ObservableObject, TPClientCallback {
             for url in imageURLs {
                 let originUrl = url
                 
-                if !originUrl.hasPermission() {
-                    DispatchQueue.main.async {
-                        self.requestPermission = true
-                    }
-                    break
-                }
+//                if !originUrl.hasPermission() {
+//                    DispatchQueue.main.async {
+//                        self.requestPermission = true
+//                    }
+//                    break
+//                }
 
                 if !originUrl.fileExists() {
                     let task = TaskInfo(originUrl: originUrl)

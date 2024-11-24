@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainContentView: View {
     @EnvironmentObject var appContext: AppContext
-    @StateObject var vm: MainViewModel = MainViewModel()
+    @ObservedObject var vm: MainViewModel
     @State private var dropResult: [URL] = []
     @State private var showAlert = false
     @State private var showOpenPanel = false
@@ -87,8 +87,4 @@ struct MainContentView: View {
 //            }
 //        }
 //    }
-}
-
-#Preview {
-    MainContentView()
 }

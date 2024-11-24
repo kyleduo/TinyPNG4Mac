@@ -120,8 +120,12 @@ class MainViewModel: ObservableObject, TPClientCallback {
         
         if let index = tasks.firstIndex(where: { item in item.id == task.id }) {
             tasks[index] = task
-            
+            sortTasksInPlace(&tasks)
             tasks = tasks
         }
+    }
+    
+    func sortTasksInPlace(_ tasks: inout [TaskInfo]) {
+        tasks.sort { $0 < $1 }
     }
 }

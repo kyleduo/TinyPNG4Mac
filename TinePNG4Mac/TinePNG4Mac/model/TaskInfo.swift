@@ -101,11 +101,9 @@ extension TaskInfo: Equatable {
     }
 }
 
-
 extension TaskInfo {
-    
     func statusText() -> String {
-        if status == .uploading || status == .downloading {
+        if (status == .uploading || status == .downloading) && progress > 0 {
             status.displayText() + " (\(progress * 100) %)"
         } else {
             status.displayText()
@@ -113,9 +111,7 @@ extension TaskInfo {
     }
 }
 
-
 extension TaskInfo {
-    
     func copy(
         id: String? = nil,
         originUrl: URL? = nil,
@@ -144,6 +140,23 @@ extension TaskInfo {
             errorMessage: errorMessage ?? self.errorMessage,
             progress: progress ?? self.progress
         )
+    }
+}
+
+extension TaskInfo: Comparable {
+    static func < (lhs: TaskInfo, rhs: TaskInfo) -> Bool {
+        // Define the precedence of each status
+        let precedence: [TaskStatus: Int] = [
+            .error: 0,
+            .uploading: 1,
+            .processing: 1,
+            .downloading: 1,
+            .created: 2,
+            .cancelled: 3,
+            .completed: 4,
+        ]
+
+        return precedence[lhs.status, default: Int.max] < precedence[rhs.status, default: Int.max]
     }
 }
 

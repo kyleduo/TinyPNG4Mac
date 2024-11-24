@@ -12,6 +12,8 @@ class TPClient {
     static let shared = TPClient()
 
     var apiKey = ProcessInfo.processInfo.environment["API_KEY"] ?? ""
+    var mockEnabled = ProcessInfo.processInfo.environment["MOCK_ENABLED"] != nil
+    
     var maxConcurrencyCount = 1
     var runningTasks = 0
     var callback: TPClientCallback?
@@ -48,6 +50,13 @@ class TPClient {
             }
 
             let headers = requestHeaders()
+            
+            if mockEnabled {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                    self.completeTask(task)
+                }
+                return
+            }
 
             AF.upload(data, to: TPAPI.shrink.rawValue, headers: headers)
                 .uploadProgress { progress in
@@ -91,11 +100,7 @@ class TPClient {
                     do {
                         DocumentUtils.moveFile(task.downloadUrl!, to: task.originUrl)
                         DocumentUtils.setFilePermission(task.filePermission!, to: task.originUrl.path(percentEncoded: false))
-                        self.updateStatus(.completed, of: task)
-                        self.lock.withLock {
-                            self.runningTasks -= 1
-                        }
-                        self.checkExecution()
+                        self.completeTask(task)
                     } catch {
                         debugPrint("FileManager set posixPermissions error")
                     }
@@ -108,7 +113,6 @@ class TPClient {
                 self.checkExecution()
             }
     }
-    
 
     private func requestHeaders() -> HTTPHeaders {
         let auth = "api:\(apiKey)"
@@ -120,6 +124,14 @@ class TPClient {
             .accept("application/json"),
         ]
         return headers
+    }
+    
+    private func completeTask(_ task: TaskInfo) {
+        self.updateStatus(.completed, of: task)
+        self.lock.withLock {
+            self.runningTasks -= 1
+        }
+        self.checkExecution()
     }
     
     private func updateStatus(_ status: TaskStatus, of task: TaskInfo) {

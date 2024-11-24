@@ -61,9 +61,6 @@ struct MainContentView: View {
                 vm.createTasks(imageURLs: newValue)
             }
         }
-        .onChange(of: vm.tasks) { _ in
-            print("view on task change")
-        }
     }
 
 //    private func requestFilePermission() {

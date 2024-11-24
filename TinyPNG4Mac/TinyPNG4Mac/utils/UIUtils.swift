@@ -45,7 +45,7 @@ struct UIUtils {
 
 
 extension Color {
-    init(_ hex: String) {
+    init(hex: String) {
         self = UIUtils.colorFromHex(hex)
     }
 }

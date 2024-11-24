@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 class MainViewModel: ObservableObject, TPClientCallback {
     @Published var tasks: [TaskInfo] = []
     @Published var requestPermission: Bool = false
+    @Published var monthlyUsedQuota: Int = -1
 
     init() {
         TPClient.shared.callback = self
@@ -129,6 +130,11 @@ class MainViewModel: ObservableObject, TPClientCallback {
             sortTasksInPlace(&tasks)
             tasks = tasks
         }
+    }
+    
+    func onMonthlyUsedQuotaUpdated(quota: Int) {
+        debugPrint("onMonthlyUsedQuotaUpdated \(quota)")
+        self.monthlyUsedQuota = quota
     }
 
     func sortTasksInPlace(_ tasks: inout [TaskInfo]) {

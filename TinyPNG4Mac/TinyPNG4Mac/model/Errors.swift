@@ -7,7 +7,7 @@
 
 
 enum TaskError: Error {
-    
+    case apiError(message: String)
 }
 
 enum FileError: Error {

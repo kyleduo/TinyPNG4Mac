@@ -16,10 +16,9 @@ struct MainContentView: View {
 
     var body: some View {
         ZStack {
-            
             DropFileView(dropResult: $dropResult)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color("303030"))
+                .background(Color("mainViewBackground"))
 
             if vm.tasks.isEmpty {
                 Text("Drag and drop images or folder.")
@@ -30,14 +29,23 @@ struct MainContentView: View {
             VStack(spacing: 0) {
                 Text("TinyPNG for macOS")
                     .frame(height: appContext.windowTitleBarHeight)
-                
+
+                if vm.monthlyUsedQuota >= 0 {
+                    Text("Monthly compression count: \(vm.monthlyUsedQuota)")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color.white.opacity(0.5))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(vertical: 2, horizontal: 12)
+                }
+
                 List {
                     ForEach(vm.tasks.indices, id: \.self) { index in
                         let task = vm.tasks[index]
-                        TaskRowView(task: task)
+                        TaskRowView(task: task, first: index == 0, last: index == vm.tasks.count - 1)
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets(top: index == 0 ? 8 : 10, leading: 4, bottom: index == vm.tasks.count - 1 ? 12 : 0, trailing: 4))
+//                            .listRowInsets(EdgeInsets(top: index == 0 ? 8 : 10, leading: 4, bottom: index == vm.tasks.count - 1 ? 12 : 0, trailing: 4))
+                            .listRowInsets(EdgeInsets())
                     }
                 }
 //                .padding(.horizontal, -8)
@@ -55,21 +63,21 @@ struct MainContentView: View {
                 vm.createTasks(imageURLs: newValue)
             }
         }
-        .onChange(of: vm.tasks) { newValue in
+        .onChange(of: vm.tasks) { _ in
             print("view on task change")
         }
     }
 
 //    private func requestFilePermission() {
 //        print("requestFilePermission")
-//        
+//
 //        let openPanel = NSOpenPanel()
 //        openPanel.canChooseFiles = false
 //        openPanel.canChooseDirectories = true
 //        openPanel.allowsMultipleSelection = false
 //        openPanel.prompt = "Select Directory"
 //        openPanel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
-//        
+//
 //        openPanel.begin { result in
 //            if result == .OK, let url = openPanel.url {
 //                print("User granted access to: \(url.path)")

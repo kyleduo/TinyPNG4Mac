@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 /// 图片压缩任务
-struct TaskInfo {
+struct TaskInfo: Identifiable {
     var id: String
     var originUrl: URL
     var filePermission: Int?
@@ -57,7 +57,7 @@ struct TaskInfo {
     init(originUrl: URL, backupUrl: URL, downloadUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage) {
         id = UUID().uuidString
         status = .created
-        self.previewImage = nil
+        self.previewImage = previewImage
         self.originUrl = originUrl
         self.backupUrl = backupUrl
         self.downloadUrl = downloadUrl

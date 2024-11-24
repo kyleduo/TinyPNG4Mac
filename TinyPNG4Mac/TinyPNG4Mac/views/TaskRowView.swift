@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct TaskRowView: View {
-    private let rowHeight: CGFloat = 60
-    private let rowPadding: CGFloat = 5
+    private let rowHeight: CGFloat = 66
+    private let rowPadding: CGFloat = 8
     private let imageSize: CGFloat = 50
 
     var task: TaskInfo
+    var first: Bool
+    var last: Bool
 
     var body: some View {
         HStack(spacing: 6) {
@@ -23,6 +25,10 @@ struct TaskRowView: View {
                 .scaledToFill()
                 .frame(width: imageSize, height: imageSize)
                 .clipShape(RoundedRectangle(cornerRadius: 4))
+                .overlay {
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color("taskPreviewStroke"), lineWidth: 1)
+                }
 
             VStack {
                 HStack(alignment: .top, spacing: 6) {
@@ -58,13 +64,17 @@ struct TaskRowView: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 6)
-                .stroke(Color.gray, lineWidth: 1)
-                .background(
+                .fill(Color("taskRowBackground"))
+                .overlay {
                     RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.gray) // Background color
-                )
+                        .stroke(Color("taskRowStroke"), lineWidth: 1)
+                }
         )
-        .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 1)
+        .shadow(color: Color("taskRowShadow"), radius: 6, x: 0, y: 2)
+        .padding(.leading, 4)
+        .padding(.trailing, 4)
+        .padding(.top, first ? 8 : 4)
+        .padding(.bottom, last ? 12 : 6)
     }
 }
 

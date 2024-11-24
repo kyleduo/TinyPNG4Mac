@@ -67,16 +67,18 @@ class TPClient {
                 .responseDecodable(of: TPShrinkResponse.self) { response in
                     switch response.result {
                     case let .success(responseData):
-                        print(response.response?.value(forHTTPHeaderField: "Compression-Count") ?? "count")
+                        if let usedQuota = Int(response.response?.value(forHTTPHeaderField: "Compression-Count") ?? "") {
+                            self.updateUsedQuota(usedQuota)
+                        }
                         if let error = responseData.error {
                             let errorDescription = error + (responseData.message ?? "Unknown error")
-                            print("error \(errorDescription)")
+                            self.failTask(task, error: TaskError.apiError(message: errorDescription))
                         } else {
                             print("success \(responseData)")
                             self.downloadFile(task, response: responseData)
                         }
                     case let .failure(error):
-                        print("error \(error)")
+                        self.failTask(task, error: error)
                     }
                 }
         }
@@ -108,11 +110,10 @@ class TPClient {
                         }
                         self.completeTask(task)
                     } catch {
-                        debugPrint("FileManager set posixPermissions error")
+                        self.failTask(task, error: error)
                     }
                     break
                 case let .failure(error):
-//                    self.markError(task, errorMessage: error.errorDescription)
                     self.failTask(task, error: error)
                     break
                 }
@@ -166,6 +167,12 @@ class TPClient {
             self.callback?.onTaskChanged(task: task.copy(progress: progress))
         }
     }
+    
+    private func updateUsedQuota(_ quota: Int) {
+        DispatchQueue.main.async {
+            self.callback?.onMonthlyUsedQuotaUpdated(quota: quota)
+        }
+    }
 }
 
 enum TPAPI: String {
@@ -174,4 +181,6 @@ enum TPAPI: String {
 
 protocol TPClientCallback {
     func onTaskChanged(task: TaskInfo)
+    
+    func onMonthlyUsedQuotaUpdated(quota: Int)
 }

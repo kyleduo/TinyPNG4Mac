@@ -58,7 +58,7 @@ class TPClient {
                     self.updateStatus(.uploading, progress: 0.47, of: task)
                 }
 
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double.random(in: 0.8 ..< 1.5)) {
                     self.updateStatus(.processing, of: task)
                 }
 
@@ -70,8 +70,12 @@ class TPClient {
                     self.updateStatus(.downloading, progress: 0.38, of: task)
                 }
 
-                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int.random(in: 5 ..< 10))) {
-                    self.completeTask(task, fileSizeFromResponse: 1028)
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double.random(in: 5 ..< 7)) {
+                    if Bool.random() {
+                        self.completeTask(task, fileSizeFromResponse: 1028)
+                    } else {
+                        self.failTask(task, error: nil)
+                    }
                 }
                 return
             }
@@ -186,7 +190,7 @@ class TPClient {
     }
 
     private func updateError(_ errorCode: Int, message: String, of task: TaskInfo) {
-        task.status = .error
+        task.status = .failed
         task.errorCode = errorCode
         task.errorMessage = message
         notifyTaskUpdated(task)

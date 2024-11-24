@@ -107,7 +107,7 @@ extension TaskInfo {
     }
     
     func updateError(message: String) {
-        status = .error
+        status = .failed
         errorMessage = message
     }
     
@@ -123,7 +123,7 @@ extension TaskInfo: Comparable {
     static func < (lhs: TaskInfo, rhs: TaskInfo) -> Bool {
         // Define the precedence of each status
         let precedence: [TaskStatus: Int] = [
-            .error: 0,
+            .failed: 0,
             .uploading: 1,
             .processing: 1,
             .downloading: 1,
@@ -139,7 +139,7 @@ extension TaskInfo: Comparable {
 enum TaskStatus {
     case created
     case cancelled
-    case error
+    case failed
     case completed
     case uploading
     case processing
@@ -153,8 +153,8 @@ extension TaskStatus {
             "Pending"
         case .cancelled:
             "Cancelled"
-        case .error:
-            "Error"
+        case .failed:
+            "Failed"
         case .completed:
             "Completed"
         case .uploading:

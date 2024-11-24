@@ -13,7 +13,6 @@ struct TaskRowView: View {
     private let imageSize: CGFloat = 50
 
     @Binding var task: TaskInfo
-    var first: Bool
     var last: Bool
 
     var body: some View {
@@ -35,6 +34,7 @@ struct TaskRowView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text(task.originUrl.shortPath())
                             .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color("textBody"))
                             .lineLimit(1)
                             .truncationMode(.head)
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -42,7 +42,7 @@ struct TaskRowView: View {
                         HStack(alignment: .center, spacing: 4) {
                             Text(task.originSize?.formatBytes() ?? "NaN")
                                 .font(.system(size: 10, weight: .light))
-                                .foregroundStyle(Color.white.opacity(0.2))
+                                .foregroundStyle(Color("textCaption"))
 
                             if let finalSize = task.finalSize {
                                 Image(systemName: "arrow.forward")
@@ -51,15 +51,36 @@ struct TaskRowView: View {
 
                                 Text(finalSize.formatBytes())
                                     .font(.system(size: 10, weight: .regular))
-//                                    .foregroundStyle(Color(hex: "1BE17D"))
-                                    .foregroundStyle(Color.white.opacity(0.4))
+                                    .foregroundStyle(Color("textSecondary"))
                             }
                         }
                     }
 
-                    Image(systemName: "ellipsis.circle")
-                        .font(.system(size: 12, weight: .medium))
-                        .frame(width: 20, height: 20)
+                    /*
+                     
+                     1. display action button after task complete / error
+                     2. when error, display retry button
+                     3. when complete, display recover button
+                     
+                    Menu {
+                        Button("Cancel") {
+                            print("Option 3 selected")
+                        }
+                        Divider()
+                        Button("Recover") {
+                            print("Option 3 selected")
+                        }
+                        .disabled(task.status != .completed)
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color("textBody"))
+                            .frame(width: 20, height: 20)
+                    }
+                    .menuStyle(BorderlessButtonMenuStyle())
+                    .menuIndicator(.hidden)
+                    .frame(width: 20, height: 20)
+                     */
                 }
 
                 Spacer()
@@ -69,7 +90,8 @@ struct TaskRowView: View {
                     Spacer()
 
                     Text(task.statusText())
-                        .font(.system(size: 12))
+                        .font(.system(size: 12, weight: statusTextWeight(task.status)))
+                        .foregroundStyle(statusTextColor(task.status))
                 }
             }
         }
@@ -84,11 +106,33 @@ struct TaskRowView: View {
                         .stroke(Color("taskRowStroke"), lineWidth: 1)
                 }
         )
-        .shadow(color: Color("taskRowShadow"), radius: 6, x: 0, y: 2)
+        .shadow(color: Color("taskRowShadow"), radius: 4, x: 0, y: 2)
         .padding(.leading, 4)
         .padding(.trailing, 4)
-        .padding(.top, first ? 8 : 4)
+        .padding(.top, 4)
         .padding(.bottom, last ? 12 : 6)
+    }
+
+    func statusTextColor(_ status: TaskStatus) -> Color {
+        switch status {
+        case .failed:
+            Color("textRed")
+        case .cancelled:
+            Color("textCaption")
+        case .completed:
+            Color("textGreen")
+        default:
+            Color("textSecondary")
+        }
+    }
+
+    func statusTextWeight(_ status: TaskStatus) -> Font.Weight {
+        switch status {
+        case .completed:
+            .medium
+        default:
+            .regular
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 //  DocumentUtils.swift
 //  TinePNG4Mac
 //
-//  Created by 张铎 on 2024/11/16.
+//  Created by kyleduo on 2024/11/16.
 //
 
 import UniformTypeIdentifiers
@@ -140,6 +140,56 @@ struct DocumentUtils {
             // Handle any error that occurs while fetching the attributes
             print("Error retrieving file attributes: \(error.localizedDescription)")
             return nil
+        }
+    }
+
+    static func getFilePermission(path: String) -> Int? {
+        let fileManager = FileManager.default
+
+        do {
+            // Get the attributes of the file at the given path
+            let attributes = try fileManager.attributesOfItem(atPath: path)
+
+            // Retrieve the file size from the attributes dictionary
+            if let filePermission = attributes[.posixPermissions] as? NSNumber {
+                return filePermission.intValue
+            } else {
+                print("File size could not be retrieved.")
+                return nil
+            }
+        } catch {
+            // Handle any error that occurs while fetching the attributes
+            print("Error retrieving file attributes: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    static func setFilePermission(_ permission: Int, to filePath: String) {
+        do {
+            try fileManager.setAttributes([FileAttributeKey.posixPermissions: permission], ofItemAtPath: filePath)
+        } catch {
+            print("error set file permission")
+        }
+    }
+
+    static func moveFile(_ src: URL, to dst: URL) {
+        do {
+            if fileManager.fileExists(atPath: dst.path(percentEncoded: false)) {
+                print("The file already exists at the target path.")
+
+                // You can either overwrite or rename the destination file:
+
+                // Option 1: Overwrite the file
+                try fileManager.removeItem(at: dst) // Remove the existing file
+                try fileManager.moveItem(at: src, to: dst)
+                print("File overwritten.")
+            } else {
+                // The file doesn't exist, so you can safely copy it
+                try fileManager.copyItem(at: src, to: dst)
+                print("File copied successfully.")
+            }
+        } catch {
+            print("Error copying file: \(error.localizedDescription)")
         }
     }
 

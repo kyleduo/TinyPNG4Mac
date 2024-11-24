@@ -2,15 +2,19 @@
 //  MainViewModel.swift
 //  TinePNG4Mac
 //
-//  Created by 张铎 on 2024/11/17.
+//  Created by kyleduo on 2024/11/17.
 //
 
 import SwiftUI
 import UniformTypeIdentifiers
 
-class MainViewModel: ObservableObject {
+class MainViewModel: ObservableObject, TPClientCallback {
     @Published var tasks: [TaskInfo] = []
     @Published var requestPermission: Bool = false
+    
+    init() {
+        TPClient.shared.callback = self
+    }
     
     func createTasks(imageURLs: [URL]) {
         Task {
@@ -25,7 +29,7 @@ class MainViewModel: ObservableObject {
                 }
                 
                 if !DocumentUtils.exists(path: originUrlPath) {
-                    let task = TaskInfo(originUrl: originUrl)
+                    var task = TaskInfo(originUrl: originUrl)
                     task.setError(message: "File not exists, skip create task.")
                     appendTask(task: task)
                     continue
@@ -36,26 +40,34 @@ class MainViewModel: ObservableObject {
                 let backupUrl = DocumentUtils.getBackupUrl(id: uuid)
                 let backupRet = DocumentUtils.createBackup(id: uuid, sourcePath: originUrlPath, targetPath: backupUrl.path(percentEncoded: false))
                 if !backupRet {
-                    let task = TaskInfo(originUrl: originUrl)
+                    var task = TaskInfo(originUrl: originUrl)
                     task.setError(message: "Fail to create backup, skip creat task.")
                     appendTask(task: task)
                     continue
                 }
                 
                 let downloadUrl = DocumentUtils.getDownloadUrl(id: uuid)
-                
-                
                 let previewImage = loadImagePreviewUsingCGImageSource(from: originUrl, maxDimension: 200)
                 
-                let task = TaskInfo(originUrl: originUrl)
-                task.backupUrl = backupUrl
-                task.downloadUrl = downloadUrl
-                task.originSize = DocumentUtils.getFileSize(path: originUrlPath)
-                task.previewImage = previewImage
+                let task = TaskInfo(
+                    originUrl: originUrl,
+                    backupUrl: backupUrl,
+                    downloadUrl: downloadUrl,
+                    originSize: DocumentUtils.getFileSize(path: originUrlPath) ?? 0,
+                    filePermission: DocumentUtils.getFilePermission(path: originUrlPath) ?? 0x644,
+                    previewImage: previewImage ?? NSImage(named: "photo")!
+                )
+//                task.backupUrl = backupUrl
+//                task.downloadUrl = downloadUrl
+//                task.originSize = DocumentUtils.getFileSize(path: originUrlPath)
+//                task.filePermission = DocumentUtils.getFilePermission(path: originUrlPath)
+//                task.previewImage = previewImage
               
                 print("Task created: \(task)")
                 
                 appendTask(task: task)
+                
+                TPClient.shared.addTask(task: task)
             }
         }
     }
@@ -101,5 +113,15 @@ class MainViewModel: ObservableObject {
         
         // Create an NSImage from the CGImage
         return NSImage(cgImage: cgImage, size: thumbnailSize)
+    }
+    
+    func onTaskChanged(task: TaskInfo) {
+        print("onTaskStatusChanged, \(task)")
+        
+        if let index = tasks.firstIndex(where: { item in item.id == task.id }) {
+            tasks[index] = task
+            
+            tasks = tasks
+        }
     }
 }

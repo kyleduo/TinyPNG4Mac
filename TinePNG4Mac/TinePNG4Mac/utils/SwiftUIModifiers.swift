@@ -2,7 +2,7 @@
 //  SwiftUIModifiers.swift
 //  EventTracker
 //
-//  Created by 张铎 on 2022/8/13.
+//  Created by kyleduo on 2022/8/13.
 //
 
 import Foundation

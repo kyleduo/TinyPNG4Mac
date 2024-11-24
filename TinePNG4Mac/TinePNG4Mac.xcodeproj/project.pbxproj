@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6C1F98FE2CF3082800BF6501 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 6C1F98FD2CF3082800BF6501 /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		6CCB4BA52CE7AAB100DAB8A2 /* TinePNG4Mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TinePNG4Mac.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +27,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6C1F98FE2CF3082800BF6501 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +70,7 @@
 			);
 			name = TinePNG4Mac;
 			packageProductDependencies = (
+				6C1F98FD2CF3082800BF6501 /* Alamofire */,
 			);
 			productName = TinePNG4Mac;
 			productReference = 6CCB4BA52CE7AAB100DAB8A2 /* TinePNG4Mac.app */;
@@ -94,6 +100,9 @@
 			);
 			mainGroup = 6CCB4B9C2CE7AAB100DAB8A2;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				6C1F98FC2CF3082800BF6501 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 6CCB4BA62CE7AAB100DAB8A2 /* Products */;
 			projectDirPath = "";
@@ -321,6 +330,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		6C1F98FC2CF3082800BF6501 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		6C1F98FD2CF3082800BF6501 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6C1F98FC2CF3082800BF6501 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 6CCB4B9D2CE7AAB100DAB8A2 /* Project object */;
 }

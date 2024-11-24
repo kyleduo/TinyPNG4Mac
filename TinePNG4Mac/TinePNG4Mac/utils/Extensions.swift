@@ -2,7 +2,7 @@
 //  Extensions.swift
 //  TinePNG4Mac
 //
-//  Created by 张铎 on 2024/11/23.
+//  Created by kyleduo on 2024/11/23.
 //
 
 import Foundation

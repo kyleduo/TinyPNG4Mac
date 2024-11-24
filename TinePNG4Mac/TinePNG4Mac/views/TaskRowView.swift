@@ -2,7 +2,7 @@
 //  TaskRowView.swift
 //  TinePNG4Mac
 //
-//  Created by 张铎 on 2024/11/23.
+//  Created by kyleduo on 2024/11/23.
 //
 
 import SwiftUI
@@ -55,7 +55,7 @@ struct TaskRowView: View {
                 HStack {
                     Spacer()
 
-                    Text(task.status.displayText())
+                    Text(task.statusText())
                         .font(.system(size: 12))
                 }
             }

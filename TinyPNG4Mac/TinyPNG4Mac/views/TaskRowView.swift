@@ -63,10 +63,10 @@ struct TaskRowView: View {
         .frame(height: rowHeight)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(
-            RoundedRectangle(cornerRadius: 6)
+            RoundedRectangle(cornerRadius: 8)
                 .fill(Color("taskRowBackground"))
                 .overlay {
-                    RoundedRectangle(cornerRadius: 6)
+                    RoundedRectangle(cornerRadius: 8)
                         .stroke(Color("taskRowStroke"), lineWidth: 1)
                 }
         )

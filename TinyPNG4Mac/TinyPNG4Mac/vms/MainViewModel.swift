@@ -30,8 +30,8 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 }
 
                 if !originUrl.fileExists() {
-                    var task = TaskInfo(originUrl: originUrl)
-                    task.setError(message: "File not exists")
+                    let task = TaskInfo(originUrl: originUrl)
+                    task.updateError(message: "File not exists")
                     appendTask(task: task)
                     continue
                 }
@@ -42,8 +42,8 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 do {
                     try originUrl.copyFileTo(backupUrl)
                 } catch {
-                    var task = TaskInfo(originUrl: originUrl)
-                    task.setError(message: "File to create backup file, \(error.localizedDescription)")
+                    let task = TaskInfo(originUrl: originUrl)
+                    task.updateError(message: "File to create backup file, \(error.localizedDescription)")
                     appendTask(task: task)
                     continue
                 }
@@ -55,8 +55,8 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 do {
                     fileSize = try originUrl.sizeOfFile()
                 } catch {
-                    var task = TaskInfo(originUrl: originUrl)
-                    task.setError(message: "Fail to create backup, skip creat task.")
+                    let task = TaskInfo(originUrl: originUrl)
+                    task.updateError(message: "Fail to create backup, skip creat task.")
                     appendTask(task: task)
                     continue
                 }
@@ -128,7 +128,6 @@ class MainViewModel: ObservableObject, TPClientCallback {
         if let index = tasks.firstIndex(where: { item in item.id == task.id }) {
             tasks[index] = task
             sortTasksInPlace(&tasks)
-            tasks = tasks
         }
     }
     

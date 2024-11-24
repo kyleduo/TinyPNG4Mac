@@ -12,7 +12,7 @@ struct TaskRowView: View {
     private let rowPadding: CGFloat = 8
     private let imageSize: CGFloat = 50
 
-    var task: TaskInfo
+    @Binding var task: TaskInfo
     var first: Bool
     var last: Bool
 

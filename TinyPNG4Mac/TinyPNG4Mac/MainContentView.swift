@@ -40,15 +40,13 @@ struct MainContentView: View {
 
                 List {
                     ForEach(vm.tasks.indices, id: \.self) { index in
-                        let task = vm.tasks[index]
+                        let task = $vm.tasks[index]
                         TaskRowView(task: task, first: index == 0, last: index == vm.tasks.count - 1)
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
-//                            .listRowInsets(EdgeInsets(top: index == 0 ? 8 : 10, leading: 4, bottom: index == vm.tasks.count - 1 ? 12 : 0, trailing: 4))
                             .listRowInsets(EdgeInsets())
                     }
                 }
-//                .padding(.horizontal, -8)
                 .clipped()
                 .frame(maxWidth: 500)
                 .scrollContentBackground(.hidden)

@@ -10,11 +10,12 @@ import Foundation
 
 class TPClient {
     static let shared = TPClient()
+    static let HEADER_COMPRESSION_COUNT = "Compression-Count"
 
     var apiKey = ProcessInfo.processInfo.environment["API_KEY"] ?? ""
     var mockEnabled = ProcessInfo.processInfo.environment["MOCK_ENABLED"] != nil
 
-    var maxConcurrencyCount = 1
+    var maxConcurrencyCount = 2
     var runningTasks = 0
     var callback: TPClientCallback?
 
@@ -33,7 +34,6 @@ class TPClient {
             while runningTasks < maxConcurrencyCount {
                 if let task = taskQueue.dequeue() {
                     runningTasks += 1
-                    updateStatus(.uploading, of: task)
                     executeTask(task)
                 } else {
                     break
@@ -51,8 +51,26 @@ class TPClient {
 
             let headers = requestHeaders()
 
+            self.updateStatus(.uploading, of: task)
+
             if mockEnabled {
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+                    self.updateStatus(.uploading, progress: 0.47, of: task)
+                }
+
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+                    self.updateStatus(.processing, of: task)
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
+                    self.updateStatus(.downloading, of: task)
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
+                    self.updateStatus(.downloading, progress: 0.38, of: task)
+                }
+
+                DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int.random(in: 5 ..< 10))) {
                     self.completeTask(task, fileSizeFromResponse: 1028)
                 }
                 return
@@ -60,14 +78,16 @@ class TPClient {
 
             AF.upload(data, to: TPAPI.shrink.rawValue, headers: headers)
                 .uploadProgress { progress in
-                    print(progress)
-                    self.updateProgress(progress.fractionCompleted, of: task)
-                    self.updateStatus(.processing, of: task)
+                    if progress.fractionCompleted == 1 {
+                        self.updateStatus(.processing, of: task)
+                    } else {
+                        self.updateStatus(.uploading, progress: progress.fractionCompleted, of: task)
+                    }
                 }
                 .responseDecodable(of: TPShrinkResponse.self) { response in
                     switch response.result {
                     case let .success(responseData):
-                        if let usedQuota = Int(response.response?.value(forHTTPHeaderField: "Compression-Count") ?? "") {
+                        if let usedQuota = Int(response.response?.value(forHTTPHeaderField: TPClient.HEADER_COMPRESSION_COUNT) ?? "") {
                             self.updateUsedQuota(usedQuota)
                         }
                         if let error = responseData.error {
@@ -85,7 +105,6 @@ class TPClient {
     }
 
     private func downloadFile(_ task: TaskInfo, response shrinkResponse: TPShrinkResponse) {
-        updateStatus(.downloading, of: task)
         guard let downloadUrl = task.downloadUrl else {
             failTask(task)
             return
@@ -95,6 +114,8 @@ class TPClient {
             return
         }
 
+        updateStatus(.downloading, progress: 0, of: task)
+
         let destination: DownloadRequest.Destination = { _, _ in
             (downloadUrl, [.removePreviousFile])
         }
@@ -102,7 +123,7 @@ class TPClient {
         AF.download(output.url, to: destination)
             .downloadProgress { progress in
                 print(progress)
-                self.updateProgress(progress.fractionCompleted, of: task)
+                self.updateStatus(.downloading, progress: progress.fractionCompleted, of: task)
             }
             .response { response in
                 switch response.result {
@@ -146,11 +167,10 @@ class TPClient {
             finalFileSize = fileSizeFromResponse
         }
         
-        let newTask = task.copy(
-            status: .completed,
-            finalSize: finalFileSize
-        )
-        notifyTaskUpdated(newTask)
+        task.status = .completed
+        task.finalSize = finalFileSize
+        notifyTaskUpdated(task)
+
         lock.withLock {
             self.runningTasks -= 1
         }
@@ -164,25 +184,30 @@ class TPClient {
         }
         checkExecution()
     }
-    
+
     private func updateError(_ errorCode: Int, message: String, of task: TaskInfo) {
-        notifyTaskUpdated(task.copy(status: .error, errorCode: errorCode, errorMessage: message))
+        task.status = .error
+        task.errorCode = errorCode
+        task.errorMessage = message
+        notifyTaskUpdated(task)
     }
 
     private func updateStatus(_ status: TaskStatus, of task: TaskInfo) {
-        notifyTaskUpdated(task.copy(status: status))
+        task.updateStatus(status)
+        notifyTaskUpdated(task)
     }
 
-    private func updateProgress(_ progress: Double, of task: TaskInfo) {
-        notifyTaskUpdated(task.copy(progress: progress))
+    private func updateStatus(_ status: TaskStatus, progress: Double, of task: TaskInfo) {
+        task.updateStatus(status, progress: progress)
+        notifyTaskUpdated(task)
     }
-    
+
     private func updateUsedQuota(_ quota: Int) {
         DispatchQueue.main.async {
             self.callback?.onMonthlyUsedQuotaUpdated(quota: quota)
         }
     }
-    
+
     private func notifyTaskUpdated(_ newTask: TaskInfo) {
         DispatchQueue.main.async {
             self.callback?.onTaskChanged(task: newTask)
@@ -196,6 +221,6 @@ enum TPAPI: String {
 
 protocol TPClientCallback {
     func onTaskChanged(task: TaskInfo)
-    
+
     func onMonthlyUsedQuotaUpdated(quota: Int)
 }

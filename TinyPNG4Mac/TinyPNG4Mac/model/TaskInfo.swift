@@ -8,7 +8,7 @@ import Foundation
 import SwiftUI
 
 /// 图片压缩任务
-struct TaskInfo: Identifiable {
+class TaskInfo: Identifiable {
     var id: String
     var originUrl: URL
     var filePermission: Int?
@@ -77,11 +77,6 @@ struct TaskInfo: Identifiable {
         errorMessage = nil
         previewImage = nil
     }
-
-    mutating func setError(message: String) {
-        status = .error
-        errorMessage = message
-    }
 }
 
 extension TaskInfo: CustomStringConvertible {
@@ -102,6 +97,7 @@ extension TaskInfo: Equatable {
 }
 
 extension TaskInfo {
+    
     func statusText() -> String {
         if (status == .uploading || status == .downloading) && progress > 0 {
             status.displayText() + " (\(progress * 100) %)"
@@ -109,37 +105,17 @@ extension TaskInfo {
             status.displayText()
         }
     }
-}
-
-extension TaskInfo {
-    func copy(
-        id: String? = nil,
-        originUrl: URL? = nil,
-        filePermission: Int? = nil,
-        previewImage: NSImage? = nil,
-        backupUrl: URL? = nil,
-        downloadUrl: URL? = nil,
-        status: TaskStatus? = nil,
-        originSize: UInt64? = nil,
-        finalSize: UInt64? = nil,
-        errorCode: Int? = nil,
-        errorMessage: String? = nil,
-        progress: Double? = nil
-    ) -> TaskInfo {
-        return TaskInfo(
-            id: id ?? self.id,
-            originUrl: originUrl ?? self.originUrl,
-            status: status ?? self.status,
-            filePermission: filePermission ?? self.filePermission,
-            previewImage: previewImage ?? self.previewImage,
-            backupUrl: backupUrl ?? self.backupUrl,
-            downloadUrl: downloadUrl ?? self.downloadUrl,
-            originSize: originSize ?? self.originSize,
-            finalSize: finalSize ?? self.finalSize,
-            errorCode: errorCode ?? self.errorCode,
-            errorMessage: errorMessage ?? self.errorMessage,
-            progress: progress ?? self.progress
-        )
+    
+    func updateError(message: String) {
+        status = .error
+        errorMessage = message
+    }
+    
+    func updateStatus(_ newStatus: TaskStatus, progress: Double? = nil) {
+        self.status = newStatus
+        if let progress {
+            self.progress = progress
+        }
     }
 }
 

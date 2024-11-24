@@ -53,7 +53,7 @@ class TPClient {
 
             if mockEnabled {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
-                    self.completeTask(task)
+                    self.completeTask(task, fileSizeFromResponse: 1028)
                 }
                 return
             }
@@ -84,9 +84,13 @@ class TPClient {
         }
     }
 
-    private func downloadFile(_ task: TaskInfo, response: TPShrinkResponse) {
+    private func downloadFile(_ task: TaskInfo, response shrinkResponse: TPShrinkResponse) {
         updateStatus(.downloading, of: task)
         guard let downloadUrl = task.downloadUrl else {
+            failTask(task)
+            return
+        }
+        guard let output = shrinkResponse.output else {
             failTask(task)
             return
         }
@@ -95,7 +99,7 @@ class TPClient {
             (downloadUrl, [.removePreviousFile])
         }
 
-        AF.download(response.output!.url, to: destination)
+        AF.download(output.url, to: destination)
             .downloadProgress { progress in
                 print(progress)
                 self.updateProgress(progress.fractionCompleted, of: task)
@@ -108,7 +112,7 @@ class TPClient {
                         if let filePermission = task.filePermission {
                             task.originUrl.setPosixPermissions(filePermission)
                         }
-                        self.completeTask(task)
+                        self.completeTask(task, fileSizeFromResponse: output.size)
                     } catch {
                         self.failTask(task, error: error)
                     }
@@ -134,8 +138,19 @@ class TPClient {
         return headers
     }
 
-    private func completeTask(_ task: TaskInfo) {
-        updateStatus(.completed, of: task)
+    private func completeTask(_ task: TaskInfo, fileSizeFromResponse: UInt64) {
+        let finalFileSize: UInt64
+        do {
+            finalFileSize = try task.originUrl.sizeOfFile()
+        } catch {
+            finalFileSize = fileSizeFromResponse
+        }
+        
+        let newTask = task.copy(
+            status: .completed,
+            finalSize: finalFileSize
+        )
+        notifyTaskUpdated(newTask)
         lock.withLock {
             self.runningTasks -= 1
         }
@@ -151,26 +166,26 @@ class TPClient {
     }
     
     private func updateError(_ errorCode: Int, message: String, of task: TaskInfo) {
-        DispatchQueue.main.async {
-            self.callback?.onTaskChanged(task: task.copy(status: .error, errorCode: errorCode, errorMessage: message))
-        }
+        notifyTaskUpdated(task.copy(status: .error, errorCode: errorCode, errorMessage: message))
     }
 
     private func updateStatus(_ status: TaskStatus, of task: TaskInfo) {
-        DispatchQueue.main.async {
-            self.callback?.onTaskChanged(task: task.copy(status: status))
-        }
+        notifyTaskUpdated(task.copy(status: status))
     }
 
     private func updateProgress(_ progress: Double, of task: TaskInfo) {
-        DispatchQueue.main.async {
-            self.callback?.onTaskChanged(task: task.copy(progress: progress))
-        }
+        notifyTaskUpdated(task.copy(progress: progress))
     }
     
     private func updateUsedQuota(_ quota: Int) {
         DispatchQueue.main.async {
             self.callback?.onMonthlyUsedQuotaUpdated(quota: quota)
+        }
+    }
+    
+    private func notifyTaskUpdated(_ newTask: TaskInfo) {
+        DispatchQueue.main.async {
+            self.callback?.onTaskChanged(task: newTask)
         }
     }
 }

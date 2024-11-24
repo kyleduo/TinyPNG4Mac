@@ -7,14 +7,14 @@
 
 struct TPShrinkResponse: Decodable {
     struct Input: Decodable {
-        let size: Int
+        let size: UInt64
         let type: String
     }
 
     struct Output: Decodable {
         let height: Int
         let width: Int
-        let size: Int
+        let size: UInt64
         let ratio: Float
         let type: String
         let url: String

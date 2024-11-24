@@ -19,7 +19,7 @@ struct TaskRowView: View {
     var body: some View {
         HStack(spacing: 6) {
             let uiImage = task.previewImage ?? NSImage(named: "placeholder")!
-            
+
             Image(nsImage: uiImage) // For macOS
                 .resizable()
                 .scaledToFill()
@@ -39,8 +39,22 @@ struct TaskRowView: View {
                             .truncationMode(.head)
                             .frame(maxWidth: .infinity, alignment: .leading)
 
-                        Text(task.originSize?.formatBytes() ?? "NaN")
-                            .font(.system(size: 10, weight: .light))
+                        HStack(alignment: .center, spacing: 4) {
+                            Text(task.originSize?.formatBytes() ?? "NaN")
+                                .font(.system(size: 10, weight: .light))
+                                .foregroundStyle(Color.white.opacity(0.2))
+
+                            if let finalSize = task.finalSize {
+                                Image(systemName: "arrow.forward")
+                                    .font(.system(size: 10, weight: .light))
+                                    .foregroundStyle(Color.white.opacity(0.2))
+
+                                Text(finalSize.formatBytes())
+                                    .font(.system(size: 10, weight: .regular))
+//                                    .foregroundStyle(Color(hex: "1BE17D"))
+                                    .foregroundStyle(Color.white.opacity(0.4))
+                            }
+                        }
                     }
 
                     Image(systemName: "ellipsis.circle")

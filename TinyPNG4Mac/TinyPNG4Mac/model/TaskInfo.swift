@@ -1,6 +1,6 @@
 //
 //  ImageTask.swift
-//  TinePNG4Mac
+//  TinyPNG4Mac
 //
 //  Created by kyleduo on 2024/11/17.
 //
@@ -57,7 +57,7 @@ struct TaskInfo {
     init(originUrl: URL, backupUrl: URL, downloadUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage) {
         id = UUID().uuidString
         status = .created
-        self.previewImage = previewImage
+        self.previewImage = nil
         self.originUrl = originUrl
         self.backupUrl = backupUrl
         self.downloadUrl = downloadUrl

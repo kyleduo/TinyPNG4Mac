@@ -1,6 +1,6 @@
 //
 //  URLUtils.swift
-//  TinePNG4Mac
+//  TinyPNG4Mac
 //
 //  Created by kyleduo on 2024/11/23.
 //
@@ -42,5 +42,42 @@ extension URL {
         // Compare the paths ignoring any trailing slashes
         return standardizedSelf.trimmingCharacters(in: CharacterSet(charactersIn: "/")) ==
             standardizedOther.trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+    }
+
+    /// - Returns: path without percent  encoded
+    func rawPath() -> String {
+        path(percentEncoded: false)
+    }
+
+    /// Check whether the file exists
+    func fileExists() -> Bool {
+        FileUtils.exists(path: rawPath())
+    }
+
+    /// Make a copy of current file to `target` path
+    func copyFileTo(_ target: URL) throws {
+        try FileUtils.copyFile(sourcePath: rawPath(), targetPath: target.rawPath())
+    }
+
+    func moveFileTo(_ dst: URL) throws {
+        try FileUtils.moveFile(self, to: dst)
+    }
+
+    func hasPermission() -> Bool {
+        FileUtils.hasReadAndWritePermission(path: rawPath())
+    }
+
+    func sizeOfFile() throws -> UInt64 {
+        try FileUtils.getFileSize(path: rawPath())
+    }
+
+    func posixPermissionsOfFile() -> Int? {
+        FileUtils.getFilePermission(path: rawPath())
+    }
+
+    func setPosixPermissions(_ permissions: Int) {
+        do {
+            try? FileUtils.setFilePermission(permissions, to: rawPath())
+        }
     }
 }

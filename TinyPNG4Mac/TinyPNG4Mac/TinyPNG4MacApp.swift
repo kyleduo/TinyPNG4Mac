@@ -1,6 +1,6 @@
 //
-//  TinePNG4MacApp.swift
-//  TinePNG4Mac
+//  TinyPNG4MacApp.swift
+//  TinyPNG4Mac
 //
 //  Created by kyleduo on 2024/11/16.
 //
@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 @main
-struct TinePNG4MacApp: App {
+struct TinyPNG4MacApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelgate
     @StateObject var appContext = AppContext()
 
@@ -49,7 +49,7 @@ struct TinePNG4MacApp: App {
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
-        DocumentUtils.initPaths()
+        FileUtils.initPaths()
 
         if let window = NSApp.windows.first {
             window.titleVisibility = .hidden

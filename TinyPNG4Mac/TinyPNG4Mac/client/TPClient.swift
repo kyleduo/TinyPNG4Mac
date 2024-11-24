@@ -1,6 +1,6 @@
 //
 //  TPClient.swift
-//  TinePNG4Mac
+//  TinyPNG4Mac
 //
 //  Created by kyleduo on 2024/11/24.
 //
@@ -13,7 +13,7 @@ class TPClient {
 
     var apiKey = ProcessInfo.processInfo.environment["API_KEY"] ?? ""
     var mockEnabled = ProcessInfo.processInfo.environment["MOCK_ENABLED"] != nil
-    
+
     var maxConcurrencyCount = 1
     var runningTasks = 0
     var callback: TPClientCallback?
@@ -50,7 +50,7 @@ class TPClient {
             }
 
             let headers = requestHeaders()
-            
+
             if mockEnabled {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
                     self.completeTask(task)
@@ -81,14 +81,18 @@ class TPClient {
                 }
         }
     }
-    
+
     private func downloadFile(_ task: TaskInfo, response: TPShrinkResponse) {
-        self.updateStatus(.downloading, of: task)
-        
-        let destination: DownloadRequest.Destination = { _, _ in
-            return (task.downloadUrl!, [.removePreviousFile])
+        updateStatus(.downloading, of: task)
+        guard let downloadUrl = task.downloadUrl else {
+            failTask(task)
+            return
         }
-        
+
+        let destination: DownloadRequest.Destination = { _, _ in
+            (downloadUrl, [.removePreviousFile])
+        }
+
         AF.download(response.output!.url, to: destination)
             .downloadProgress { progress in
                 print(progress)
@@ -96,20 +100,23 @@ class TPClient {
             }
             .response { response in
                 switch response.result {
-                case .success(_):
+                case .success:
                     do {
-                        DocumentUtils.moveFile(task.downloadUrl!, to: task.originUrl)
-                        DocumentUtils.setFilePermission(task.filePermission!, to: task.originUrl.path(percentEncoded: false))
+                        try downloadUrl.moveFileTo(task.originUrl)
+                        if let filePermission = task.filePermission {
+                            task.originUrl.setPosixPermissions(filePermission)
+                        }
                         self.completeTask(task)
                     } catch {
                         debugPrint("FileManager set posixPermissions error")
                     }
                     break
-                case .failure(let error):
+                case let .failure(error):
 //                    self.markError(task, errorMessage: error.errorDescription)
+                    self.failTask(task, error: error)
                     break
                 }
-                
+
                 self.checkExecution()
             }
     }
@@ -125,21 +132,35 @@ class TPClient {
         ]
         return headers
     }
-    
+
     private func completeTask(_ task: TaskInfo) {
-        self.updateStatus(.completed, of: task)
-        self.lock.withLock {
+        updateStatus(.completed, of: task)
+        lock.withLock {
             self.runningTasks -= 1
         }
-        self.checkExecution()
+        checkExecution()
+    }
+
+    private func failTask(_ task: TaskInfo, error: Error? = nil) {
+        updateError(0, message: error?.localizedDescription ?? "error", of: task)
+        lock.withLock {
+            self.runningTasks -= 1
+        }
+        checkExecution()
     }
     
+    private func updateError(_ errorCode: Int, message: String, of task: TaskInfo) {
+        DispatchQueue.main.async {
+            self.callback?.onTaskChanged(task: task.copy(status: .error, errorCode: errorCode, errorMessage: message))
+        }
+    }
+
     private func updateStatus(_ status: TaskStatus, of task: TaskInfo) {
         DispatchQueue.main.async {
             self.callback?.onTaskChanged(task: task.copy(status: status))
         }
     }
-    
+
     private func updateProgress(_ progress: Double, of task: TaskInfo) {
         DispatchQueue.main.async {
             self.callback?.onTaskChanged(task: task.copy(progress: progress))

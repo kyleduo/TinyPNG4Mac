@@ -1,6 +1,6 @@
 //
 //  TaskRowView.swift
-//  TinePNG4Mac
+//  TinyPNG4Mac
 //
 //  Created by kyleduo on 2024/11/23.
 //
@@ -16,20 +16,13 @@ struct TaskRowView: View {
 
     var body: some View {
         HStack(spacing: 6) {
-            if let uiImage = task.previewImage {
-//            if let uiImage = NSImage(contentsOf: task.backupUrl!) {
-                Image(nsImage: uiImage) // For macOS
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: imageSize, height: imageSize)
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
-            } else {
-                Image(systemName: "photo") // Fallback for invalid file
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: imageSize, height: imageSize)
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
-            }
+            let uiImage = task.previewImage ?? NSImage(named: "placeholder")!
+            
+            Image(nsImage: uiImage) // For macOS
+                .resizable()
+                .scaledToFill()
+                .frame(width: imageSize, height: imageSize)
+                .clipShape(RoundedRectangle(cornerRadius: 4))
 
             VStack {
                 HStack(alignment: .top, spacing: 6) {

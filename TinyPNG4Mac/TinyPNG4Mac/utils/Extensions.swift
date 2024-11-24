@@ -1,6 +1,6 @@
 //
 //  Extensions.swift
-//  TinePNG4Mac
+//  TinyPNG4Mac
 //
 //  Created by kyleduo on 2024/11/23.
 //

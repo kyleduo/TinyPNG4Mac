@@ -1,6 +1,6 @@
 //
 //  DropFileView.swift
-//  TinePNG4Mac
+//  TinyPNG4Mac
 //
 //  Created by kyleduo on 2024/11/16.
 //
@@ -40,7 +40,7 @@ struct DropFileView: View {
         }
         
         group.notify(queue: .main) {
-            let imageUrls = DocumentUtils.findImageFiles(urls: urls)
+            let imageUrls = FileUtils.findImageFiles(urls: urls)
             dropResult = imageUrls
         }
         

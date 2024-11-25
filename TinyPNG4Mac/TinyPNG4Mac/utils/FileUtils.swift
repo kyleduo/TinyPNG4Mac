@@ -26,12 +26,11 @@ struct FileUtils {
                 for dir in otherSessionsDir {
                     let dirUrl = cacheRootDir.appendingPathComponent(dir)
                     if dirUrl.isSameFilePath(as: sessionRootDir) {
-                        print("same")
                         continue
                     }
                     let dirPath = dirUrl.path(percentEncoded: false)
                     try fileManager.removeItem(atPath: dirPath)
-                    print("Delete \(dirPath)")
+                    print("Delete previous session folder: \(dirPath)")
                 }
             } catch {
                 print("Error delete other session caches")

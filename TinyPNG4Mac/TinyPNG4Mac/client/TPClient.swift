@@ -22,6 +22,8 @@ class TPClient {
     private var taskQueue = TPQueue<TaskInfo>()
     private let lock: NSLock = NSLock()
 
+    private var currentRequests: [Request] = []
+
     func addTask(task: TaskInfo) {
         lock.withLock {
             if !taskQueue.contains(task) {
@@ -83,7 +85,7 @@ class TPClient {
                 return
             }
 
-            AF.upload(data, to: TPAPI.shrink.rawValue, headers: headers)
+            let uploadRequest = AF.upload(data, to: TPAPI.shrink.rawValue, headers: headers)
                 .uploadProgress { progress in
                     if progress.fractionCompleted == 1 {
                         self.updateStatus(.processing, of: task)
@@ -91,23 +93,27 @@ class TPClient {
                         self.updateStatus(.uploading, progress: progress.fractionCompleted, of: task)
                     }
                 }
-                .responseDecodable(of: TPShrinkResponse.self) { response in
-                    switch response.result {
-                    case let .success(responseData):
-                        if let usedQuota = Int(response.response?.value(forHTTPHeaderField: TPClient.HEADER_COMPRESSION_COUNT) ?? "") {
-                            self.updateUsedQuota(usedQuota)
-                        }
-                        if let error = responseData.error {
-                            let errorDescription = error + (responseData.message ?? "Unknown error")
-                            self.failTask(task, error: TaskError.apiError(message: errorDescription))
-                        } else {
-                            print("success \(responseData)")
-                            self.downloadFile(task, response: responseData)
-                        }
-                    case let .failure(error):
-                        self.failTask(task, error: error)
+                .validate()
+            currentRequests.append(uploadRequest)
+
+            uploadRequest.responseDecodable(of: TPShrinkResponse.self) { response in
+                self.currentRequests.removeAll { $0.id == uploadRequest.id }
+
+                switch response.result {
+                case let .success(responseData):
+                    if let usedQuota = Int(response.response?.value(forHTTPHeaderField: TPClient.HEADER_COMPRESSION_COUNT) ?? "") {
+                        self.updateUsedQuota(usedQuota)
                     }
+                    if let error = responseData.error {
+                        let errorDescription = error + (responseData.message ?? "Unknown error")
+                        self.failTask(task, error: TaskError.apiError(message: errorDescription))
+                    } else {
+                        self.downloadFile(task, response: responseData)
+                    }
+                case let .failure(error):
+                    self.failTask(task, error: error)
                 }
+            }
         }
     }
 
@@ -127,31 +133,31 @@ class TPClient {
             (downloadUrl, [.removePreviousFile])
         }
 
-        AF.download(output.url, to: destination)
+        let request = AF.download(output.url, to: destination)
             .downloadProgress { progress in
                 print(progress)
                 self.updateStatus(.downloading, progress: progress.fractionCompleted, of: task)
             }
-            .response { response in
-                switch response.result {
-                case .success:
-                    do {
-                        try downloadUrl.moveFileTo(task.originUrl)
-                        if let filePermission = task.filePermission {
-                            task.originUrl.setPosixPermissions(filePermission)
-                        }
-                        self.completeTask(task, fileSizeFromResponse: output.size)
-                    } catch {
-                        self.failTask(task, error: error)
-                    }
-                    break
-                case let .failure(error):
-                    self.failTask(task, error: error)
-                    break
-                }
+            .validate()
+        currentRequests.append(request)
 
-                self.checkExecution()
+        request.response { response in
+            self.currentRequests.removeAll { $0.id == request.id }
+            switch response.result {
+            case .success:
+                do {
+                    try downloadUrl.moveFileTo(task.originUrl)
+                    if let filePermission = task.filePermission {
+                        task.originUrl.setPosixPermissions(filePermission)
+                    }
+                    self.completeTask(task, fileSizeFromResponse: output.size)
+                } catch {
+                    self.failTask(task, error: error)
+                }
+            case let .failure(error):
+                self.failTask(task, error: error)
             }
+        }
     }
 
     private func requestHeaders() -> HTTPHeaders {
@@ -198,7 +204,7 @@ class TPClient {
         task.errorMessage = message
         notifyTaskUpdated(task)
     }
-    
+
     private func resetStatus(of task: TaskInfo) {
         task.reset()
         notifyTaskUpdated(task)

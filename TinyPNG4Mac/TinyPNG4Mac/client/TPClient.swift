@@ -93,7 +93,6 @@ class TPClient {
                         self.updateStatus(.uploading, progress: progress.fractionCompleted, of: task)
                     }
                 }
-                .validate()
             currentRequests.append(uploadRequest)
 
             uploadRequest.responseDecodable(of: TPShrinkResponse.self) { response in
@@ -104,25 +103,23 @@ class TPClient {
                     if let usedQuota = Int(response.response?.value(forHTTPHeaderField: TPClient.HEADER_COMPRESSION_COUNT) ?? "") {
                         self.updateUsedQuota(usedQuota)
                     }
-                    if let error = responseData.error {
-                        let errorDescription = error + (responseData.message ?? "Unknown error")
-                        self.failTask(task, error: TaskError.apiError(message: errorDescription))
+                    if let output = responseData.output {
+                        self.downloadFile(task, response: output)
+                    } else if let error = responseData.error {
+                        let errorDescription = error + ": " + (responseData.message ?? "Unknown error")
+                        self.failTask(task, error: TaskError.apiError(statusCode: response.response?.statusCode ?? 0, message: errorDescription))
                     } else {
-                        self.downloadFile(task, response: responseData)
+                        self.failTask(task, error: TaskError.apiError(statusCode: response.response?.statusCode ?? 0, message: "fail to parse response"))
                     }
                 case let .failure(error):
-                    self.failTask(task, error: error)
+                    self.failTask(task, error: TaskError.apiError(statusCode: response.response?.statusCode ?? 0, message: error.localizedDescription))
                 }
             }
         }
     }
 
-    private func downloadFile(_ task: TaskInfo, response shrinkResponse: TPShrinkResponse) {
+    private func downloadFile(_ task: TaskInfo, response output: TPShrinkResponse.Output) {
         guard let downloadUrl = task.downloadUrl else {
-            failTask(task)
-            return
-        }
-        guard let output = shrinkResponse.output else {
             failTask(task)
             return
         }
@@ -155,7 +152,7 @@ class TPClient {
                     self.failTask(task, error: error)
                 }
             case let .failure(error):
-                self.failTask(task, error: error)
+                self.failTask(task, error: TaskError.apiError(statusCode: response.response?.statusCode ?? 0, message: error.localizedDescription))
             }
         }
     }
@@ -191,6 +188,7 @@ class TPClient {
     }
 
     private func failTask(_ task: TaskInfo, error: Error? = nil) {
+        print(error)
         updateError(0, message: error?.localizedDescription ?? "error", of: task)
         lock.withLock {
             self.runningTasks -= 1

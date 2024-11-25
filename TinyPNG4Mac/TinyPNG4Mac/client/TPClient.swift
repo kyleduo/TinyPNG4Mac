@@ -188,7 +188,6 @@ class TPClient {
     }
 
     private func failTask(_ task: TaskInfo, error: Error? = nil) {
-        print(error)
         updateError(0, message: error?.localizedDescription ?? "error", of: task)
         lock.withLock {
             self.runningTasks -= 1

@@ -24,7 +24,10 @@ class TPClient {
 
     func addTask(task: TaskInfo) {
         lock.withLock {
-            taskQueue.enqueue(task)
+            if !taskQueue.contains(task) {
+                resetStatus(of: task)
+                taskQueue.enqueue(task)
+            }
         }
         checkExecution()
     }
@@ -51,7 +54,7 @@ class TPClient {
 
             let headers = requestHeaders()
 
-            self.updateStatus(.uploading, of: task)
+            updateStatus(.uploading, of: task)
 
             if mockEnabled {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
@@ -170,7 +173,7 @@ class TPClient {
         } catch {
             finalFileSize = fileSizeFromResponse
         }
-        
+
         task.status = .completed
         task.finalSize = finalFileSize
         notifyTaskUpdated(task)
@@ -193,6 +196,11 @@ class TPClient {
         task.status = .failed
         task.errorCode = errorCode
         task.errorMessage = message
+        notifyTaskUpdated(task)
+    }
+    
+    private func resetStatus(of task: TaskInfo) {
+        task.reset()
         notifyTaskUpdated(task)
     }
 

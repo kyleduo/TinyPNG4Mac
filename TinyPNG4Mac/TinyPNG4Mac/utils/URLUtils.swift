@@ -55,8 +55,8 @@ extension URL {
     }
 
     /// Make a copy of current file to `target` path
-    func copyFileTo(_ target: URL) throws {
-        try FileUtils.copyFile(sourcePath: rawPath(), targetPath: target.rawPath())
+    func copyFileTo(_ target: URL, override: Bool = false) throws {
+        try FileUtils.copyFile(sourcePath: rawPath(), targetPath: target.rawPath(), override: override)
     }
 
     func moveFileTo(_ dst: URL) throws {

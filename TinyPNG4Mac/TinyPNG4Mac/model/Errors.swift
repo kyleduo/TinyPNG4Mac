@@ -12,4 +12,5 @@ enum TaskError: Error {
 
 enum FileError: Error {
     case notExists
+    case dstAlreadyExists
 }

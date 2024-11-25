@@ -30,8 +30,9 @@ struct MainContentView: View {
                 Text("TinyPNG for macOS")
                     .frame(height: appContext.windowTitleBarHeight)
 
-                if vm.monthlyUsedQuota >= 0 {
-                    Text("Monthly compression count: \(vm.monthlyUsedQuota)")
+                if vm.tasks.count > 0 {
+                    let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
+                    Text("Monthly compression count: \(usedQuota)")
                         .font(.system(size: 12))
                         .foregroundStyle(Color.white.opacity(0.5))
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -43,7 +44,7 @@ struct MainContentView: View {
 
                 List {
                     ForEach(vm.tasks.indices, id: \.self) { index in
-                        TaskRowView(task: $vm.tasks[index], last: index == vm.tasks.count - 1)
+                        TaskRowView(vm: vm, task: $vm.tasks[index], last: index == vm.tasks.count - 1)
                             .listRowBackground(Color.clear)
                             .listRowSeparator(.hidden)
                             .listRowInsets(EdgeInsets())
@@ -62,6 +63,17 @@ struct MainContentView: View {
                 dropResult = []
                 vm.createTasks(imageURLs: newValue)
             }
+        }
+        .alert("Would you like to restore the image?", isPresented: Binding(
+            get: { vm.restoreConfirmTask != nil },
+            set: { if !$0 { } }
+        )) {
+            Button("Confirm") { vm.restoreConfirmConfirmed() }
+            Button("Cancel", role: .cancel) { vm.restoreConfirmCancel() }
+        } message: {
+            let path = vm.restoreConfirmTask == nil ? "" : vm.restoreConfirmTask?.originUrl.rawPath() ?? ""
+            Text("Image at \"\(path)\" will be restore with origin image file.")
+                .font(.system(size: 12))
         }
     }
 

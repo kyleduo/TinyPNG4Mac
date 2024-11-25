@@ -11,6 +11,7 @@ import UniformTypeIdentifiers
 class MainViewModel: ObservableObject, TPClientCallback {
     @Published var tasks: [TaskInfo] = []
     @Published var monthlyUsedQuota: Int = -1
+    @Published var restoreConfirmTask: TaskInfo?
 
     init() {
         TPClient.shared.callback = self
@@ -20,7 +21,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
         Task {
             for url in imageURLs {
                 let originUrl = url
-                
+
 //                if !originUrl.hasPermission() {
 //                    DispatchQueue.main.async {
 //                        self.requestPermission = true
@@ -78,6 +79,47 @@ class MainViewModel: ObservableObject, TPClientCallback {
         }
     }
 
+    func retry(_ task: TaskInfo) {
+        TPClient.shared.addTask(task: task)
+    }
+
+    func restore(_ task: TaskInfo) {
+        guard task.status == .completed else {
+            return
+        }
+
+        self.restoreConfirmTask = task
+    }
+
+    func restoreConfirmConfirmed() {
+        guard let task = restoreConfirmTask else {
+            return
+        }
+        
+        defer { restoreConfirmTask = nil }
+
+        Task {
+            if let backupUrl = task.backupUrl {
+                do {
+                    try backupUrl.copyFileTo(task.originUrl, override: true)
+                    print("restore success")
+                    DispatchQueue.main.async {
+                        task.status = .restored
+                        self.notifyTaskChanged(task: task)
+                    }
+                } catch {
+                    print("restore fail \(error.localizedDescription)")
+                }
+            } else {
+                print("backup not found")
+            }
+        }
+    }
+
+    func restoreConfirmCancel() {
+        self.restoreConfirmTask = nil
+    }
+
     private func appendTask(task: TaskInfo) {
         DispatchQueue.main.async {
             self.tasks.append(task)
@@ -124,18 +166,32 @@ class MainViewModel: ObservableObject, TPClientCallback {
     func onTaskChanged(task: TaskInfo) {
         print("onTaskStatusChanged, \(task)")
 
+        notifyTaskChanged(task: task)
+    }
+
+    func onMonthlyUsedQuotaUpdated(quota: Int) {
+        debugPrint("onMonthlyUsedQuotaUpdated \(quota)")
+        monthlyUsedQuota = quota
+    }
+
+    private func notifyTaskChanged(task: TaskInfo) {
         if let index = tasks.firstIndex(where: { item in item.id == task.id }) {
             tasks[index] = task
             sortTasksInPlace(&tasks)
         }
     }
-    
-    func onMonthlyUsedQuotaUpdated(quota: Int) {
-        debugPrint("onMonthlyUsedQuotaUpdated \(quota)")
-        self.monthlyUsedQuota = quota
-    }
 
-    func sortTasksInPlace(_ tasks: inout [TaskInfo]) {
+    private func sortTasksInPlace(_ tasks: inout [TaskInfo]) {
         tasks.sort { $0 < $1 }
     }
+}
+
+struct AlertInfo {
+    var type: AlertType
+    var title: String
+    var message: String
+}
+
+enum AlertType {
+    case restoreConfirm
 }

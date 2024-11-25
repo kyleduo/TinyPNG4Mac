@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TPQueue<Element> {
+struct TPQueue<Element: Equatable> {
     private var queue: [Element] = []
 
     mutating func enqueue(_ object: Element) {
@@ -30,5 +30,11 @@ struct TPQueue<Element> {
 
     func size() -> Int {
         return queue.count
+    }
+    
+    func contains(_ element: Element) -> Bool {
+        return queue.contains { e in
+            e == element
+        }
     }
 }

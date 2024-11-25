@@ -90,8 +90,15 @@ struct FileUtils {
         }
     }
 
-    static func copyFile(sourcePath: String, targetPath: String) throws {
+    static func copyFile(sourcePath: String, targetPath: String, override: Bool = false) throws {
         if fileManager.fileExists(atPath: sourcePath) {
+            if fileManager.fileExists(atPath: targetPath) {
+                if override {
+                    try fileManager.removeItem(atPath: targetPath)
+                } else {
+                    throw FileError.dstAlreadyExists
+                }
+            }
             try fileManager.copyItem(atPath: sourcePath, toPath: targetPath)
         } else {
             throw FileError.notExists

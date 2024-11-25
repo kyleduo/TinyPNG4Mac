@@ -97,7 +97,6 @@ extension TaskInfo: Equatable {
 }
 
 extension TaskInfo {
-    
     func statusText() -> String {
         if (status == .uploading || status == .downloading) && progress > 0 {
             status.displayText() + " (\(progress * 100) %)"
@@ -105,17 +104,25 @@ extension TaskInfo {
             status.displayText()
         }
     }
-    
+
     func updateError(message: String) {
         status = .failed
         errorMessage = message
     }
-    
+
     func updateStatus(_ newStatus: TaskStatus, progress: Double? = nil) {
-        self.status = newStatus
+        status = newStatus
         if let progress {
             self.progress = progress
         }
+    }
+
+    func reset() {
+        status = .created
+        errorCode = 0
+        errorMessage = nil
+        finalSize = nil
+        progress = 0
     }
 }
 
@@ -129,7 +136,8 @@ extension TaskInfo: Comparable {
             .downloading: 1,
             .created: 2,
             .cancelled: 3,
-            .completed: 4,
+            .restored: 4,
+            .completed: 5,
         ]
 
         return precedence[lhs.status, default: Int.max] < precedence[rhs.status, default: Int.max]
@@ -144,6 +152,7 @@ enum TaskStatus {
     case uploading
     case processing
     case downloading
+    case restored
 }
 
 extension TaskStatus {
@@ -163,6 +172,8 @@ extension TaskStatus {
             "Processing"
         case .downloading:
             "Downloading"
+        case .restored:
+            "Restored"
         }
     }
 }

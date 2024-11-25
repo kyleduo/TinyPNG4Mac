@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct TaskRowView: View {
-    private let rowHeight: CGFloat = 66
+    private let rowHeight: CGFloat = 70
     private let rowPadding: CGFloat = 8
-    private let imageSize: CGFloat = 50
+    private let imageSize: CGFloat = 54
 
+    @ObservedObject var vm: MainViewModel
     @Binding var task: TaskInfo
     var last: Bool
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(alignment: .top, spacing: 6) {
             let uiImage = task.previewImage ?? NSImage(named: "placeholder")!
 
             Image(nsImage: uiImage) // For macOS
@@ -44,7 +45,7 @@ struct TaskRowView: View {
                                 .font(.system(size: 10, weight: .light))
                                 .foregroundStyle(Color("textCaption"))
 
-                            if let finalSize = task.finalSize {
+                            if let finalSize = task.finalSize, task.status == .completed {
                                 Image(systemName: "arrow.forward")
                                     .font(.system(size: 10, weight: .light))
                                     .foregroundStyle(Color.white.opacity(0.2))
@@ -55,39 +56,37 @@ struct TaskRowView: View {
                             }
                         }
                     }
-
-                    /*
-                     
-                     1. display action button after task complete / error
-                     2. when error, display retry button
-                     3. when complete, display recover button
-                     
-                    Menu {
-                        Button("Cancel") {
-                            print("Option 3 selected")
-                        }
-                        Divider()
-                        Button("Recover") {
-                            print("Option 3 selected")
-                        }
-                        .disabled(task.status != .completed)
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(Color("textBody"))
-                            .frame(width: 20, height: 20)
-                    }
-                    .menuStyle(BorderlessButtonMenuStyle())
-                    .menuIndicator(.hidden)
-                    .frame(width: 20, height: 20)
-                     */
                 }
 
                 Spacer()
                     .frame(minHeight: 0)
 
-                HStack {
+                HStack(spacing: 4) {
                     Spacer()
+
+                    if task.status == .completed {
+                        Button {
+                            vm.restore(task)
+                        } label: {
+                            Image(systemName: "arrow.uturn.backward")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(Color("textBody"))
+                                .frame(width: 20, height: 20)
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        .help("Restore with origin image")
+                    } else if task.status == .failed || task.status == .restored {
+                        Button {
+                            vm.retry(task)
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(Color("textBody"))
+                                .frame(width: 20, height: 20)
+                        }
+                        .buttonStyle(BorderlessButtonStyle())
+                        .help("Retry task")
+                    }
 
                     Text(task.statusText())
                         .font(.system(size: 12, weight: statusTextWeight(task.status)))
@@ -96,8 +95,7 @@ struct TaskRowView: View {
             }
         }
         .padding(rowPadding)
-        .frame(height: rowHeight)
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, maxHeight: rowHeight, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color("taskRowBackground"))

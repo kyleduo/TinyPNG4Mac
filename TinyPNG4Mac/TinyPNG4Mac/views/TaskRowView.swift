@@ -134,6 +134,47 @@ struct TaskRowView: View {
     }
 }
 
+extension TaskInfo {
+    fileprivate func statusText() -> String {
+        if (status == .uploading || status == .downloading) && progress > 0 {
+            status.displayText() + " (\(formatedProgress()))"
+        } else {
+            status.displayText()
+        }
+    }
+
+    private func formatedProgress() -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .percent
+        formatter.maximumFractionDigits = 1
+        formatter.minimumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: progress)) ?? "\(progress)%"
+    }
+}
+
+extension TaskStatus {
+    fileprivate func displayText() -> String {
+        switch self {
+        case .created:
+            "Pending"
+        case .cancelled:
+            "Cancelled"
+        case .failed:
+            "Failed"
+        case .completed:
+            "Completed"
+        case .uploading:
+            "Uploading"
+        case .processing:
+            "Processing"
+        case .downloading:
+            "Downloading"
+        case .restored:
+            "Restored"
+        }
+    }
+}
+
 // #Preview {
 //    TaskRowView()
 // }

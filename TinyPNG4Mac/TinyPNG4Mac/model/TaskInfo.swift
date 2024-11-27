@@ -97,14 +97,6 @@ extension TaskInfo: Equatable {
 }
 
 extension TaskInfo {
-    func statusText() -> String {
-        if (status == .uploading || status == .downloading) && progress > 0 {
-            status.displayText() + " (\(progress * 100) %)"
-        } else {
-            status.displayText()
-        }
-    }
-
     func updateError(message: String) {
         status = .failed
         errorMessage = message
@@ -153,27 +145,4 @@ enum TaskStatus {
     case processing
     case downloading
     case restored
-}
-
-extension TaskStatus {
-    func displayText() -> String {
-        switch self {
-        case .created:
-            "Pending"
-        case .cancelled:
-            "Cancelled"
-        case .failed:
-            "Failed"
-        case .completed:
-            "Completed"
-        case .uploading:
-            "Uploading"
-        case .processing:
-            "Processing"
-        case .downloading:
-            "Downloading"
-        case .restored:
-            "Restored"
-        }
-    }
 }

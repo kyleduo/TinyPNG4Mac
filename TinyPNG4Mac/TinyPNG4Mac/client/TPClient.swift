@@ -60,7 +60,7 @@ class TPClient {
 
             if mockEnabled {
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
-                    self.updateStatus(.uploading, progress: 0.47, of: task)
+                    self.updateStatus(.uploading, progress: 0.43237, of: task)
                 }
 
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double.random(in: 0.8 ..< 1.5)) {
@@ -72,7 +72,7 @@ class TPClient {
                 }
 
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 3) {
-                    self.updateStatus(.downloading, progress: 0.38, of: task)
+                    self.updateStatus(.downloading, progress: 0.331983218, of: task)
                 }
 
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double.random(in: 5 ..< 7)) {

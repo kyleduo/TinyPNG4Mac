@@ -15,6 +15,7 @@ struct TinyPNG4MacApp: App {
     @StateObject var vm: MainViewModel = MainViewModel()
 
     @State var firstAppear: Bool = true
+    @State var lastTaskCount = 0
 
     var body: some Scene {
         WindowGroup {
@@ -41,10 +42,38 @@ struct TinyPNG4MacApp: App {
                     }
                 }
                 .environmentObject(appContext)
+                .onChange(of: vm.tasks.count) { value in
+                    if value > 0 && self.lastTaskCount == 0 {
+                        if let window = NSApp.windows.first {
+                            if window.frame.size.height == appContext.minSize.height {
+                                DispatchQueue.main.async {
+                                    let frame = window.frame
+                                    let newFrame = NSRect(origin: CGPoint(x: frame.origin.x, y: max(0, frame.origin.y - 100)), size: CGSize(width: frame.width, height: frame.height + 100))
+                                    animateWindowFrame(window, newFrame: newFrame)
+                                }
+                            }
+                        }
+                    }
+                    self.lastTaskCount = value
+                }
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowResizability(.contentSize)
         .defaultSize(CGSize(width: 320, height: 320 - appContext.windowTitleBarHeight))
+    }
+
+    func animateWindowFrame(_ window: NSWindow, newFrame: NSRect) {
+        let animation = NSViewAnimation()
+        animation.viewAnimations = [
+            [
+                NSViewAnimation.Key.target: window,
+                NSViewAnimation.Key.startFrame: NSValue(rect: window.frame),
+                NSViewAnimation.Key.endFrame: NSValue(rect: newFrame),
+            ],
+        ]
+        animation.duration = 0.3
+        animation.animationCurve = .easeOut
+        animation.start()
     }
 }
 

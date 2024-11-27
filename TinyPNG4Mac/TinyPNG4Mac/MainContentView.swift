@@ -30,18 +30,6 @@ struct MainContentView: View {
                 Text("TinyPNG for macOS")
                     .frame(height: appContext.windowTitleBarHeight)
 
-                if vm.tasks.count > 0 {
-                    let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
-                    Text("Monthly compression count: \(usedQuota)")
-                        .font(.system(size: 12))
-                        .foregroundStyle(Color.white.opacity(0.5))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(vertical: 2, horizontal: 12)
-                } else {
-                    Spacer()
-                        .frame(height: 4)
-                }
-
                 List {
                     ForEach(vm.tasks.indices, id: \.self) { index in
                         TaskRowView(vm: vm, task: $vm.tasks[index], last: index == vm.tasks.count - 1)
@@ -55,6 +43,46 @@ struct MainContentView: View {
                 .scrollContentBackground(.hidden)
                 .listStyle(PlainListStyle())
                 .environment(\.defaultMinListRowHeight, 0)
+
+                HorizontalDivider()
+                    .padding(vertical: 0, horizontal: 12)
+
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
+                        Text("Monthly compression count: \(usedQuota)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.white.opacity(0.5))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.white.opacity(0.5))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        Text("Completed: \(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color.white.opacity(0.5))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+
+                    Menu {
+                        Button {
+                            // TODO: retry
+                        } label: {
+                            Text("Retry all")
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color("textBody"))
+                            .frame(width: 20, height: 20)
+                    }
+                    .menuStyle(.borderlessButton)
+                    .menuIndicator(.hidden)
+                    .frame(width: 20, height: 20)
+                }.padding(12)
+                    .frame(maxWidth: 500)
             }
         }
         .ignoresSafeArea()

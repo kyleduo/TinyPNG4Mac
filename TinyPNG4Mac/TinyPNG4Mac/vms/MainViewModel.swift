@@ -13,6 +13,23 @@ class MainViewModel: ObservableObject, TPClientCallback {
     @Published var monthlyUsedQuota: Int = -1
     @Published var restoreConfirmTask: TaskInfo?
 
+    var totalOriginSize: UInt64 {
+        tasks.reduce(0) { partialResult, task in
+            partialResult + (task.originSize ?? 0)
+        }
+    }
+
+    var totalFinalSize: UInt64 {
+        tasks.filter { $0.status == .completed }
+            .reduce(0) { partialResult, task in
+                partialResult + (task.finalSize ?? 0)
+            }
+    }
+
+    var completedTaskCount: Int {
+        tasks.count { $0.status == .completed }
+    }
+
     init() {
         TPClient.shared.callback = self
     }
@@ -81,14 +98,14 @@ class MainViewModel: ObservableObject, TPClientCallback {
             return
         }
 
-        self.restoreConfirmTask = task
+        restoreConfirmTask = task
     }
 
     func restoreConfirmConfirmed() {
         guard let task = restoreConfirmTask else {
             return
         }
-        
+
         defer { restoreConfirmTask = nil }
 
         Task {
@@ -110,7 +127,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
     }
 
     func restoreConfirmCancel() {
-        self.restoreConfirmTask = nil
+        restoreConfirmTask = nil
     }
 
     private func appendTask(task: TaskInfo) {

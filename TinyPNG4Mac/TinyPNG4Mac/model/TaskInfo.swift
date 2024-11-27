@@ -21,8 +21,7 @@ class TaskInfo: Identifiable {
     /// 压缩后的最终体积
     /// in byte
     var finalSize: UInt64?
-    var errorCode: Int = 0
-    var errorMessage: String?
+    var error: TaskError?
     /// upload / download progress
     var progress: Double = 0
 
@@ -36,8 +35,7 @@ class TaskInfo: Identifiable {
         downloadUrl: URL? = nil,
         originSize: UInt64? = nil,
         finalSize: UInt64? = nil,
-        errorCode: Int = 0,
-        errorMessage: String? = nil,
+        error: TaskError? = nil,
         progress: Double = 0
     ) {
         self.id = id
@@ -49,8 +47,7 @@ class TaskInfo: Identifiable {
         self.downloadUrl = downloadUrl
         self.originSize = originSize
         self.finalSize = finalSize
-        self.errorCode = errorCode
-        self.errorMessage = errorMessage
+        self.error = error
         self.progress = progress
     }
 
@@ -74,7 +71,6 @@ class TaskInfo: Identifiable {
         status = .created
         originSize = 0
         finalSize = 0
-        errorMessage = nil
         previewImage = nil
     }
 }
@@ -91,15 +87,14 @@ extension TaskInfo: Equatable {
             lhs.originUrl == rhs.originUrl &&
             lhs.status == rhs.status &&
             lhs.progress == rhs.progress &&
-            lhs.errorCode == rhs.errorCode &&
-            lhs.errorMessage == rhs.errorMessage
+            lhs.error == rhs.error
     }
 }
 
 extension TaskInfo {
-    func updateError(message: String) {
+    func updateError(error: TaskError) {
         status = .failed
-        errorMessage = message
+        self.error = error
     }
 
     func updateStatus(_ newStatus: TaskStatus, progress: Double? = nil) {
@@ -111,8 +106,7 @@ extension TaskInfo {
 
     func reset() {
         status = .created
-        errorCode = 0
-        errorMessage = nil
+        error = nil
         finalSize = nil
         progress = 0
     }

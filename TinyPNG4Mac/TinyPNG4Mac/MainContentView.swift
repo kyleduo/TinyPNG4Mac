@@ -22,7 +22,7 @@ struct MainContentView: View {
 
             if vm.tasks.isEmpty {
                 Text("Drag and drop images or folder.")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
 

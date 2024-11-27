@@ -79,7 +79,7 @@ class TPClient {
                     if Bool.random() {
                         self.completeTask(task, fileSizeFromResponse: 1028)
                     } else {
-                        self.failTask(task, error: nil)
+                        self.failTask(task, error: TaskError.apiError(statusCode: 401, message: "Unauthorised. This custom implementation provides more control"))
                     }
                 }
                 return
@@ -188,17 +188,16 @@ class TPClient {
     }
 
     private func failTask(_ task: TaskInfo, error: Error? = nil) {
-        updateError(0, message: error?.localizedDescription ?? "error", of: task)
+        updateError(TaskError.from(error: error), of: task)
         lock.withLock {
             self.runningTasks -= 1
         }
         checkExecution()
     }
 
-    private func updateError(_ errorCode: Int, message: String, of task: TaskInfo) {
+    private func updateError(_ error: TaskError, of task: TaskInfo) {
         task.status = .failed
-        task.errorCode = errorCode
-        task.errorMessage = message
+        task.error = error
         notifyTaskUpdated(task)
     }
 

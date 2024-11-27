@@ -17,85 +17,115 @@ struct TaskRowView: View {
     var last: Bool
 
     var body: some View {
-        HStack(alignment: .top, spacing: 6) {
-            let uiImage = task.previewImage ?? NSImage(named: "placeholder")!
+        VStack(spacing: 0) {
+            HStack(alignment: .top, spacing: 6) {
+                let uiImage = task.previewImage ?? NSImage(named: "placeholder")!
 
-            Image(nsImage: uiImage) // For macOS
-                .resizable()
-                .scaledToFill()
-                .frame(width: imageSize, height: imageSize)
-                .clipShape(RoundedRectangle(cornerRadius: 4))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 4)
-                        .stroke(Color("taskPreviewStroke"), lineWidth: 1)
-                }
+                Image(nsImage: uiImage) // For macOS
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: imageSize, height: imageSize)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 4)
+                            .stroke(Color("taskPreviewStroke"), lineWidth: 1)
+                    }
 
-            VStack {
-                HStack(alignment: .top, spacing: 6) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(task.originUrl.shortPath())
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(Color("textBody"))
-                            .lineLimit(1)
-                            .truncationMode(.head)
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                VStack {
+                    HStack(alignment: .top, spacing: 6) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            HStack {
+                                Text(task.originUrl.shortPath())
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(Color("textBody"))
+                                    .lineLimit(1)
+                                    .truncationMode(.head)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                        HStack(alignment: .center, spacing: 4) {
-                            Text(task.originSize?.formatBytes() ?? "NaN")
-                                .font(.system(size: 10, weight: .light))
-                                .foregroundStyle(Color("textCaption"))
+                                if task.status == .completed {
+                                    Menu {
+                                        Button {
+                                            vm.restore(task)
+                                        } label: {
+                                            Text("Restore")
+                                        }
+                                    } label: {
+                                        Image(systemName: "ellipsis.circle")
+                                            .font(.system(size: 12, weight: .medium))
+                                            .foregroundStyle(Color("textBody"))
+                                            .frame(width: 20, height: 20)
+                                    }
+                                    .menuStyle(.borderlessButton)
+                                    .menuIndicator(.hidden)
+                                    .frame(width: 20, height: 20)
+                                }
+                            }
 
-                            if let finalSize = task.finalSize, task.status == .completed {
-                                Image(systemName: "arrow.forward")
+                            HStack(alignment: .center, spacing: 4) {
+                                Text(task.originSize?.formatBytes() ?? "NaN")
                                     .font(.system(size: 10, weight: .light))
-                                    .foregroundStyle(Color.white.opacity(0.2))
+                                    .foregroundStyle(Color("textCaption"))
 
-                                Text(finalSize.formatBytes())
-                                    .font(.system(size: 10, weight: .regular))
-                                    .foregroundStyle(Color("textSecondary"))
+                                if let finalSize = task.finalSize, task.status == .completed {
+                                    Image(systemName: "arrow.forward")
+                                        .font(.system(size: 10, weight: .light))
+                                        .foregroundStyle(Color.white.opacity(0.2))
+
+                                    Text(finalSize.formatBytes())
+                                        .font(.system(size: 10, weight: .regular))
+                                        .foregroundStyle(Color("textSecondary"))
+                                }
                             }
                         }
                     }
-                }
 
-                Spacer()
-                    .frame(minHeight: 0)
-
-                HStack(spacing: 4) {
                     Spacer()
+                        .frame(minHeight: 0)
 
-                    if task.status == .completed {
-                        Button {
-                            vm.restore(task)
-                        } label: {
-                            Image(systemName: "arrow.uturn.backward")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color("textBody"))
-                                .frame(width: 20, height: 20)
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .help("Restore with origin image")
-                    } else if task.status == .failed || task.status == .restored {
-                        Button {
-                            vm.retry(task)
-                        } label: {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color("textBody"))
-                                .frame(width: 20, height: 20)
-                        }
-                        .buttonStyle(BorderlessButtonStyle())
-                        .help("Retry task")
+                    HStack(spacing: 4) {
+                        Spacer()
+
+                        Text(task.statusText())
+                            .font(.system(size: 12, weight: statusTextWeight(task.status)))
+                            .foregroundStyle(statusTextColor(task.status))
                     }
-
-                    Text(task.statusText())
-                        .font(.system(size: 12, weight: statusTextWeight(task.status)))
-                        .foregroundStyle(statusTextColor(task.status))
                 }
             }
+            .padding(rowPadding)
+            .frame(height: rowHeight)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            if task.status == .failed {
+                HorizontalDivider()
+                    .padding(vertical: 0, horizontal: rowPadding)
+                    .frame(height: 2)
+
+                HStack {
+                    let errorText = "Error: \(task.error?.displayText() ?? "unknown")"
+                    Text(errorText)
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color("textSecondary"))
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Button {
+                        vm.retry(task)
+                    } label: {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color("textSecondary"))
+                            .frame(width: 20, height: 20)
+                    }
+                    .buttonStyle(BorderlessButtonStyle())
+                    .help("Retry task")
+                }
+                .padding(.leading, rowPadding)
+                .padding(.trailing, rowPadding)
+                .padding(.bottom, rowPadding)
+                .padding(.top, 8)
+            }
         }
-        .padding(rowPadding)
-        .frame(maxWidth: .infinity, maxHeight: rowHeight, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 8)
                 .fill(Color("taskRowBackground"))

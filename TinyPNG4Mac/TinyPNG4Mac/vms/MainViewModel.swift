@@ -22,16 +22,9 @@ class MainViewModel: ObservableObject, TPClientCallback {
             for url in imageURLs {
                 let originUrl = url
 
-//                if !originUrl.hasPermission() {
-//                    DispatchQueue.main.async {
-//                        self.requestPermission = true
-//                    }
-//                    break
-//                }
-
                 if !originUrl.fileExists() {
                     let task = TaskInfo(originUrl: originUrl)
-                    task.updateError(message: "File not exists")
+                    task.updateError(error: TaskError.from(message: "File not exists"))
                     appendTask(task: task)
                     continue
                 }
@@ -43,7 +36,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     try originUrl.copyFileTo(backupUrl)
                 } catch {
                     let task = TaskInfo(originUrl: originUrl)
-                    task.updateError(message: "File to create backup file, \(error.localizedDescription)")
+                    task.updateError(error: TaskError.from(error: error))
                     appendTask(task: task)
                     continue
                 }
@@ -56,7 +49,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     fileSize = try originUrl.sizeOfFile()
                 } catch {
                     let task = TaskInfo(originUrl: originUrl)
-                    task.updateError(message: "Fail to create backup, skip creat task.")
+                    task.updateError(error: TaskError.from(error: error))
                     appendTask(task: task)
                     continue
                 }

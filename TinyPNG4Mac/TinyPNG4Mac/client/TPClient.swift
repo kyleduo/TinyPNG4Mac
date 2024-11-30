@@ -33,6 +33,18 @@ class TPClient {
         }
         checkExecution()
     }
+    
+    func stopAllTask() {
+        lock.withLock {
+            currentRequests.forEach { request in
+                request.cancel()
+            }
+            currentRequests.removeAll()
+            
+            taskQueue.removeAll()
+            runningTasks = 0
+        }
+    }
 
     private func checkExecution() {
         lock.withLock {

@@ -48,9 +48,17 @@ struct TinyPNG4MacApp: App {
                             if window.frame.size.height == appContext.minSize.height {
                                 DispatchQueue.main.async {
                                     let frame = window.frame
-                                    let newFrame = NSRect(origin: CGPoint(x: frame.origin.x, y: max(0, frame.origin.y - 100)), size: CGSize(width: frame.width, height: frame.height + 100))
+                                    let newFrame = NSRect(origin: CGPoint(x: frame.origin.x, y: max(0, frame.origin.y - 75)), size: CGSize(width: frame.width, height: frame.height + 75))
                                     animateWindowFrame(window, newFrame: newFrame)
                                 }
+                            }
+                        }
+                    } else if value == 0 && self.lastTaskCount > 0 {
+                        if let window = NSApp.windows.first {
+                            DispatchQueue.main.async {
+                                let frame = window.frame
+                                let newFrame = NSRect(origin: CGPoint(x: frame.origin.x, y: max(0, frame.origin.y - (appContext.minSize.height - frame.height))), size: CGSize(width: appContext.minSize.width, height: appContext.minSize.height))
+                                animateWindowFrame(window, newFrame: newFrame)
                             }
                         }
                     }

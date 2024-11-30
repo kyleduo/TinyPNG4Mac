@@ -140,3 +140,10 @@ enum TaskStatus {
     case downloading
     case restored
 }
+
+extension TaskStatus {
+    /// In status where considered is finished
+    func isFinished() -> Bool {
+        return self == .cancelled || self == .completed || self == .restored
+    }
+}

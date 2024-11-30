@@ -37,4 +37,8 @@ struct TPQueue<Element: Equatable> {
             e == element
         }
     }
+    
+    mutating func removeAll() {
+        queue.removeAll()
+    }
 }

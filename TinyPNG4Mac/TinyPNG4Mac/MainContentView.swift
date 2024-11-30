@@ -13,6 +13,7 @@ struct MainContentView: View {
     @State private var dropResult: [URL] = []
     @State private var showAlert = false
     @State private var showOpenPanel = false
+    @State private var bottomAreaShown = false
 
     var body: some View {
         ZStack {
@@ -44,53 +45,102 @@ struct MainContentView: View {
                 .listStyle(PlainListStyle())
                 .environment(\.defaultMinListRowHeight, 0)
 
-                HorizontalDivider()
-                    .padding(vertical: 0, horizontal: 12)
-                    .padding(.top, 2)
+                if bottomAreaShown {
+                    HorizontalDivider()
+                        .padding(vertical: 0, horizontal: 12)
+                        .padding(.top, 2)
 
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
-                        Text("Monthly compression count: \(usedQuota)")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color.white.opacity(0.5))
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                    HStack(spacing: 0) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.white.opacity(0.5))
+                                .frame(maxWidth: .infinity, alignment: .leading)
 
-                        Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color.white.opacity(0.5))
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                            Text("Completed: \(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.white.opacity(0.5))
+                                .frame(maxWidth: .infinity, alignment: .leading)
 
-                        Text("Completed: \(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color.white.opacity(0.5))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                    }
-
-                    Menu {
-                        Button {
-                            // TODO: retry
-                        } label: {
-                            Text("Retry all")
+                            let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
+                            Text("Monthly compression count: \(usedQuota)")
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color.white.opacity(0.5))
+                                .frame(maxWidth: .infinity, alignment: .leading)
                         }
-                    } label: {
-                        Image(systemName: "ellipsis.circle")
-                            .font(.system(size: 12, weight: .medium))
-                            .foregroundStyle(Color("textBody"))
-                            .frame(width: 20, height: 20)
-                    }
-                    .menuStyle(.borderlessButton)
-                    .menuIndicator(.hidden)
-                    .frame(width: 20, height: 20)
-                }.padding(EdgeInsets(top: 8, leading: 12, bottom: 12, trailing: 12))
-                    .frame(maxWidth: 500)
+
+                        Spacer()
+                            .frame(width: 44)
+                    }.padding(EdgeInsets(top: 8, leading: 12, bottom: 12, trailing: 12))
+                        .frame(maxWidth: 500)
+                }
             }
+
+            ZStack(alignment: .bottomTrailing) {
+                Color.clear
+
+                Menu {
+                    Button {
+                        vm.retryAllFailedTask()
+                    } label: {
+                        Text("Retry all")
+                    }
+                    .disabled(vm.failedTaskCount == 0)
+
+                    Button {
+                        vm.clearAllTask()
+                    } label: {
+                        Text("Clear all")
+                    }
+                    .disabled(vm.tasks.count == 0)
+
+                    Button {
+                        vm.clearFinishedTask()
+                    } label: {
+                        Text("Clear completed")
+                    }
+                    .disabled(vm.tasks.count == 0)
+
+                    Divider()
+
+                    Button {
+                    } label: {
+                        Text("Settings...")
+                    }
+
+                    Button {
+                    } label: {
+                        Text("Quit")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis.circle")
+                        .font(.system(size: 12, weight: .medium))
+                        .frame(width: 20, height: 20)
+                }
+                .menuStyle(.borderlessButton)
+                .menuIndicator(.hidden)
+                .frame(width: 20, height: 20)
+                .tint(Color("textSecondary"))
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .ignoresSafeArea()
         .onChange(of: dropResult) { newValue in
             if !newValue.isEmpty {
                 dropResult = []
                 vm.createTasks(imageURLs: newValue)
+            }
+        }
+        .onChange(of: vm.tasks.count) { newValue in
+            if !bottomAreaShown && newValue > 0 {
+                withAnimation {
+                    bottomAreaShown = true
+                }
+            } else if bottomAreaShown && newValue == 0 {
+                withAnimation {
+                    bottomAreaShown = false
+                }
             }
         }
         .alert("Would you like to restore the image?", isPresented: Binding(

@@ -34,6 +34,10 @@ class MainViewModel: ObservableObject, TPClientCallback {
         TPClient.shared.callback = self
     }
 
+    var failedTaskCount: Int {
+        tasks.count { $0.status == .failed }
+    }
+
     func createTasks(imageURLs: [URL]) {
         Task {
             for url in imageURLs {
@@ -99,6 +103,22 @@ class MainViewModel: ObservableObject, TPClientCallback {
         }
 
         restoreConfirmTask = task
+    }
+
+    func clearAllTask() {
+        TPClient.shared.stopAllTask()
+        tasks.removeAll()
+    }
+
+    func clearFinishedTask() {
+        tasks.removeAll { $0.status.isFinished() }
+    }
+
+    func retryAllFailedTask() {
+        tasks.filter { $0.status == .failed }
+            .forEach { task in
+                retry(task)
+            }
     }
 
     func restoreConfirmConfirmed() {

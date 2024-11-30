@@ -12,7 +12,10 @@ class TPClient {
     static let shared = TPClient()
     static let HEADER_COMPRESSION_COUNT = "Compression-Count"
 
-    var apiKey = ProcessInfo.processInfo.environment["API_KEY"] ?? ""
+    var apiKey: String {
+        ProcessInfo.processInfo.environment["API_KEY"] ?? AppContext.shared.appConfig.apiKey
+    }
+        
     var mockEnabled = ProcessInfo.processInfo.environment["MOCK_ENABLED"] != nil
 
     var maxConcurrencyCount = 2

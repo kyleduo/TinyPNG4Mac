@@ -103,9 +103,20 @@ struct MainContentView: View {
 
                     Divider()
 
-                    Button {
-                    } label: {
-                        Text("Settings...")
+                    if #available(macOS 14.0, *) {
+                        SettingsLink {
+                            Text("Settings...")
+                        }
+                    } else {
+                        Button {
+                            if #available(macOS 13.0, *) {
+                                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                            } else {
+                                NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+                            }
+                        } label: {
+                            Text("Settings...")
+                        }
                     }
 
                     Button {

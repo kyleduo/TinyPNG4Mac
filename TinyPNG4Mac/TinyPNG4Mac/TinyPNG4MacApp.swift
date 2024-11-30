@@ -11,7 +11,7 @@ import SwiftUI
 @main
 struct TinyPNG4MacApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelgate
-    @StateObject var appContext = AppContext()
+    @StateObject var appContext = AppContext.shared
     @StateObject var vm: MainViewModel = MainViewModel()
 
     @State var firstAppear: Bool = true
@@ -68,6 +68,13 @@ struct TinyPNG4MacApp: App {
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowResizability(.contentSize)
         .defaultSize(CGSize(width: 320, height: 320 - appContext.windowTitleBarHeight))
+        
+        
+        Settings {
+            SettingsView()
+                .frame(minWidth: 400, idealWidth: 400, minHeight: 400)
+        }
+        .defaultSize(CGSize(width: 400, height: 400))
     }
 
     func animateWindowFrame(_ window: NSWindow, newFrame: NSRect) {

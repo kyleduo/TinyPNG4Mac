@@ -46,6 +46,7 @@ struct MainContentView: View {
 
                 HorizontalDivider()
                     .padding(vertical: 0, horizontal: 12)
+                    .padding(.top, 2)
 
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
@@ -81,7 +82,7 @@ struct MainContentView: View {
                     .menuStyle(.borderlessButton)
                     .menuIndicator(.hidden)
                     .frame(width: 20, height: 20)
-                }.padding(12)
+                }.padding(EdgeInsets(top: 8, leading: 12, bottom: 12, trailing: 12))
                     .frame(maxWidth: 500)
             }
         }

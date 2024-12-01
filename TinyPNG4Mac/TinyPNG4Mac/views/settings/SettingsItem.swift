@@ -22,9 +22,10 @@ struct SettingsItem<Content: View>: View {
                 content()
 
                 if !desc.isEmpty {
-                    Text(desc)
+                    Text(.init(desc))
                         .font(.system(size: 10))
                         .padding(.bottom, 8)
+                        .padding(.top, 2)
                 }
             }
             .frame(maxWidth: 320, alignment: .leading)

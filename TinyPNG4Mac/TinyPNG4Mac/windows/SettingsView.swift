@@ -32,7 +32,7 @@ struct SettingsView: View {
                     Text("TinyPNG")
                         .font(.system(size: 13, weight: .bold))
 
-                    SettingsItem(title: "API key:", desc: "Visit https://tinypng.com/developers to request an API key.") {
+                    SettingsItem(title: "API key:", desc: "Visit [https://tinypng.com/developers](https://tinypng.com/developers) to request an API key.") {
                         TextField("apikey", text: $apiKey)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .focused($isTextFieldFocused)

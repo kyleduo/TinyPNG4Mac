@@ -105,7 +105,7 @@ struct TaskRowView: View {
                     Text(errorText)
                         .font(.system(size: 12))
                         .foregroundStyle(Color("textSecondary"))
-                        .lineLimit(2)
+                        .lineLimit(4)
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
 

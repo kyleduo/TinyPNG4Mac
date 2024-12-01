@@ -18,7 +18,7 @@ struct TinyPNG4MacApp: App {
     @State var lastTaskCount = 0
 
     var body: some Scene {
-        WindowGroup {
+        Window("", id: "") {
             MainContentView(vm: vm)
                 .frame(
                     minWidth: appContext.minSize.width,
@@ -28,6 +28,8 @@ struct TinyPNG4MacApp: App {
                     idealHeight: appContext.minSize.height - appContext.windowTitleBarHeight
                 )
                 .onAppear {
+                    appDelgate.updateViewModel(vm: vm)
+
                     if !firstAppear {
                         return
                     }
@@ -68,8 +70,7 @@ struct TinyPNG4MacApp: App {
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowResizability(.contentSize)
         .defaultSize(CGSize(width: 320, height: 320 - appContext.windowTitleBarHeight))
-        
-        
+
         Settings {
             SettingsView()
         }
@@ -91,6 +92,14 @@ struct TinyPNG4MacApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    private var vm: MainViewModel?
+
+    func updateViewModel(vm: MainViewModel) {
+        if self.vm == nil {
+            self.vm = vm
+        }
+    }
+
     func applicationDidFinishLaunching(_ notification: Notification) {
         FileUtils.initPaths()
 
@@ -98,5 +107,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = true
         }
+    }
+
+    func application(_ application: NSApplication, open urls: [URL]) {
+        let imageUrls = FileUtils.findImageFiles(urls: urls)
+        vm?.createTasks(imageURLs: imageUrls)
+    }
+    
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return false
     }
 }

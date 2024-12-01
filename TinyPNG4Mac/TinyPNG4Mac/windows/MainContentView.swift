@@ -103,21 +103,7 @@ struct MainContentView: View {
 
                     Divider()
 
-                    if #available(macOS 14.0, *) {
-                        SettingsLink {
-                            Text("Settings...")
-                        }
-                    } else {
-                        Button {
-                            if #available(macOS 13.0, *) {
-                                NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
-                            } else {
-                                NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
-                            }
-                        } label: {
-                            Text("Settings...")
-                        }
-                    }
+                    settingButton(title: "Settings...")
 
                     Button {
                     } label: {
@@ -157,13 +143,46 @@ struct MainContentView: View {
         .alert("Would you like to restore the image?", isPresented: Binding(
             get: { vm.restoreConfirmTask != nil },
             set: { if !$0 { } }
-        )) {
+        ), actions: {
             Button("Confirm") { vm.restoreConfirmConfirmed() }
             Button("Cancel", role: .cancel) { vm.restoreConfirmCancel() }
-        } message: {
+        }, message: {
             let path = vm.restoreConfirmTask == nil ? "" : vm.restoreConfirmTask?.originUrl.rawPath() ?? ""
             Text("Image at \"\(path)\" will be restore with origin image file.")
                 .font(.system(size: 12))
+        })
+        .alert("Config is not ready.", isPresented: Binding(
+            get: { vm.settingsNotReadyMessage != nil },
+            set: { if !$0 { vm.settingsNotReadyMessage = nil } }
+        ), actions: {
+            settingButton(title: "Open Setting")
+            Button("Cancel", role: .cancel) { }
+        }, message: {
+            if let message = vm.settingsNotReadyMessage {
+                Text(message)
+            }
+        })
+    }
+
+    private func settingButton(title: String) -> some View {
+        if #available(macOS 14.0, *) {
+            AnyView(
+                SettingsLink {
+                    Text(title)
+                }
+            )
+        } else {
+            AnyView(
+                Button {
+                    if #available(macOS 13.0, *) {
+                        NSApp.sendAction(Selector(("showSettingsWindow:")), to: nil, from: nil)
+                    } else {
+                        NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
+                    }
+                } label: {
+                    Text(title)
+                }
+            )
         }
     }
 }

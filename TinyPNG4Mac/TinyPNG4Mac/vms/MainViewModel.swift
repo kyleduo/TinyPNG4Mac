@@ -12,6 +12,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
     @Published var tasks: [TaskInfo] = []
     @Published var monthlyUsedQuota: Int = -1
     @Published var restoreConfirmTask: TaskInfo?
+    @Published var settingsNotReadyMessage: String? = nil
 
     var totalOriginSize: UInt64 {
         tasks.reduce(0) { partialResult, task in
@@ -39,6 +40,21 @@ class MainViewModel: ObservableObject, TPClientCallback {
     }
 
     func createTasks(imageURLs: [URL]) {
+        let config = AppContext.shared.appConfig
+        if config.apiKey.isEmpty {
+            DispatchQueue.main.async {
+                self.settingsNotReadyMessage = "Please config API key first."
+            }
+            return
+        }
+
+        if !config.isReplaceModeEnabled && config.outputFolderUrl == nil {
+            DispatchQueue.main.async {
+                self.settingsNotReadyMessage = "Replace mode is disabled. Please select output folder first."
+            }
+            return
+        }
+
         Task {
             for url in imageURLs {
                 let originUrl = url

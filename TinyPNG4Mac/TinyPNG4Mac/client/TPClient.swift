@@ -15,10 +15,13 @@ class TPClient {
     var apiKey: String {
         ProcessInfo.processInfo.environment["API_KEY"] ?? AppContext.shared.appConfig.apiKey
     }
+    
+    var maxConcurrencyCount: Int {
+        AppContext.shared.appConfig.concurrentTaskCount
+    }
         
     var mockEnabled = ProcessInfo.processInfo.environment["MOCK_ENABLED"] != nil
 
-    var maxConcurrencyCount = 2
     var runningTasks = 0
     var callback: TPClientCallback?
 

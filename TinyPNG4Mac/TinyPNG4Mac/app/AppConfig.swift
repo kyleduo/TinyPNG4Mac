@@ -17,6 +17,7 @@ class AppConfig {
     static let key_outputFilepath = "outputFilepath"
 
     private(set) var apiKey: String = ""
+    private(set) var concurrentTaskCount: Int = 3
 
     init() {
         update()
@@ -25,8 +26,10 @@ class AppConfig {
     func update() {
         let ud = UserDefaults.standard
 
-        let apiKey = ud.string(forKey: "apikey") ?? ""
+        let apiKey = ud.string(forKey: AppConfig.key_apiKey) ?? ""
 
         self.apiKey = apiKey
+        let value = ud.integer(forKey: AppConfig.key_concurrentTaskCount)
+        self.concurrentTaskCount = value > 0 ? value : 3
     }
 }

@@ -32,7 +32,7 @@ struct MainContentView: View {
             VStack(spacing: 0) {
                 Text("TinyPNG for macOS")
                     .font(.system(size: 13, weight: .medium))
-                    .foregroundStyle(Color("textTitle"))
+                    .foregroundStyle(Color("textMainTitle"))
                     .frame(height: appContext.windowTitleBarHeight)
 
                 List {

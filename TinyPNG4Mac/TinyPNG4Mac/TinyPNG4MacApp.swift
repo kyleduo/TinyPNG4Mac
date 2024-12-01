@@ -117,4 +117,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
     }
+
+    func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
+        guard let vm = vm else {
+            return .terminateNow
+        }
+
+        if !vm.shouldTerminate() {
+            vm.showRunnningTasksAlert()
+            return .terminateCancel
+        } else {
+            return .terminateNow
+        }
+    }
 }

@@ -13,6 +13,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
     @Published var monthlyUsedQuota: Int = -1
     @Published var restoreConfirmTask: TaskInfo?
     @Published var settingsNotReadyMessage: String? = nil
+    @Published var showQuitWithRunningTasksAlert: Bool = false
 
     var totalOriginSize: UInt64 {
         tasks.reduce(0) { partialResult, task in
@@ -156,7 +157,19 @@ class MainViewModel: ObservableObject, TPClientCallback {
             doRestore(task: task)
         }
     }
-
+    
+    func cancelAllTask() {
+        TPClient.shared.stopAllTask()
+    }
+    
+    func shouldTerminate() -> Bool {
+        return TPClient.shared.runningTasks == 0
+    }
+    
+    func showRunnningTasksAlert() {
+        self.showQuitWithRunningTasksAlert = true
+    }
+    
     private func doRestore(task: TaskInfo) {
         if task.status != .completed {
             return

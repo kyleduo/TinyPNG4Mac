@@ -173,6 +173,18 @@ struct MainContentView: View {
                    Text("This operation can not be undone.")
                }
         )
+        .alert("Do you really whant to quit?",
+               isPresented: $vm.showQuitWithRunningTasksAlert,
+               actions: {
+                   Button("Quit") {
+                       vm.cancelAllTask()
+                       NSApplication.shared.terminate(nil)
+                   }
+                   Button("Cancel", role: .cancel) {}
+               },
+               message: {
+                   Text("There're running tasks, quit app will cancel all the tasks.")
+               })
     }
 
     private func settingButton(title: String) -> some View {

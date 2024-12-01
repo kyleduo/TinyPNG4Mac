@@ -24,12 +24,15 @@ struct MainContentView: View {
 
             if vm.tasks.isEmpty {
                 Text("Drag and drop images or folder.")
-                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundStyle(Color("textBody"))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
 
             VStack(spacing: 0) {
                 Text("TinyPNG for macOS")
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(Color("textTitle"))
                     .frame(height: appContext.windowTitleBarHeight)
 
                 List {
@@ -55,18 +58,18 @@ struct MainContentView: View {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
                                 .font(.system(size: 12))
-                                .foregroundStyle(Color.white.opacity(0.5))
+                                .foregroundStyle(Color("textSecondary"))
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
                             Text("Completed: \(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
                                 .font(.system(size: 12))
-                                .foregroundStyle(Color.white.opacity(0.5))
+                                .foregroundStyle(Color("textSecondary"))
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
                             let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
                             Text("Monthly compression count: \(usedQuota)")
                                 .font(.system(size: 12))
-                                .foregroundStyle(Color.white.opacity(0.5))
+                                .foregroundStyle(Color("textSecondary"))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
 
@@ -74,15 +77,9 @@ struct MainContentView: View {
                             Button {
                                 vm.retryAllFailedTask()
                             } label: {
-                                Text("Retry all")
+                                Text("Retry all failed")
                             }
                             .disabled(vm.failedTaskCount == 0)
-
-                            Button {
-                                showRestoreAllConfirmAlert = true
-                            } label: {
-                                Text("Restore all")
-                            }
 
                             Divider()
 
@@ -96,11 +93,20 @@ struct MainContentView: View {
                             Button {
                                 vm.clearFinishedTask()
                             } label: {
-                                Text("Clear completed")
+                                Text("Clear all finished")
                             }
                             .disabled(vm.tasks.count == 0)
+
+                            Divider()
+
+                            Button {
+                                showRestoreAllConfirmAlert = true
+                            } label: {
+                                Text("Restore all completed")
+                            }
+                            .disabled(vm.completedTaskCount == 0)
                         } label: {
-                            Image(systemName: "ellipsis.circle")
+                            Image(systemName: "ellipsis.circle.fill")
                                 .font(.system(size: 12, weight: .medium))
                                 .frame(width: 20, height: 20)
                         }

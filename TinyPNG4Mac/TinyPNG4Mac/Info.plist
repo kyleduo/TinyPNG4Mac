@@ -19,6 +19,8 @@
 		<dict>
 			<key>CFBundleTypeName</key>
 			<string>Directory</string>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
 			<key>LSItemContentTypes</key>
 			<array>
 				<string>public.folder</string>

@@ -15,6 +15,7 @@ class TaskInfo: Identifiable {
     var previewImage: NSImage?
     var backupUrl: URL?
     var downloadUrl: URL?
+    var outputUrl: URL?
     var status: TaskStatus
     /// in byte
     var originSize: UInt64?
@@ -51,13 +52,14 @@ class TaskInfo: Identifiable {
         self.progress = progress
     }
 
-    init(originUrl: URL, backupUrl: URL, downloadUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage) {
+    init(originUrl: URL, backupUrl: URL, downloadUrl: URL, outputUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage) {
         id = UUID().uuidString
         status = .created
         self.previewImage = previewImage
         self.originUrl = originUrl
         self.backupUrl = backupUrl
         self.downloadUrl = downloadUrl
+        self.outputUrl = outputUrl
         self.originSize = originSize
         self.filePermission = filePermission
     }

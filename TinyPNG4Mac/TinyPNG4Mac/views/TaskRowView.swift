@@ -5,6 +5,7 @@
 //  Created by kyleduo on 2024/11/23.
 //
 
+import AppKit
 import SwiftUI
 
 struct TaskRowView: View {
@@ -16,12 +17,14 @@ struct TaskRowView: View {
     @Binding var task: TaskInfo
     var last: Bool
 
+    @State var titleUnderline: Bool = false
+
     var body: some View {
         VStack(spacing: 0) {
             HStack(alignment: .top, spacing: 6) {
                 let uiImage = task.previewImage ?? NSImage(named: "placeholder")!
 
-                Image(nsImage: uiImage) // For macOS
+                Image(nsImage: uiImage)
                     .resizable()
                     .scaledToFill()
                     .frame(width: imageSize, height: imageSize)
@@ -34,32 +37,19 @@ struct TaskRowView: View {
                 VStack {
                     HStack(alignment: .top, spacing: 6) {
                         VStack(alignment: .leading, spacing: 4) {
-                            HStack {
-                                Text(task.originUrl.shortPath())
-                                    .font(.system(size: 12, weight: .medium))
-                                    .foregroundStyle(Color("textBody"))
-                                    .lineLimit(1)
-                                    .truncationMode(.head)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                                if task.status == .completed {
-                                    Menu {
-                                        Button {
-                                            vm.restore(task)
-                                        } label: {
-                                            Text("Restore")
-                                        }
-                                    } label: {
-                                        Image(systemName: "ellipsis.circle")
-                                            .font(.system(size: 12, weight: .medium))
-                                            .foregroundStyle(Color("textBody"))
-                                            .frame(width: 20, height: 20)
-                                    }
-                                    .menuStyle(.borderlessButton)
-                                    .menuIndicator(.hidden)
-                                    .frame(width: 20, height: 20)
+                            Text(task.originUrl.shortPath())
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundStyle(Color("textBody"))
+                                .underline(titleUnderline)
+                                .lineLimit(1)
+                                .truncationMode(.head)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .onTapGesture {
+                                    NSWorkspace.shared.open(task.originUrl)
                                 }
-                            }
+                                .onHover { hover in
+                                    titleUnderline = hover
+                                }
 
                             HStack(alignment: .center, spacing: 4) {
                                 Text(task.originSize?.formatBytes() ?? "NaN")
@@ -69,7 +59,7 @@ struct TaskRowView: View {
                                 if let finalSize = task.finalSize, task.status == .completed {
                                     Image(systemName: "arrow.forward")
                                         .font(.system(size: 10, weight: .light))
-                                        .foregroundStyle(Color.white.opacity(0.2))
+                                        .foregroundStyle(Color.white.opacity(0.3))
 
                                     Text(finalSize.formatBytes())
                                         .font(.system(size: 10, weight: .regular))
@@ -112,7 +102,7 @@ struct TaskRowView: View {
                     Button {
                         vm.retry(task)
                     } label: {
-                        Image(systemName: "arrow.clockwise")
+                        Image(systemName: "arrow.counterclockwise.circle.fill")
                             .font(.system(size: 12, weight: .medium))
                             .foregroundStyle(Color("textSecondary"))
                             .frame(width: 20, height: 20)
@@ -139,6 +129,43 @@ struct TaskRowView: View {
         .padding(.trailing, 4)
         .padding(.top, 4)
         .padding(.bottom, last ? 12 : 6)
+        .contextMenu {
+            Button {
+                NSWorkspace.shared.open(task.originUrl)
+            } label: {
+                Text("Open Origin Image")
+            }
+
+            Button {
+                NSWorkspace.shared.open(task.originUrl.deletingLastPathComponent())
+            } label: {
+                Text("Open Origin Folder")
+            }
+
+            Divider()
+
+            Button {
+                NSWorkspace.shared.open(task.outputUrl!)
+            } label: {
+                Text("Open Compressed Image")
+            }
+            .disabled(task.status != .completed)
+            
+            Button {
+                NSWorkspace.shared.open(task.outputUrl!.deletingLastPathComponent())
+            } label: {
+                Text("Open Output Folder")
+            }
+            
+            Divider()
+
+            Button {
+                vm.restore(task)
+            } label: {
+                Text("Restore Origin Image")
+            }
+            .disabled(task.status != .completed)
+        }
     }
 
     func statusTextColor(_ status: TaskStatus) -> Color {

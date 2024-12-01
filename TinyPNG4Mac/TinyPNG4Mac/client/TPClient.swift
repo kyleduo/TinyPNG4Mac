@@ -161,13 +161,7 @@ class TPClient {
             switch response.result {
             case .success:
                 do {
-                    let config = AppContext.shared.appConfig
-                    let targetUrl: URL
-                    if config.isReplaceModeEnabled {
-                        targetUrl = task.originUrl
-                    } else if let outputFolderUrl = config.outputFolderUrl {
-                        targetUrl = outputFolderUrl.appendingPathComponent(task.originUrl.lastPathComponent)
-                    } else {
+                    guard let targetUrl = task.outputUrl else {
                         throw FileError.noOutput
                     }
                     

@@ -91,11 +91,24 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     appendTask(task: task)
                     continue
                 }
+                
+                let outputUrl: URL
+                if AppContext.shared.appConfig.isReplaceModeEnabled {
+                    outputUrl = originUrl
+                } else if let outputFolderUrl = config.outputFolderUrl {
+                    outputUrl = outputFolderUrl.appendingPathComponent(originUrl.lastPathComponent)
+                } else {
+                    let task = TaskInfo(originUrl: originUrl)
+                    task.updateError(error: TaskError.from(error: FileError.noOutput))
+                    appendTask(task: task)
+                    continue
+                }
 
                 let task = TaskInfo(
                     originUrl: originUrl,
                     backupUrl: backupUrl,
                     downloadUrl: downloadUrl,
+                    outputUrl: outputUrl,
                     originSize: fileSize,
                     filePermission: originUrl.posixPermissionsOfFile() ?? 0x644,
                     previewImage: previewImage ?? NSImage(named: "placeholder")!

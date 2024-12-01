@@ -14,6 +14,7 @@ struct MainContentView: View {
     @State private var showAlert = false
     @State private var showOpenPanel = false
     @State private var bottomAreaShown = false
+    @State private var showRestoreAllConfirmAlert = false
 
     var body: some View {
         ZStack {
@@ -50,7 +51,7 @@ struct MainContentView: View {
                         .padding(vertical: 0, horizontal: 12)
                         .padding(.top, 2)
 
-                    HStack(spacing: 0) {
+                    HStack(alignment: .bottom) {
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
                                 .font(.system(size: 12))
@@ -69,58 +70,48 @@ struct MainContentView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
 
-                        Spacer()
-                            .frame(width: 44)
+                        Menu {
+                            Button {
+                                vm.retryAllFailedTask()
+                            } label: {
+                                Text("Retry all")
+                            }
+                            .disabled(vm.failedTaskCount == 0)
+
+                            Button {
+                                showRestoreAllConfirmAlert = true
+                            } label: {
+                                Text("Restore all")
+                            }
+
+                            Divider()
+
+                            Button {
+                                vm.clearAllTask()
+                            } label: {
+                                Text("Clear all")
+                            }
+                            .disabled(vm.tasks.count == 0)
+
+                            Button {
+                                vm.clearFinishedTask()
+                            } label: {
+                                Text("Clear completed")
+                            }
+                            .disabled(vm.tasks.count == 0)
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                                .font(.system(size: 12, weight: .medium))
+                                .frame(width: 20, height: 20)
+                        }
+                        .menuStyle(.borderlessButton)
+                        .menuIndicator(.hidden)
+                        .frame(width: 20, height: 20)
+                        .tint(Color("textSecondary"))
                     }.padding(EdgeInsets(top: 8, leading: 12, bottom: 12, trailing: 12))
                         .frame(maxWidth: 500)
                 }
             }
-
-            ZStack(alignment: .bottomTrailing) {
-                Color.clear
-
-                Menu {
-                    Button {
-                        vm.retryAllFailedTask()
-                    } label: {
-                        Text("Retry all")
-                    }
-                    .disabled(vm.failedTaskCount == 0)
-
-                    Button {
-                        vm.clearAllTask()
-                    } label: {
-                        Text("Clear all")
-                    }
-                    .disabled(vm.tasks.count == 0)
-
-                    Button {
-                        vm.clearFinishedTask()
-                    } label: {
-                        Text("Clear completed")
-                    }
-                    .disabled(vm.tasks.count == 0)
-
-                    Divider()
-
-                    settingButton(title: "Settings...")
-
-                    Button {
-                    } label: {
-                        Text("Quit")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis.circle")
-                        .font(.system(size: 12, weight: .medium))
-                        .frame(width: 20, height: 20)
-                }
-                .menuStyle(.borderlessButton)
-                .menuIndicator(.hidden)
-                .frame(width: 20, height: 20)
-                .tint(Color("textSecondary"))
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .ignoresSafeArea()
         .onChange(of: dropResult) { newValue in
@@ -140,28 +131,48 @@ struct MainContentView: View {
                 }
             }
         }
-        .alert("Would you like to restore the image?", isPresented: Binding(
-            get: { vm.restoreConfirmTask != nil },
-            set: { if !$0 { } }
-        ), actions: {
-            Button("Confirm") { vm.restoreConfirmConfirmed() }
-            Button("Cancel", role: .cancel) { vm.restoreConfirmCancel() }
-        }, message: {
-            let path = vm.restoreConfirmTask == nil ? "" : vm.restoreConfirmTask?.originUrl.rawPath() ?? ""
-            Text("Image at \"\(path)\" will be restore with origin image file.")
-                .font(.system(size: 12))
-        })
-        .alert("Config is not ready.", isPresented: Binding(
-            get: { vm.settingsNotReadyMessage != nil },
-            set: { if !$0 { vm.settingsNotReadyMessage = nil } }
-        ), actions: {
-            settingButton(title: "Open Setting")
-            Button("Cancel", role: .cancel) { }
-        }, message: {
-            if let message = vm.settingsNotReadyMessage {
-                Text(message)
-            }
-        })
+        .alert("Would you like to restore the image?",
+               isPresented: Binding(
+                   get: { vm.restoreConfirmTask != nil },
+                   set: { if !$0 { } }
+               ),
+               actions: {
+                   Button("Confirm") { vm.restoreConfirmConfirmed() }
+                   Button("Cancel", role: .cancel) { vm.restoreConfirmCancel() }
+               },
+               message: {
+                   let path = vm.restoreConfirmTask == nil ? "" : vm.restoreConfirmTask?.originUrl.rawPath() ?? ""
+                   Text("Image at \"\(path)\" will be restore with origin image file.")
+                       .font(.system(size: 12))
+               }
+        )
+        .alert("Config is not ready.",
+               isPresented: Binding(
+                   get: { vm.settingsNotReadyMessage != nil },
+                   set: { if !$0 { vm.settingsNotReadyMessage = nil } }
+               ),
+               actions: {
+                   settingButton(title: "Open Setting")
+                   Button("Cancel", role: .cancel) { }
+               },
+               message: {
+                   if let message = vm.settingsNotReadyMessage {
+                       Text(message)
+                   }
+               }
+        )
+        .alert("Confirm to restore all images?",
+               isPresented: $showRestoreAllConfirmAlert,
+               actions: {
+                   Button("Restore") {
+                       vm.restoreAll()
+                   }
+                   Button("Cancel", role: .cancel) { }
+               },
+               message: {
+                   Text("This operation can not be undone.")
+               }
+        )
     }
 
     private func settingButton(title: String) -> some View {

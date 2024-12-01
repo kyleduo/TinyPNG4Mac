@@ -137,6 +137,14 @@ class MainViewModel: ObservableObject, TPClientCallback {
             }
     }
 
+    func restoreAll() {
+        Task {
+            for task in tasks {
+                doRestore(task: task)
+            }
+        }
+    }
+
     func restoreConfirmConfirmed() {
         guard let task = restoreConfirmTask else {
             return
@@ -145,20 +153,28 @@ class MainViewModel: ObservableObject, TPClientCallback {
         defer { restoreConfirmTask = nil }
 
         Task {
-            if let backupUrl = task.backupUrl {
-                do {
-                    try backupUrl.copyFileTo(task.originUrl, override: true)
-                    print("restore success")
-                    DispatchQueue.main.async {
-                        task.status = .restored
-                        self.notifyTaskChanged(task: task)
-                    }
-                } catch {
-                    print("restore fail \(error.localizedDescription)")
+            doRestore(task: task)
+        }
+    }
+
+    private func doRestore(task: TaskInfo) {
+        if task.status != .completed {
+            return
+        }
+        
+        if let backupUrl = task.backupUrl {
+            do {
+                try backupUrl.copyFileTo(task.originUrl, override: true)
+                print("restore success")
+                DispatchQueue.main.async {
+                    task.status = .restored
+                    self.notifyTaskChanged(task: task)
                 }
-            } else {
-                print("backup not found")
+            } catch {
+                print("restore fail \(error.localizedDescription)")
             }
+        } else {
+            print("backup not found")
         }
     }
 

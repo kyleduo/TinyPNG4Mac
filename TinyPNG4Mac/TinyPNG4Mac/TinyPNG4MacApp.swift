@@ -28,12 +28,12 @@ struct TinyPNG4MacApp: App {
                     idealHeight: appContext.minSize.height - appContext.windowTitleBarHeight
                 )
                 .onAppear {
-                    appDelgate.updateViewModel(vm: vm)
-
                     if !firstAppear {
                         return
                     }
                     firstAppear = false
+
+                    appDelgate.updateViewModel(vm: vm)
 
                     if let window = NSApp.windows.first {
                         appContext.updateTitleBarHeight(window: window)
@@ -113,7 +113,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let imageUrls = FileUtils.findImageFiles(urls: urls)
         vm?.createTasks(imageURLs: imageUrls)
     }
-    
+
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         return false
     }

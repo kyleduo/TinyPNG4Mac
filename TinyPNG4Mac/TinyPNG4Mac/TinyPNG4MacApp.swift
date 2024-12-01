@@ -72,9 +72,7 @@ struct TinyPNG4MacApp: App {
         
         Settings {
             SettingsView()
-                .frame(minWidth: 400, idealWidth: 400, minHeight: 400)
         }
-        .defaultSize(CGSize(width: 400, height: 400))
     }
 
     func animateWindowFrame(_ window: NSWindow, newFrame: NSRect) {

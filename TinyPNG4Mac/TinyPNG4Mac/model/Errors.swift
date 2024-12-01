@@ -18,6 +18,8 @@ enum TaskError: Error, Equatable {
 enum FileError: Error {
     case notExists
     case dstAlreadyExists
+    /// Output file path not found
+    case noOutput
 }
 
 extension TaskError {

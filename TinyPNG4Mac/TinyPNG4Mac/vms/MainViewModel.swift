@@ -60,6 +60,14 @@ class MainViewModel: ObservableObject, TPClientCallback {
             for url in imageURLs {
                 let originUrl = url
 
+                let exist = tasks.contains(where: { task in
+                    task.originUrl == originUrl && !task.status.isFinished()
+                })
+                
+                if exist {
+                    continue
+                }
+
                 if !originUrl.fileExists() {
                     let task = TaskInfo(originUrl: originUrl)
                     task.updateError(error: TaskError.from(message: "File not exists"))
@@ -91,7 +99,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     appendTask(task: task)
                     continue
                 }
-                
+
                 let outputUrl: URL
                 if AppContext.shared.appConfig.isReplaceModeEnabled {
                     outputUrl = originUrl
@@ -170,24 +178,24 @@ class MainViewModel: ObservableObject, TPClientCallback {
             doRestore(task: task)
         }
     }
-    
+
     func cancelAllTask() {
         TPClient.shared.stopAllTask()
     }
-    
+
     func shouldTerminate() -> Bool {
         return TPClient.shared.runningTasks == 0
     }
-    
+
     func showRunnningTasksAlert() {
-        self.showQuitWithRunningTasksAlert = true
+        showQuitWithRunningTasksAlert = true
     }
-    
+
     private func doRestore(task: TaskInfo) {
         if task.status != .completed {
             return
         }
-        
+
         if let backupUrl = task.backupUrl {
             do {
                 try backupUrl.copyFileTo(task.originUrl, override: true)

@@ -28,10 +28,33 @@ struct MainContentView: View {
                     .frame(height: 28)
 
                 if vm.tasks.isEmpty {
-                    Text("Drag and drop images or folder.")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(Color("textBody"))
-                        .frame(idealWidth: 360, maxWidth: .infinity, idealHeight: 360, maxHeight: .infinity)
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 12)
+                            .stroke(style: StrokeStyle(
+                                lineWidth: 2,
+                                dash: [8, 6]
+                            ))
+                            .foregroundColor(Color.white.opacity(0.1))
+                            .padding()
+
+                        VStack(spacing: 12) {
+                            Image(systemName: "photo.on.rectangle.angled")
+                                .resizable()
+                                .scaledToFit()
+                                .foregroundStyle(Color("textCaption"))
+                                .frame(width: 60, height: 60)
+                                .padding(.bottom, 12)
+
+                            Text("Drop images or folders here!")
+                                .font(.system(size: 15, weight: .bold))
+                                .foregroundStyle(Color("textBody"))
+
+                            Text("WebP, PNG, JPEG images are supported")
+                                .font(.system(size: 10))
+                                .foregroundStyle(Color("textSecondary"))
+                        }
+                    }
+                    .frame(idealWidth: 360, maxWidth: .infinity, idealHeight: 360, maxHeight: .infinity)
                 } else {
                     List {
                         ForEach(vm.tasks.indices, id: \.self) { index in

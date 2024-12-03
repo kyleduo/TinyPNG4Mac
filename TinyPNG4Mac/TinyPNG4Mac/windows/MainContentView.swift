@@ -49,7 +49,7 @@ struct MainContentView: View {
                                 .font(.system(size: 15, weight: .bold))
                                 .foregroundStyle(Color("textBody"))
 
-                            Text("WebP, PNG, JPEG images are supported")
+                            Text("Supports WebP, PNG, and JPEG images.")
                                 .font(.system(size: 10))
                                 .foregroundStyle(Color("textSecondary"))
                         }
@@ -88,7 +88,7 @@ struct MainContentView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
 
                         let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
-                        Text("Monthly compression count: \(usedQuota)")
+                        Text("Images compressed this month: \(usedQuota)")
                             .font(.system(size: 12))
                             .foregroundStyle(Color("textSecondary"))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -99,7 +99,7 @@ struct MainContentView: View {
                         Button {
                             vm.retryAllFailedTask()
                         } label: {
-                            Text("Retry all failed")
+                            Text("Retry all failed tasks")
                         }
                         .disabled(vm.failedTaskCount == 0)
 
@@ -108,14 +108,14 @@ struct MainContentView: View {
                         Button {
                             vm.clearAllTask()
                         } label: {
-                            Text("Clear all")
+                            Text("Clear all tasks")
                         }
                         .disabled(vm.tasks.count == 0)
 
                         Button {
                             vm.clearFinishedTask()
                         } label: {
-                            Text("Clear all finished")
+                            Text("Clear all finished tasks")
                         }
                         .disabled(vm.tasks.count == 0)
 
@@ -124,7 +124,7 @@ struct MainContentView: View {
                         Button {
                             showRestoreAllConfirmAlert = true
                         } label: {
-                            Text("Restore all completed")
+                            Text("Restore all compressed images")
                         }
                         .disabled(vm.completedTaskCount == 0)
                     } label: {
@@ -146,28 +146,28 @@ struct MainContentView: View {
                 vm.createTasks(imageURLs: newValue)
             }
         }
-        .alert("Would you like to restore the image?",
+        .alert("Confirm to restore the image?",
                isPresented: Binding(
                    get: { vm.restoreConfirmTask != nil },
                    set: { if !$0 { } }
                ),
                actions: {
-                   Button("Confirm") { vm.restoreConfirmConfirmed() }
+                   Button("Restore") { vm.restoreConfirmConfirmed() }
                    Button("Cancel", role: .cancel) { vm.restoreConfirmCancel() }
                },
                message: {
                    let path = vm.restoreConfirmTask == nil ? "" : vm.restoreConfirmTask?.originUrl.rawPath() ?? ""
-                   Text("Image at \"\(path)\" will be restore with origin image file.")
+                   Text("The image at \"\(path)\" will be replaced with the origin file.")
                        .font(.system(size: 12))
                }
         )
-        .alert("Config is not ready.",
+        .alert("The config is not ready",
                isPresented: Binding(
                    get: { vm.settingsNotReadyMessage != nil },
                    set: { if !$0 { vm.settingsNotReadyMessage = nil } }
                ),
                actions: {
-                   settingButton(title: "Open Setting")
+                   settingButton(title: "Open Settings")
                    Button("Cancel", role: .cancel) { }
                },
                message: {
@@ -176,7 +176,7 @@ struct MainContentView: View {
                    }
                }
         )
-        .alert("Confirm to restore all images?",
+        .alert("Confirm to restore all the images?",
                isPresented: $showRestoreAllConfirmAlert,
                actions: {
                    Button("Restore") {
@@ -185,10 +185,10 @@ struct MainContentView: View {
                    Button("Cancel", role: .cancel) { }
                },
                message: {
-                   Text("This operation can not be undone.")
+                   Text("All compressed images will be replaced with the origin file.")
                }
         )
-        .alert("Do you really whant to quit?",
+        .alert("Confirm quit?",
                isPresented: $vm.showQuitWithRunningTasksAlert,
                actions: {
                    Button("Quit") {
@@ -198,7 +198,7 @@ struct MainContentView: View {
                    Button("Cancel", role: .cancel) {}
                },
                message: {
-                   Text("There're running tasks, quit app will cancel all the tasks.")
+                   Text("There are ongoing tasks. Quitting will cancel them all.")
                })
     }
 

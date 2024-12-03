@@ -108,7 +108,7 @@ struct TaskRowView: View {
                             .frame(width: 20, height: 20)
                     }
                     .buttonStyle(BorderlessButtonStyle())
-                    .help("Retry task")
+                    .help("Retry the task")
                 }
                 .padding(.leading, rowPadding)
                 .padding(.trailing, rowPadding)
@@ -144,19 +144,27 @@ struct TaskRowView: View {
 
             Divider()
 
+            if task.status == .restored {
+                Button {
+                    vm.retry(task)
+                } label: {
+                    Text("Compress again")
+                }
+            }
+
             Button {
                 NSWorkspace.shared.open(task.outputUrl!)
             } label: {
                 Text("Open Compressed Image")
             }
             .disabled(task.status != .completed)
-            
+
             Button {
                 NSWorkspace.shared.open(task.outputUrl!.deletingLastPathComponent())
             } label: {
                 Text("Open Output Folder")
             }
-            
+
             Divider()
 
             Button {
@@ -213,21 +221,21 @@ extension TaskStatus {
     fileprivate func displayText() -> String {
         switch self {
         case .created:
-            "Pending"
+            String(localized: "Pending")
         case .cancelled:
-            "Cancelled"
+            String(localized: "Cancelled")
         case .failed:
-            "Failed"
+            String(localized: "Failed")
         case .completed:
-            "Completed"
+            String(localized: "Completed")
         case .uploading:
-            "Uploading"
+            String(localized: "Uploading")
         case .processing:
-            "Processing"
+            String(localized: "Processing")
         case .downloading:
-            "Downloading"
+            String(localized: "Downloading")
         case .restored:
-            "Restored"
+            String(localized: "Restored")
         }
     }
 }

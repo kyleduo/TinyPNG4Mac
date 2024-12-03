@@ -44,14 +44,14 @@ class MainViewModel: ObservableObject, TPClientCallback {
         let config = AppContext.shared.appConfig
         if config.apiKey.isEmpty {
             DispatchQueue.main.async {
-                self.settingsNotReadyMessage = "Please config API key first."
+                self.settingsNotReadyMessage = String(localized: "Please set the API key first.")
             }
             return
         }
 
         if !config.isReplaceModeEnabled && config.outputFolderUrl == nil {
             DispatchQueue.main.async {
-                self.settingsNotReadyMessage = "Replace mode is disabled. Please select output folder first."
+                self.settingsNotReadyMessage = String(localized: "\"Overwrite Mode\" is disabled. Please select the output directory first.")
             }
             return
         }
@@ -63,14 +63,14 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 let exist = tasks.contains(where: { task in
                     task.originUrl == originUrl && !task.status.isFinished()
                 })
-                
+
                 if exist {
                     continue
                 }
 
                 if !originUrl.fileExists() {
                     let task = TaskInfo(originUrl: originUrl)
-                    task.updateError(error: TaskError.from(message: "File not exists"))
+                    task.updateError(error: TaskError.from(message: String(localized: "File does not exists")))
                     appendTask(task: task)
                     continue
                 }

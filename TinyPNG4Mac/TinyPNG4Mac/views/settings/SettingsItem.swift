@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct SettingsItem<Content: View>: View {
-    var title: String
-    var desc: String
+    var title: LocalizedStringKey
+    var desc: LocalizedStringKey?
     @ViewBuilder var content: () -> Content
     
     var body: some View {
@@ -21,8 +21,8 @@ struct SettingsItem<Content: View>: View {
             VStack(alignment: .leading) {
                 content()
 
-                if !desc.isEmpty {
-                    Text(.init(desc))
+                if let desc = self.desc {
+                    Text(desc)
                         .font(.system(size: 10))
                         .padding(.bottom, 8)
                         .padding(.top, 2)

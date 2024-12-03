@@ -22,7 +22,8 @@ struct SettingsView: View {
 
     @FocusState private var isTextFieldFocused: Bool
 
-    @State private var selectFilepathError: Error? = nil
+    @State private var failedToSelectOutputDirectory: Bool = false
+    @State private var disableReplaceModeAfterSelect: Bool = false
     @State private var showSelectOutputFolder: Bool = false
 
     var body: some View {
@@ -33,7 +34,7 @@ struct SettingsView: View {
                         .font(.system(size: 13, weight: .bold))
 
                     SettingsItem(title: "API key:", desc: "Visit [https://tinypng.com/developers](https://tinypng.com/developers) to request an API key.") {
-                        TextField("apikey", text: $apiKey)
+                        TextField("", text: $apiKey)
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .focused($isTextFieldFocused)
                             .onAppear {
@@ -41,7 +42,7 @@ struct SettingsView: View {
                             }
                     }
 
-                    SettingsItem(title: "Preserve:", desc: "") {
+                    SettingsItem(title: "Preserve:", desc: nil) {
                         VStack(alignment: .leading) {
                             Toggle("Copyright", isOn: $preserveCopyright)
                             Toggle("Creation", isOn: $preserveCreation)
@@ -55,7 +56,7 @@ struct SettingsView: View {
                     Text("Tasks")
                         .font(.system(size: 13, weight: .bold))
 
-                    SettingsItem(title: "Parallelled tasks:", desc: "") {
+                    SettingsItem(title: "Concurrent tasks:", desc: nil) {
                         Picker("", selection: $concurrentCount) {
                             ForEach(concurrentCountOptions, id: \.self) { count in
                                 Text("\(count)").tag(count)
@@ -65,11 +66,11 @@ struct SettingsView: View {
                         .frame(maxWidth: 80)
                     }
 
-                    SettingsItem(title: "Replace mode:", desc: "By enabling replace mode, the compressed image will override the origin image file. TinyPNG4Mac will keep the origin image file in current App session for you can restore.") {
+                    SettingsItem(title: "Overwrite Mode:", desc: "When \"Overwrite Mode\" is enabled, the compressed image will replace the original file. The original image is kept until the app exits and can be restored during this time.") {
                         Toggle(replaceMode ? "Enabled" : "Disabled", isOn: $replaceMode)
                     }
 
-                    SettingsItem(title: "Output folder:", desc: "If replace mode is disabled, the compressed images will be saved to this folder. If there're images with same name, the latest image will override previous one.") {
+                    SettingsItem(title: "Output directory:", desc: "When \"Overwrite Mode\" is disabled, the compressed image will be saved to this directory. If a file with the same name exists, it will be overwritten.") {
                         HStack(alignment: .top) {
                             Text(outputFilepath.isEmpty ? "--" : outputFilepath)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -89,7 +90,7 @@ struct SettingsView: View {
                             }
                         }
                     }
-                }.padding(36)
+                }.padding(24)
             }
             .background {
                 RoundedRectangle(cornerRadius: 8)
@@ -100,28 +101,34 @@ struct SettingsView: View {
                     }
             }
         }
-        .padding(24)
+        .padding(16)
         .onChange(of: replaceMode) { newValue in
             if !newValue && outputFilepath.isEmpty {
+                replaceMode = true
                 showSelectOutputFolder = true
+                disableReplaceModeAfterSelect = true
             }
         }
         .onDisappear {
             AppContext.shared.appConfig.update()
         }
-        .alert("Fail to select file path", isPresented: Binding(get: { selectFilepathError != nil }, set: { _ in selectFilepathError = nil })) {
+        .alert("Failed to save output directory",
+               isPresented: $failedToSelectOutputDirectory
+        ) {
             Button("OK", role: .cancel) { }
         } message: {
-            Text("Plase try to select another folder.")
+            Text("Please select a different directory.")
         }
-        .alert("Select output folder", isPresented: $showSelectOutputFolder) {
+        .alert("Select output directory", isPresented: $showSelectOutputFolder) {
             Button("OK") {
                 DispatchQueue.main.async {
+                    disableReplaceModeAfterSelect = false
                     showOpenPanel()
                 }
             }
+            Button("Cancel", role: .cancel) {}
         } message: {
-            Text("Plase select output folder.")
+            Text("Disable \"Overwrite Mode\" after selecting the output directory.")
         }
     }
 
@@ -131,7 +138,7 @@ struct SettingsView: View {
         openPanel.canChooseDirectories = true
         openPanel.allowsMultipleSelection = false
         openPanel.canCreateDirectories = true
-        openPanel.prompt = "Select output directory"
+        openPanel.prompt = "Select"
 
         openPanel.begin { result in
             if result == .OK, let url = openPanel.url {
@@ -140,8 +147,13 @@ struct SettingsView: View {
                 do {
                     try AppContext.shared.appConfig.saveBookmark(for: url)
                     outputFilepath = url.rawPath()
+
+                    if disableReplaceModeAfterSelect {
+                        disableReplaceModeAfterSelect = false
+                        replaceMode = false
+                    }
                 } catch {
-                    selectFilepathError = error
+                    failedToSelectOutputDirectory = true
                 }
             } else {
                 print("User did not grant access.")

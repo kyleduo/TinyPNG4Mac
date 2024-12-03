@@ -24,8 +24,8 @@ struct TinyPNG4MacApp: App {
                     minWidth: appContext.minSize.width,
                     idealWidth: appContext.minSize.width,
                     maxWidth: appContext.maxSize.width,
-                    minHeight: appContext.minSize.height - appContext.windowTitleBarHeight,
-                    idealHeight: appContext.minSize.height - appContext.windowTitleBarHeight
+                    minHeight: appContext.minSize.height,
+                    idealHeight: appContext.minSize.height
                 )
                 .onAppear {
                     if !firstAppear {
@@ -34,42 +34,11 @@ struct TinyPNG4MacApp: App {
                     firstAppear = false
 
                     appDelgate.updateViewModel(vm: vm)
-
-                    if let window = NSApp.windows.first {
-                        appContext.updateTitleBarHeight(window: window)
-                        // 不加 async 可能设置失败。这里设置会导致窗口闪一下，默认值改成获取到的 28.
-                        DispatchQueue.main.async {
-                            window.setContentSize(CGSize(width: appContext.minSize.width, height: appContext.minSize.height - appContext.windowTitleBarHeight))
-                        }
-                    }
                 }
                 .environmentObject(appContext)
-                .onChange(of: vm.tasks.count) { value in
-                    if value > 0 && self.lastTaskCount == 0 {
-                        if let window = NSApp.windows.first {
-                            if window.frame.size.height == appContext.minSize.height {
-                                DispatchQueue.main.async {
-                                    let frame = window.frame
-                                    let newFrame = NSRect(origin: CGPoint(x: frame.origin.x, y: max(0, frame.origin.y - 75)), size: CGSize(width: frame.width, height: frame.height + 75))
-                                    animateWindowFrame(window, newFrame: newFrame)
-                                }
-                            }
-                        }
-                    } else if value == 0 && self.lastTaskCount > 0 {
-                        if let window = NSApp.windows.first {
-                            DispatchQueue.main.async {
-                                let frame = window.frame
-                                let newFrame = NSRect(origin: CGPoint(x: frame.origin.x, y: max(0, frame.origin.y - (appContext.minSize.height - frame.height))), size: CGSize(width: appContext.minSize.width, height: appContext.minSize.height))
-                                animateWindowFrame(window, newFrame: newFrame)
-                            }
-                        }
-                    }
-                    self.lastTaskCount = value
-                }
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowResizability(.contentSize)
-        .defaultSize(CGSize(width: 320, height: 320 - appContext.windowTitleBarHeight))
 
         Settings {
             SettingsView()

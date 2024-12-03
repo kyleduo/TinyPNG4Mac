@@ -13,7 +13,6 @@ struct MainContentView: View {
     @State private var dropResult: [URL] = []
     @State private var showAlert = false
     @State private var showOpenPanel = false
-    @State private var bottomAreaShown = false
     @State private var showRestoreAllConfirmAlert = false
 
     var body: some View {
@@ -22,101 +21,99 @@ struct MainContentView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color("mainViewBackground"))
 
-            if vm.tasks.isEmpty {
-                Text("Drag and drop images or folder.")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundStyle(Color("textBody"))
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-            }
-
             VStack(spacing: 0) {
                 Text("TinyPNG for macOS")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(Color("textMainTitle"))
-                    .frame(height: appContext.windowTitleBarHeight)
+                    .frame(height: 28)
 
-                List {
-                    ForEach(vm.tasks.indices, id: \.self) { index in
-                        TaskRowView(vm: vm, task: $vm.tasks[index], last: index == vm.tasks.count - 1)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparator(.hidden)
-                            .listRowInsets(EdgeInsets())
+                if vm.tasks.isEmpty {
+                    Text("Drag and drop images or folder.")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(Color("textBody"))
+                        .frame(idealWidth: 360, maxWidth: .infinity, idealHeight: 360, maxHeight: .infinity)
+                } else {
+                    List {
+                        ForEach(vm.tasks.indices, id: \.self) { index in
+                            TaskRowView(vm: vm, task: $vm.tasks[index], last: index == vm.tasks.count - 1)
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                                .listRowInsets(EdgeInsets())
+                        }
                     }
+                    .clipped()
+                    .frame(maxWidth: appContext.maxSize.width)
+                    .scrollContentBackground(.hidden)
+                    .listStyle(PlainListStyle())
+                    .environment(\.defaultMinListRowHeight, 0)
                 }
-                .clipped()
-                .frame(maxWidth: 500)
-                .scrollContentBackground(.hidden)
-                .listStyle(PlainListStyle())
-                .environment(\.defaultMinListRowHeight, 0)
 
-                if bottomAreaShown {
-                    HorizontalDivider()
-                        .padding(vertical: 0, horizontal: 12)
-                        .padding(.top, 2)
+                HorizontalDivider()
+                    .padding(vertical: 0, horizontal: 12)
+                    .padding(.top, 2)
 
-                    HStack(alignment: .bottom) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
-                                .font(.system(size: 12))
-                                .foregroundStyle(Color("textSecondary"))
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                HStack(alignment: .bottom) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color("textSecondary"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
-                            Text("Completed: \(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
-                                .font(.system(size: 12))
-                                .foregroundStyle(Color("textSecondary"))
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                        Text("Completed: \(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color("textSecondary"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
 
-                            let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
-                            Text("Monthly compression count: \(usedQuota)")
-                                .font(.system(size: 12))
-                                .foregroundStyle(Color("textSecondary"))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+                        let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
+                        Text("Monthly compression count: \(usedQuota)")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color("textSecondary"))
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 12)
+                    }
 
-                        Menu {
-                            Button {
-                                vm.retryAllFailedTask()
-                            } label: {
-                                Text("Retry all failed")
-                            }
-                            .disabled(vm.failedTaskCount == 0)
-
-                            Divider()
-
-                            Button {
-                                vm.clearAllTask()
-                            } label: {
-                                Text("Clear all")
-                            }
-                            .disabled(vm.tasks.count == 0)
-
-                            Button {
-                                vm.clearFinishedTask()
-                            } label: {
-                                Text("Clear all finished")
-                            }
-                            .disabled(vm.tasks.count == 0)
-
-                            Divider()
-
-                            Button {
-                                showRestoreAllConfirmAlert = true
-                            } label: {
-                                Text("Restore all completed")
-                            }
-                            .disabled(vm.completedTaskCount == 0)
+                    Menu {
+                        Button {
+                            vm.retryAllFailedTask()
                         } label: {
-                            Image(systemName: "ellipsis.circle.fill")
-                                .font(.system(size: 12, weight: .medium))
-                                .frame(width: 20, height: 20)
+                            Text("Retry all failed")
                         }
-                        .menuStyle(.borderlessButton)
-                        .menuIndicator(.hidden)
-                        .frame(width: 20, height: 20)
-                        .tint(Color("textSecondary"))
-                    }.padding(EdgeInsets(top: 8, leading: 12, bottom: 12, trailing: 12))
-                        .frame(maxWidth: 500)
-                }
+                        .disabled(vm.failedTaskCount == 0)
+
+                        Divider()
+
+                        Button {
+                            vm.clearAllTask()
+                        } label: {
+                            Text("Clear all")
+                        }
+                        .disabled(vm.tasks.count == 0)
+
+                        Button {
+                            vm.clearFinishedTask()
+                        } label: {
+                            Text("Clear all finished")
+                        }
+                        .disabled(vm.tasks.count == 0)
+
+                        Divider()
+
+                        Button {
+                            showRestoreAllConfirmAlert = true
+                        } label: {
+                            Text("Restore all completed")
+                        }
+                        .disabled(vm.completedTaskCount == 0)
+                    } label: {
+                        Image(systemName: "ellipsis.circle.fill")
+                            .font(.system(size: 12, weight: .medium))
+                            .frame(width: 20, height: 20)
+                    }
+                    .menuStyle(.borderlessButton)
+                    .menuIndicator(.hidden)
+                    .frame(width: 20, height: 20)
+                    .tint(Color("textSecondary"))
+                }.padding(EdgeInsets(top: 8, leading: 12, bottom: 12, trailing: 12))
             }
         }
         .ignoresSafeArea()
@@ -124,17 +121,6 @@ struct MainContentView: View {
             if !newValue.isEmpty {
                 dropResult = []
                 vm.createTasks(imageURLs: newValue)
-            }
-        }
-        .onChange(of: vm.tasks.count) { newValue in
-            if !bottomAreaShown && newValue > 0 {
-                withAnimation {
-                    bottomAreaShown = true
-                }
-            } else if bottomAreaShown && newValue == 0 {
-                withAnimation {
-                    bottomAreaShown = false
-                }
             }
         }
         .alert("Would you like to restore the image?",

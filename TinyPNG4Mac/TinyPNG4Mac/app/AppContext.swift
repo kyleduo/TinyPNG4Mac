@@ -10,10 +10,8 @@ import SwiftUI
 class AppContext: ObservableObject {
     static let shared = AppContext()
 
-    let minSize = CGSize(width: 360, height: 360)
+    let minSize = CGSize(width: 360, height: 440)
     let maxSize = CGSize(width: 640, height: 640)
-
-    @Published var windowTitleBarHeight: CGFloat = 28
 
     var appConfig = AppConfig()
     var isDebug: Bool {
@@ -22,15 +20,5 @@ class AppContext: ObservableObject {
         #else
             false
         #endif
-    }
-
-    func updateTitleBarHeight(window: NSWindow) {
-        windowTitleBarHeight = getTitleBarHeight(of: window)
-    }
-
-    private func getTitleBarHeight(of window: NSWindow) -> CGFloat {
-        let fullHeight = window.frame.height
-        let contentHeight = window.contentLayoutRect.height
-        return fullHeight - contentHeight
     }
 }

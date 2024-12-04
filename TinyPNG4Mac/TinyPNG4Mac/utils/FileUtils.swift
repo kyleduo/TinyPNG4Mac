@@ -146,32 +146,31 @@ struct FileUtils {
     }
 
     /// Find all the valid image files recursively
-    static func findImageFiles(urls: [URL]) -> [URL] {
-        var imageFiles: [URL] = []
+    static func findImageFiles(urls: [URL]) -> [URL: URL] {
+        var imageFiles: [URL: URL] = [:]
+        findImageFiles(urls: urls, originUrl: nil, result: &imageFiles)
+        return imageFiles
+    }
+
+    private static func findImageFiles(urls: [URL], originUrl: URL?, result: inout [URL: URL]) {
         let validExtensions = ["jpeg", "jpg", "png", "webp"]
 
         for url in urls {
             if url.hasDirectoryPath {
-                if let folderFiles = fetchFilesRecursively(from: url) {
-                    for fileURL in folderFiles {
-                        if isValidImageFile(fileURL, withExtensions: validExtensions) {
-                            if imageFiles.firstIndex(where: { item in item.isSameFilePath(as: fileURL) }) == nil {
-                                imageFiles.append(fileURL)
-                            }
-                        }
-                    }
+                if let folderFiles = listAllFiles(from: url) {
+                    findImageFiles(urls: folderFiles, originUrl: originUrl ?? url, result: &result)
                 }
             } else if isValidImageFile(url, withExtensions: validExtensions) {
-                if imageFiles.firstIndex(where: { item in item.isSameFilePath(as: url) }) == nil {
-                    imageFiles.append(url)
+                if !result.contains(where: { key, _ in
+                    key.isSameFilePath(as: url)
+                }) {
+                    result[url] = originUrl ?? url
                 }
             }
         }
-
-        return imageFiles
     }
 
-    private static func fetchFilesRecursively(from folderURL: URL) -> [URL]? {
+    private static func listAllFiles(from folderURL: URL) -> [URL]? {
         let options: FileManager.DirectoryEnumerationOptions = [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
 
         if let enumerator = fileManager.enumerator(at: folderURL, includingPropertiesForKeys: nil, options: options) {
@@ -184,5 +183,24 @@ struct FileUtils {
     private static func isValidImageFile(_ url: URL, withExtensions validExtensions: [String]) -> Bool {
         let fileExtension = url.pathExtension.lowercased()
         return validExtensions.contains(fileExtension)
+    }
+
+    static func getRelocatedRelativePath(of file: URL, fromDir: URL, toDir: URL) -> URL? {
+        guard file.path.hasPrefix(fromDir.path) else {
+            return nil
+        }
+        let relativePath = file.path.replacingOccurrences(of: fromDir.path, with: "")
+        let newFileURL = toDir
+            .appendingPathComponent(fromDir.lastPathComponent)
+            .appendingPathComponent(relativePath)
+        return newFileURL
+    }
+
+    static func ensureDirectoryExist(file: URL) throws {
+        if file.hasDirectoryPath {
+            try fileManager.createDirectory(at: file, withIntermediateDirectories: true)
+        } else {
+            try fileManager.createDirectory(at: file.deletingLastPathComponent(), withIntermediateDirectories: true)
+        }
     }
 }

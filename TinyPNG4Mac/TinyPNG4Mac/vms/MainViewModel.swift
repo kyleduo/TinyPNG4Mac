@@ -40,7 +40,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
         tasks.count { $0.status == .failed }
     }
 
-    func createTasks(imageURLs: [URL]) {
+    func createTasks(imageURLs: [URL: URL]) {
         let config = AppContext.shared.appConfig
         if config.apiKey.isEmpty {
             DispatchQueue.main.async {
@@ -57,7 +57,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
         }
 
         Task {
-            for url in imageURLs {
+            for (url, inputUrl) in imageURLs {
                 let originUrl = url
 
                 let exist = tasks.contains(where: { task in
@@ -104,7 +104,9 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 if AppContext.shared.appConfig.isReplaceModeEnabled {
                     outputUrl = originUrl
                 } else if let outputFolderUrl = config.outputFolderUrl {
-                    outputUrl = outputFolderUrl.appendingPathComponent(originUrl.lastPathComponent)
+                    let relocatedUrl = FileUtils.getRelocatedRelativePath(of: originUrl, fromDir: inputUrl, toDir: outputFolderUrl)
+                    print(relocatedUrl ?? "")
+                    outputUrl = relocatedUrl ?? outputFolderUrl.appendingPathComponent(originUrl.lastPathComponent)
                 } else {
                     let task = TaskInfo(originUrl: originUrl)
                     task.updateError(error: TaskError.from(error: FileError.noOutput))

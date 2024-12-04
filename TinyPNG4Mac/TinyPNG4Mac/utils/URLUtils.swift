@@ -80,4 +80,8 @@ extension URL {
             try? FileUtils.setFilePermission(permissions, to: rawPath())
         }
     }
+
+    func ensureDirectoryExists() throws {
+        try FileUtils.ensureDirectoryExist(file: self)
+    }
 }

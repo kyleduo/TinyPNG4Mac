@@ -182,6 +182,8 @@ class TPClient {
 
                     let downloadedUrl: URL
                     if !downloadRequestBody.isEmpty {
+                        try targetUrl.ensureDirectoryExists()
+
                         guard let afDownloadURL = response.fileURL else {
                             throw FileError.notExists
                         }

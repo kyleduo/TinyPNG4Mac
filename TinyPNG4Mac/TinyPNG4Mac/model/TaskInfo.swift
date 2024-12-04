@@ -7,7 +7,7 @@
 import Foundation
 import SwiftUI
 
-/// 图片压缩任务
+/// Image compression task
 class TaskInfo: Identifiable {
     var id: String
     var originUrl: URL
@@ -19,7 +19,7 @@ class TaskInfo: Identifiable {
     var status: TaskStatus
     /// in byte
     var originSize: UInt64?
-    /// 压缩后的最终体积
+    /// Compressed image size
     /// in byte
     var finalSize: UInt64?
     var error: TaskError?

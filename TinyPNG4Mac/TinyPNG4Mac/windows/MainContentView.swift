@@ -10,7 +10,8 @@ import SwiftUI
 struct MainContentView: View {
     @EnvironmentObject var appContext: AppContext
     @ObservedObject var vm: MainViewModel
-    @State private var dropResult: [URL] = []
+    /// imageUrl : inputUrl
+    @State private var dropResult: [URL: URL] = [:]
     @State private var showAlert = false
     @State private var showOpenPanel = false
     @State private var showRestoreAllConfirmAlert = false
@@ -142,7 +143,7 @@ struct MainContentView: View {
         .ignoresSafeArea()
         .onChange(of: dropResult) { newValue in
             if !newValue.isEmpty {
-                dropResult = []
+                dropResult = [:]
                 vm.createTasks(imageURLs: newValue)
             }
         }

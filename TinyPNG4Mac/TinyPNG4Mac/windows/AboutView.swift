@@ -28,7 +28,7 @@ struct AboutView: View {
 
             Text("Made by [@kyleduo](https://github.com/kyleduo)  ❤︎  Open-sourced on [Github](https://github.com/kyleduo/TinyPNG4Mac)")
                 .font(.system(size: 12))
-                .foregroundStyle(Color("textSecondary"))
+                .foregroundStyle(Color("textSecondaryAbout"))
                 .padding(.bottom, 12)
         }
         .padding(24)
@@ -38,7 +38,7 @@ struct AboutView: View {
     func paragraph(text: LocalizedStringKey) -> some View {
         Text(text)
             .font(.system(size: 13))
-            .foregroundStyle(Color("textBody"))
+            .foregroundStyle(Color("textBodyAbout"))
             .multilineTextAlignment(.center)
     }
 }

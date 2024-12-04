@@ -10,6 +10,8 @@ import SwiftUI
 
 @main
 struct TinyPNG4MacApp: App {
+    @Environment(\.openWindow) private var openWindow
+
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelgate
     @StateObject var appContext = AppContext.shared
     @StateObject var vm: MainViewModel = MainViewModel()
@@ -40,6 +42,22 @@ struct TinyPNG4MacApp: App {
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowResizability(.contentSize)
         .defaultSize(appContext.minSize)
+        .commands {
+            CommandGroup(replacing: CommandGroupPlacement.appInfo) {
+                Button(action: {
+                    // Open the "about" window
+                    openWindow(id: "about")
+                }, label: {
+                    Text("About...")
+                })
+            }
+        }
+        
+        // Note the id "about" here
+        Window("About TinyPNG for macOS", id: "about") {
+            AboutView()
+        }
+        .windowResizability(.contentMinSize)
 
         Settings {
             SettingsView()

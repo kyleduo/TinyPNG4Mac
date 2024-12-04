@@ -14,13 +14,16 @@ class AppConfig {
     static let key_preserveLocation = "preserveLocation"
     static let key_concurrentTaskCount = "concurrentTaskCount"
     static let key_replaceMode = "replaceMode"
-    
+
     private static let key_outputFilepathBookmark = "outputFilepathBookmark"
 
     private(set) var apiKey: String = ""
     private(set) var concurrentTaskCount: Int = 3
     private(set) var isReplaceModeEnabled: Bool = false
     private(set) var outputFolderUrl: URL?
+    private(set) var preserveCopyright: Bool = false
+    private(set) var preserveCreation: Bool = false
+    private(set) var preserveLocation: Bool = false
 
     init() {
         update()
@@ -43,7 +46,7 @@ class AppConfig {
             var isStale = false
             do {
                 let testURL = try URL(resolvingBookmarkData: outputFolderBookmark, options: .withSecurityScope, relativeTo: nil, bookmarkDataIsStale: &isStale)
-                self.outputFolderUrl = testURL
+                outputFolderUrl = testURL
                 if isStale {
                     print("Bookmark is stale, consider updating it.")
                 }
@@ -55,21 +58,29 @@ class AppConfig {
                 print("Failed to restore folder access: \(error)")
             }
         }
+
+        preserveCopyright = ud.bool(forKey: AppConfig.key_preserveCopyright)
+        preserveCreation = ud.bool(forKey: AppConfig.key_preserveCreation)
+        preserveLocation = ud.bool(forKey: AppConfig.key_preserveLocation)
     }
 
     func saveBookmark(for folderURL: URL) throws {
         let bookmark = try folderURL.bookmarkData(options: .withSecurityScope, includingResourceValuesForKeys: nil, relativeTo: nil)
         UserDefaults.standard.set(bookmark, forKey: AppConfig.key_outputFilepathBookmark)
     }
-    
+
     func clearOutputFolder() {
         if !AppContext.shared.isDebug {
             return
         }
         UserDefaults.standard.removeObject(forKey: AppConfig.key_outputFilepathBookmark)
-        if let outputFolderUrl = self.outputFolderUrl {
+        if let outputFolderUrl = outputFolderUrl {
             outputFolderUrl.stopAccessingSecurityScopedResource()
             self.outputFolderUrl = nil
         }
+    }
+
+    func needPreserveMetadata() -> Bool {
+        return preserveCopyright || preserveCreation || preserveLocation
     }
 }

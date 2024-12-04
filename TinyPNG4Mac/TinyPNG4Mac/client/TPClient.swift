@@ -15,11 +15,11 @@ class TPClient {
     var apiKey: String {
         ProcessInfo.processInfo.environment["API_KEY"] ?? AppContext.shared.appConfig.apiKey
     }
-    
+
     var maxConcurrencyCount: Int {
         AppContext.shared.appConfig.concurrentTaskCount
     }
-        
+
     var mockEnabled = ProcessInfo.processInfo.environment["MOCK_ENABLED"] != nil
 
     var runningTasks = 0
@@ -39,14 +39,14 @@ class TPClient {
         }
         checkExecution()
     }
-    
+
     func stopAllTask() {
         lock.withLock {
             currentRequests.forEach { request in
                 request.cancel()
             }
             currentRequests.removeAll()
-            
+
             taskQueue.removeAll()
             runningTasks = 0
         }
@@ -148,12 +148,27 @@ class TPClient {
             (downloadUrl, [.removePreviousFile])
         }
 
-        let request = AF.download(output.url, to: destination)
-            .downloadProgress { progress in
-                print(progress)
-                self.updateStatus(.downloading, progress: progress.fractionCompleted, of: task)
-            }
-            .validate()
+        let downloadRequestBody = getDownloadRequestBody()
+        let request: DownloadRequest
+
+        if !downloadRequestBody.isEmpty {
+            var req = URLRequest(url: URL(string: output.url)!)
+            req.httpMethod = HTTPMethod.post.rawValue
+            req.addValue(getAuthorization(), forHTTPHeaderField: "Authorization")
+            req.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            req.httpBody = try? JSONSerialization.data(withJSONObject: downloadRequestBody, options: [])
+
+            request = AF.download(req)
+        } else {
+            request = AF.download(output.url, to: destination)
+        }
+
+        request.downloadProgress { progress in
+            print(progress)
+            self.updateStatus(.downloading, progress: progress.fractionCompleted, of: task)
+        }
+        request.validate()
+
         currentRequests.append(request)
 
         request.response { response in
@@ -164,8 +179,18 @@ class TPClient {
                     guard let targetUrl = task.outputUrl else {
                         throw FileError.noOutput
                     }
-                    
-                    try downloadUrl.moveFileTo(targetUrl)
+
+                    let downloadedUrl: URL
+                    if !downloadRequestBody.isEmpty {
+                        guard let afDownloadURL = response.fileURL else {
+                            throw FileError.notExists
+                        }
+                        downloadedUrl = afDownloadURL
+                    } else {
+                        downloadedUrl = downloadUrl
+                    }
+
+                    try downloadedUrl.moveFileTo(targetUrl)
                     if let filePermission = task.filePermission {
                         targetUrl.setPosixPermissions(filePermission)
                     }
@@ -179,22 +204,51 @@ class TPClient {
         }
     }
 
+    private func getDownloadRequestBody() -> [String: [String]] {
+        let config = AppContext.shared.appConfig
+        if !config.needPreserveMetadata() {
+            return [:]
+        }
+
+        var preserveList: [String] = []
+        if config.preserveCopyright {
+            preserveList.append("copyright")
+        }
+        if config.preserveCreation {
+            preserveList.append("creation")
+        }
+        if config.preserveLocation {
+            preserveList.append("location")
+        }
+        if preserveList.isEmpty {
+            return [:]
+        }
+        return [
+            "preserve": preserveList,
+        ]
+    }
+
     private func requestHeaders() -> HTTPHeaders {
-        let auth = "api:\(apiKey)"
-        let authData = auth.data(using: String.Encoding.utf8)?.base64EncodedString(options: NSData.Base64EncodingOptions.lineLength64Characters)
-        let authorizationHeader = "Basic " + authData!
+        let authorization = getAuthorization()
 
         let headers: HTTPHeaders = [
-            .authorization(authorizationHeader),
+            .authorization(authorization),
             .accept("application/json"),
         ]
         return headers
     }
 
+    private func getAuthorization() -> String {
+        let auth = "api:\(apiKey)"
+        let authData = auth.data(using: String.Encoding.utf8)?.base64EncodedString(options: NSData.Base64EncodingOptions.lineLength64Characters)
+        let authorization = "Basic " + authData!
+        return authorization
+    }
+
     private func completeTask(_ task: TaskInfo, fileSizeFromResponse: UInt64) {
         let finalFileSize: UInt64
         do {
-            finalFileSize = try task.originUrl.sizeOfFile()
+            finalFileSize = try task.outputUrl!.sizeOfFile()
         } catch {
             finalFileSize = fileSizeFromResponse
         }

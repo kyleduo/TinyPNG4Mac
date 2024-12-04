@@ -39,6 +39,7 @@ struct TinyPNG4MacApp: App {
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowResizability(.contentSize)
+        .defaultSize(appContext.minSize)
 
         Settings {
             SettingsView()

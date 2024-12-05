@@ -10,9 +10,9 @@ TinyPNG for macOS is a 3rd-party client of [TinyPNG](https://tinypng.com). With 
 
 
 
-### Release Note
+### 2.0.0 Release Note
 
-2.0 version brings a batch of features:
+> Version 2.0.0 supports macOS 13 Ventura and later. For lower version systems, please use the previous version.
 
 - New designed task list with more task info, such as file sizes, api usage.
 - New overwrite mode and image restoration.

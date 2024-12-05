@@ -27,8 +27,8 @@ TinyPNG for macOS 是 [TinyPNG](https://tinypng.com) 的第三方客户端，使
 
 ### 使用方法
 
-1. 在 [这里](https://tinypng.com/developers) 使用您的电子邮件注册一个 API 密钥。
-2. 将密钥粘贴到 `设置` 窗口中。（如果需要，您可以随时修改）
+1. 在 [这里](https://tinypng.com/developers) 注册 **API key**。
+2. 将 API key 粘贴到 `设置` 窗口中。（如果需要，您可以随时修改）
 3. 将图片或包含图片的文件夹拖拽到窗口中。
 
 

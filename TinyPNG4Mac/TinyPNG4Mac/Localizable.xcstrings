@@ -14,12 +14,12 @@
         }
       }
     },
-    "\"Tiny Image\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com)." : {
+    "\"Slim Image\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com)." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"Tiny Image” (TinyPNG4Mac) 是 [TinyPNG](https://tinypng.com) 的第三方客户端。"
+            "value" : "“Slim Image” (TinyPNG4Mac) 是 [TinyPNG](https://tinypng.com) 的第三方客户端。"
           }
         }
       }
@@ -27,8 +27,15 @@
     "%lld" : {
       "shouldTranslate" : false
     },
-    "About Tiny Image" : {
-
+    "About Slim Image" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关于 Slim Image"
+          }
+        }
+      }
     },
     "About..." : {
       "localizations" : {
@@ -519,6 +526,9 @@
         }
       }
     },
+    "Slim Image" : {
+      "shouldTranslate" : false
+    },
     "Supports WebP, PNG, and JPEG images." : {
       "localizations" : {
         "zh-Hans" : {
@@ -568,9 +578,6 @@
           }
         }
       }
-    },
-    "Tiny Image" : {
-      "shouldTranslate" : false
     },
     "TinyPNG" : {
       "shouldTranslate" : false

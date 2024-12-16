@@ -23,7 +23,7 @@ struct MainContentView: View {
                 .background(Color("mainViewBackground"))
 
             VStack(spacing: 0) {
-                Text("Tiny Image")
+                Text("Slim Image")
                     .font(.system(size: 13, weight: .medium))
                     .foregroundStyle(Color("textMainTitle"))
                     .frame(height: 28)

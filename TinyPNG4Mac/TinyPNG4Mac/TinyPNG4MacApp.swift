@@ -54,7 +54,7 @@ struct TinyPNG4MacApp: App {
         }
         
         // Note the id "about" here
-        Window("About Tiny Image", id: "about") {
+        Window("About Slim Image", id: "about") {
             AboutView()
         }
         .windowResizability(.contentMinSize)

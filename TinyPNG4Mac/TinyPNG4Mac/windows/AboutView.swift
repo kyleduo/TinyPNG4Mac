@@ -16,7 +16,7 @@ struct AboutView: View {
                     .scaledToFit()
                     .frame(width: 80, height: 80)
 
-                paragraph(text: "\"Tiny Image\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com).")
+                paragraph(text: "\"Slim Image\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com).")
                     .padding(.top, 16)
 
                 paragraph(text: "TinyPNG holds the final right of interpretation regarding the image compression functionality and results.")

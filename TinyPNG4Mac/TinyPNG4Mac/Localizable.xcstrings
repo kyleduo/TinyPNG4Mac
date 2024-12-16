@@ -14,12 +14,12 @@
         }
       }
     },
-    "\"TinyPNG for macOS\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com)." : {
+    "\"Tiny Image\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com)." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "\"TinyPNG for macOS\" (TinyPNG4Mac) 是 [TinyPNG](https://tinypng.com) 的第三方客户端。"
+            "value" : "\"Tiny Image” (TinyPNG4Mac) 是 [TinyPNG](https://tinypng.com) 的第三方客户端。"
           }
         }
       }
@@ -27,15 +27,8 @@
     "%lld" : {
       "shouldTranslate" : false
     },
-    "About TinyPNG for macOS" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "关于 TinyPNG for macOS"
-          }
-        }
-      }
+    "About Tiny Image" : {
+
     },
     "About..." : {
       "localizations" : {
@@ -576,10 +569,10 @@
         }
       }
     },
-    "TinyPNG" : {
+    "Tiny Image" : {
       "shouldTranslate" : false
     },
-    "TinyPNG for macOS" : {
+    "TinyPNG" : {
       "shouldTranslate" : false
     },
     "TinyPNG holds the final right of interpretation regarding the image compression functionality and results." : {

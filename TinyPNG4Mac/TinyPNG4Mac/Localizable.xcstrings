@@ -539,6 +539,16 @@
         }
       }
     },
+    "Task List" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "任务列表"
+          }
+        }
+      }
+    },
     "Tasks" : {
       "localizations" : {
         "zh-Hans" : {

@@ -20,7 +20,7 @@ struct TinyPNG4MacApp: App {
     @State var lastTaskCount = 0
 
     var body: some Scene {
-        Window("", id: "") {
+        Window("Task List", id: "main") {
             MainContentView(vm: vm)
                 .frame(
                     minWidth: appContext.minSize.width,

@@ -1,4 +1,7 @@
-# TinyPNG for macOS
+# Tiny Image
+
+> 出于知识产权角度考虑，应用名修改为 Tiny Image，因为原名包含 TinyPNG 和 macOS。
+
 ![preview](./preview/banner.png)
 
 

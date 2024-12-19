@@ -1,4 +1,6 @@
-# TinyPNG for macOS
+# Tiny Image
+
+>  The App's name is renamed to Image Image for property sake, since previous name contains TinyPNG and macOS.
 
 ![preview](./preview/banner.png)
 

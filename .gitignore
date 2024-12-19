@@ -65,3 +65,8 @@ fastlane/screenshots
 fastlane/test_output
 
 .DS_Store
+
+
+# dmg
+dmg_source/
+*.dmg

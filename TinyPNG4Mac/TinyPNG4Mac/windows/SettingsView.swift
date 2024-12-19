@@ -14,7 +14,7 @@ struct SettingsView: View {
     @AppStorage(AppConfig.key_preserveCreation) var preserveCreation: Bool = false
     @AppStorage(AppConfig.key_preserveLocation) var preserveLocation: Bool = false
 
-    @AppStorage(AppConfig.key_concurrentTaskCount) var concurrentCount: Int = 1
+    @AppStorage(AppConfig.key_concurrentTaskCount) var concurrentCount: Int = AppContext.shared.appConfig.concurrentTaskCount
     let concurrentCountOptions = Array(1 ... 6)
 
     @AppStorage(AppConfig.key_replaceMode) var replaceMode: Bool = false

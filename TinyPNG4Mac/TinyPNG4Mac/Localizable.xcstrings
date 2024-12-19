@@ -14,12 +14,12 @@
         }
       }
     },
-    "\"Slim Image\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com)." : {
+    "\"Tiny Image\" (TinyPNG4Mac) is a 3rd-party client for [TinyPNG](https://tinypng.com)." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“Slim Image” (TinyPNG4Mac) 是 [TinyPNG](https://tinypng.com) 的第三方客户端。"
+            "value" : "“Tiny Image” (TinyPNG4Mac) 是 [TinyPNG](https://tinypng.com) 的第三方客户端。"
           }
         }
       }
@@ -27,12 +27,12 @@
     "%lld" : {
       "shouldTranslate" : false
     },
-    "About Slim Image" : {
+    "About Tiny Image" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "关于 Slim Image"
+            "value" : "关于 Tiny Image"
           }
         }
       }
@@ -526,25 +526,12 @@
         }
       }
     },
-    "Slim Image" : {
-      "shouldTranslate" : false
-    },
     "Supports WebP, PNG, and JPEG images." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "支持 WebP, PNG 和 JPEG 图片"
-          }
-        }
-      }
-    },
-    "Task List" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "任务列表"
           }
         }
       }
@@ -585,6 +572,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "有正在进行中的任务，退出应用会取消所有任务。"
+          }
+        }
+      }
+    },
+    "Tiny Image" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tiny Image"
           }
         }
       }

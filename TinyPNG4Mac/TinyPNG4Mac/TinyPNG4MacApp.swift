@@ -20,7 +20,7 @@ struct TinyPNG4MacApp: App {
     @State var lastTaskCount = 0
 
     var body: some Scene {
-        Window("Task List", id: "main") {
+        Window("Tiny Image", id: "main") {
             MainContentView(vm: vm)
                 .frame(
                     minWidth: appContext.minSize.width,
@@ -54,7 +54,7 @@ struct TinyPNG4MacApp: App {
         }
         
         // Note the id "about" here
-        Window("About Slim Image", id: "about") {
+        Window("About Tiny Image", id: "about") {
             AboutView()
         }
         .windowResizability(.contentMinSize)

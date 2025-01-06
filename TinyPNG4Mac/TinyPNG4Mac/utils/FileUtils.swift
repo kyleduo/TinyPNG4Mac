@@ -186,10 +186,14 @@ struct FileUtils {
     }
 
     static func getRelocatedRelativePath(of file: URL, fromDir: URL, toDir: URL) -> URL? {
+        // the file is input as a single file, return
+        if file.isSameFilePath(as: fromDir) {
+            return nil
+        }
         guard file.path.hasPrefix(fromDir.path) else {
             return nil
         }
-        let relativePath = file.path.replacingOccurrences(of: fromDir.path, with: "")
+        let relativePath = file.rawPath().replacingOccurrences(of: fromDir.path, with: "")
         let newFileURL = toDir
             .appendingPathComponent(fromDir.lastPathComponent)
             .appendingPathComponent(relativePath)

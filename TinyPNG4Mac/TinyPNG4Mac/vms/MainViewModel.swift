@@ -105,7 +105,6 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     outputUrl = originUrl
                 } else if let outputFolderUrl = config.outputFolderUrl {
                     let relocatedUrl = FileUtils.getRelocatedRelativePath(of: originUrl, fromDir: inputUrl, toDir: outputFolderUrl)
-                    print(relocatedUrl ?? "")
                     outputUrl = relocatedUrl ?? outputFolderUrl.appendingPathComponent(originUrl.lastPathComponent)
                 } else {
                     let task = TaskInfo(originUrl: originUrl)

@@ -81,6 +81,9 @@ struct FileUtils {
     }
 
     private static func getCachesDirectory(_ key: String? = nil) -> URL {
+//        // If disable Sandbox mode, open these line of codes to make the cache dir consistent, otherwise "FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)" will return the global root cache dir: ~/Library/Caches
+//        let userHomeDir = FileManager.default.homeDirectoryForCurrentUser
+//        let cacheRootDir = URL(filePath: userHomeDir.rawPath() + "Library/Containers/\(Bundle.main.bundleIdentifier)/Data/Library/Caches")
         let cacheRootDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
         if key != nil {
             return cacheRootDir.appendingPathComponent(key!)

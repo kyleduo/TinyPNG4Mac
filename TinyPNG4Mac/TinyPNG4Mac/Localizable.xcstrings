@@ -316,6 +316,16 @@
         }
       }
     },
+    "No write permission of output folder %@, please re-select the output directory." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缺少输出目录 “%@” 的权限，请重新选择输出目录。"
+          }
+        }
+      }
+    },
     "OK" : {
       "localizations" : {
         "zh-Hans" : {
@@ -362,6 +372,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开输出目录"
+          }
+        }
+      }
+    },
+    "Output directory not exists, please re-select the output directory." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输出目录不存在，请重新选择输出目录。"
           }
         }
       }

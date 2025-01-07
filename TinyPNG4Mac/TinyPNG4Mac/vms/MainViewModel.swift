@@ -41,18 +41,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
     }
 
     func createTasks(imageURLs: [URL: URL]) {
-        let config = AppContext.shared.appConfig
-        if config.apiKey.isEmpty {
-            DispatchQueue.main.async {
-                self.settingsNotReadyMessage = String(localized: "Please set the API key first.")
-            }
-            return
-        }
-
-        if !config.isReplaceModeEnabled && config.outputFolderUrl == nil {
-            DispatchQueue.main.async {
-                self.settingsNotReadyMessage = String(localized: "\"Overwrite Mode\" is disabled. Please select the output directory first.")
-            }
+        if !validateSettingsBeforeStartTask() {
             return
         }
 
@@ -103,7 +92,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 let outputUrl: URL
                 if AppContext.shared.appConfig.isReplaceModeEnabled {
                     outputUrl = originUrl
-                } else if let outputFolderUrl = config.outputFolderUrl {
+                } else if let outputFolderUrl = AppContext.shared.appConfig.outputFolderUrl {
                     let relocatedUrl = FileUtils.getRelocatedRelativePath(of: originUrl, fromDir: inputUrl, toDir: outputFolderUrl)
                     outputUrl = relocatedUrl ?? outputFolderUrl.appendingPathComponent(originUrl.lastPathComponent)
                 } else {
@@ -190,6 +179,49 @@ class MainViewModel: ObservableObject, TPClientCallback {
 
     func showRunnningTasksAlert() {
         showQuitWithRunningTasksAlert = true
+    }
+
+    /// Validate settings before create tasks.
+    /// - Returns true if the settings is valid
+    private func validateSettingsBeforeStartTask() -> Bool {
+        let config = AppContext.shared.appConfig
+        if config.apiKey.isEmpty {
+            DispatchQueue.main.async {
+                self.settingsNotReadyMessage = String(localized: "Please set the API key first.")
+            }
+            return false
+        }
+
+        if !config.isReplaceModeEnabled {
+            if let outputFolderUrl = config.outputFolderUrl {
+                if !outputFolderUrl.fileExists() {
+                    do {
+                        try outputFolderUrl.ensureDirectoryExists()
+                    } catch {
+                        // ignore eroor
+                        DispatchQueue.main.async {
+                            self.settingsNotReadyMessage = String(localized: "Output directory not exists, please re-select the output directory.")
+                        }
+                        return false
+                    }
+                    return true
+                }
+
+                if !FileUtils.hasReadAndWritePermission(path: outputFolderUrl.rawPath()) {
+                    DispatchQueue.main.async {
+                        self.settingsNotReadyMessage = String(localized: "No write permission of output folder \(outputFolderUrl.rawPath()), please re-select the output directory.")
+                    }
+                    return false
+                }
+            } else {
+                DispatchQueue.main.async {
+                    self.settingsNotReadyMessage = String(localized: "\"Overwrite Mode\" is disabled. Please select the output directory first.")
+                }
+                return false
+            }
+        }
+
+        return true
     }
 
     private func doRestore(task: TaskInfo) {

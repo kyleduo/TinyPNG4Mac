@@ -70,9 +70,6 @@ class AppConfig {
     }
 
     func clearOutputFolder() {
-        if !AppContext.shared.isDebug {
-            return
-        }
         UserDefaults.standard.removeObject(forKey: AppConfig.key_outputFilepathBookmark)
         if let outputFolderUrl = outputFolderUrl {
             outputFolderUrl.stopAccessingSecurityScopedResource()

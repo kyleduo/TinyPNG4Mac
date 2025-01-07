@@ -76,7 +76,7 @@ struct SettingsView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
                             Button {
-                                showOpenPanel()
+                                showSelectFolderPanel()
                             } label: {
                                 Text("Select...")
                             }
@@ -110,6 +110,9 @@ struct SettingsView: View {
             }
         }
         .onDisappear {
+            if outputFilepath.isEmpty {
+                AppContext.shared.appConfig.clearOutputFolder()
+            }
             AppContext.shared.appConfig.update()
         }
         .alert("Failed to save output directory",
@@ -123,7 +126,7 @@ struct SettingsView: View {
             Button("OK") {
                 DispatchQueue.main.async {
                     disableReplaceModeAfterSelect = false
-                    showOpenPanel()
+                    showSelectFolderPanel()
                 }
             }
             Button("Cancel", role: .cancel) {}
@@ -132,16 +135,17 @@ struct SettingsView: View {
         }
     }
 
-    private func showOpenPanel() {
-        let openPanel = NSOpenPanel()
-        openPanel.canChooseFiles = false
-        openPanel.canChooseDirectories = true
-        openPanel.allowsMultipleSelection = false
-        openPanel.canCreateDirectories = true
-        openPanel.prompt = "Select"
+    private func showSelectFolderPanel() {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.canCreateDirectories = true
+        panel.directoryURL = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
+        panel.prompt = "Select"
 
-        openPanel.begin { result in
-            if result == .OK, let url = openPanel.url {
+        panel.begin { result in
+            if result == .OK, let url = panel.url {
                 print("User granted access to: \(url.rawPath())")
 
                 do {

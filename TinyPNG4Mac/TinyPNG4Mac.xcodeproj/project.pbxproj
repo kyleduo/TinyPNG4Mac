@@ -14,9 +14,22 @@
 		6CCB4BA52CE7AAB100DAB8A2 /* Tiny Image.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Tiny Image.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6C5DDA742D2D96E10096E8C0 /* Exceptions for "TinyPNG4Mac" folder in "Tiny Image" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6CCB4BA42CE7AAB100DAB8A2 /* Tiny Image */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		6CCB4BA72CE7AAB100DAB8A2 /* TinyPNG4Mac */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6C5DDA742D2D96E10096E8C0 /* Exceptions for "TinyPNG4Mac" folder in "Tiny Image" target */,
+			);
 			path = TinyPNG4Mac;
 			sourceTree = "<group>";
 		};

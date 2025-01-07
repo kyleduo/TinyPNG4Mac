@@ -198,7 +198,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     do {
                         try outputFolderUrl.ensureDirectoryExists()
                     } catch {
-                        // ignore eroor
+                        // ignore error
                         DispatchQueue.main.async {
                             self.settingsNotReadyMessage = String(localized: "Output directory not exists, please re-select the output directory.")
                         }

@@ -347,6 +347,7 @@
       }
     },
     "Open Origin Folder" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -367,6 +368,7 @@
       }
     },
     "Open Output Folder" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -522,6 +524,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重试任务"
+          }
+        }
+      }
+    },
+    "Reveal Compressed Image in Finder" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开压缩图片目录"
+          }
+        }
+      }
+    },
+    "Reveal Origin Image in Finder" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开已压缩图片目录"
           }
         }
       }

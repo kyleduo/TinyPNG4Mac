@@ -9,9 +9,9 @@ import AppKit
 import SwiftUI
 
 struct TaskRowView: View {
-    private let rowHeight: CGFloat = 70
+    private let rowHeight: CGFloat = 74
     private let rowPadding: CGFloat = 8
-    private let imageSize: CGFloat = 54
+    private let imageSize: CGFloat = 60
 
     @ObservedObject var vm: MainViewModel
     @Binding var task: TaskInfo
@@ -37,19 +37,75 @@ struct TaskRowView: View {
                 VStack {
                     HStack(alignment: .top, spacing: 6) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(task.originUrl.shortPath())
-                                .font(.system(size: 12, weight: .medium))
-                                .foregroundStyle(Color("textBody"))
-                                .underline(titleUnderline)
-                                .lineLimit(1)
-                                .truncationMode(.head)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .onTapGesture {
-                                    NSWorkspace.shared.open(task.originUrl)
+                            HStack {
+                                Text(task.originUrl.shortPath())
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundStyle(Color("textBody"))
+                                    .underline(titleUnderline)
+                                    .lineLimit(1)
+                                    .truncationMode(.head)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .onTapGesture {
+                                        NSWorkspace.shared.open(task.originUrl)
+                                    }
+                                    .onHover { hover in
+                                        titleUnderline = hover
+                                    }
+                                
+                                Menu {
+                                    Button {
+                                        NSWorkspace.shared.open(task.originUrl)
+                                    } label: {
+                                        Text("Open Origin Image")
+                                    }
+
+                                    Button {
+                                        NSWorkspace.shared.open(task.originUrl.deletingLastPathComponent())
+                                    } label: {
+                                        Text("Reveal Origin Image in Finder")
+                                    }
+
+                                    Divider()
+
+                                    if task.status == .restored {
+                                        Button {
+                                            vm.retry(task)
+                                        } label: {
+                                            Text("Compress again")
+                                        }
+                                    }
+
+                                    Button {
+                                        NSWorkspace.shared.open(task.outputUrl!)
+                                    } label: {
+                                        Text("Open Compressed Image")
+                                    }
+                                    .disabled(task.status != .completed)
+
+                                    Button {
+                                        NSWorkspace.shared.open(task.outputUrl!.deletingLastPathComponent())
+                                    } label: {
+                                        Text("Reveal Compressed Image in Finder")
+                                    }
+
+                                    Divider()
+
+                                    Button {
+                                        vm.restore(task)
+                                    } label: {
+                                        Text("Restore Origin Image")
+                                    }
+                                    .disabled(task.status != .completed)
+                                } label: {
+                                    Image(systemName: "ellipsis.circle.fill")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .frame(width: 20, height: 20)
                                 }
-                                .onHover { hover in
-                                    titleUnderline = hover
-                                }
+                                .menuStyle(.borderlessButton)
+                                .menuIndicator(.hidden)
+                                .frame(width: 20, height: 20)
+                                .tint(Color("textSecondary"))
+                            }
 
                             HStack(alignment: .center, spacing: 4) {
                                 Text(task.originSize?.formatBytes() ?? "NaN")
@@ -73,12 +129,26 @@ struct TaskRowView: View {
                         .frame(minHeight: 0)
 
                     HStack(spacing: 4) {
+                        if task.status == .completed {
+                            Button {
+                                NSWorkspace.shared.open(task.outputUrl!.deletingLastPathComponent())
+                            } label: {
+                                Image(systemName: "folder.circle.fill")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .frame(width: 20, height: 20)
+                                    .foregroundColor(Color("textSecondary"))
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .help("Reveal Compressed Image in Finder")
+                        }
+                        
                         Spacer()
 
                         Text(task.statusText())
                             .font(.system(size: 12, weight: statusTextWeight(task.status)))
                             .foregroundStyle(statusTextColor(task.status))
                     }
+                    .padding(.top, 4)
                 }
             }
             .padding(rowPadding)
@@ -129,51 +199,6 @@ struct TaskRowView: View {
         .padding(.trailing, 4)
         .padding(.top, 4)
         .padding(.bottom, last ? 12 : 6)
-        .contextMenu {
-            Button {
-                NSWorkspace.shared.open(task.originUrl)
-            } label: {
-                Text("Open Origin Image")
-            }
-
-            Button {
-                NSWorkspace.shared.open(task.originUrl.deletingLastPathComponent())
-            } label: {
-                Text("Open Origin Folder")
-            }
-
-            Divider()
-
-            if task.status == .restored {
-                Button {
-                    vm.retry(task)
-                } label: {
-                    Text("Compress again")
-                }
-            }
-
-            Button {
-                NSWorkspace.shared.open(task.outputUrl!)
-            } label: {
-                Text("Open Compressed Image")
-            }
-            .disabled(task.status != .completed)
-
-            Button {
-                NSWorkspace.shared.open(task.outputUrl!.deletingLastPathComponent())
-            } label: {
-                Text("Open Output Folder")
-            }
-
-            Divider()
-
-            Button {
-                vm.restore(task)
-            } label: {
-                Text("Restore Origin Image")
-            }
-            .disabled(task.status != .completed)
-        }
     }
 
     func statusTextColor(_ status: TaskStatus) -> Color {

@@ -4,12 +4,12 @@
     "" : {
       "shouldTranslate" : false
     },
-    "\"Overwrite Mode\" is disabled. Please select the output directory first." : {
+    "\"Save As Mode\" is selected. Please config the output directory first." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "“覆盖模式”已禁用，请先设置输出目录"
+            "value" : "“另存为模式”已启用，请先设置输出目录"
           }
         }
       }
@@ -216,16 +216,6 @@
         }
       }
     },
-    "Disabled" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已禁用"
-          }
-        }
-      }
-    },
     "Downloading" : {
       "localizations" : {
         "zh-Hans" : {
@@ -246,22 +236,22 @@
         }
       }
     },
-    "Enabled" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已启用"
-          }
-        }
-      }
-    },
     "Failed" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "失败"
+          }
+        }
+      }
+    },
+    "Failed to create output directory: %@, please re-select the output directory." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "创建输出目录 “%@” 失败，请重新设置输出目录。"
           }
         }
       }
@@ -346,44 +336,12 @@
         }
       }
     },
-    "Open Origin Folder" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开原始图片目录"
-          }
-        }
-      }
-    },
     "Open Origin Image" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开原始图片"
-          }
-        }
-      }
-    },
-    "Open Output Folder" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "打开输出目录"
-          }
-        }
-      }
-    },
-    "Output directory not exists, please re-select the output directory." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "输出目录不存在，请重新选择输出目录。"
           }
         }
       }
@@ -398,12 +356,12 @@
         }
       }
     },
-    "Overwrite Mode:" : {
+    "Overwrite Mode:\nThe compressed image will replace the original file. The original image is kept temporarily and can be restored before exit the app.\n\nSave As Mode:\nThe compressed image is saved as a new file, leaving the original image unchanged. You can choose where to save the compressed images." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "覆盖模式："
+            "value" : "覆盖模式：\n压缩后的图像将替换原始文件。原始图像会暂时保留，并且可以在退出应用之前恢复。\n\n另存为模式：\n压缩后的图像会保存为一个新文件，原始图像不会被修改。你可以在下面选择压缩图像保存的位置。"
           }
         }
       }
@@ -548,6 +506,16 @@
         }
       }
     },
+    "Save Mode:" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存模式："
+          }
+        }
+      }
+    },
     "Select output directory" : {
       "localizations" : {
         "zh-Hans" : {
@@ -677,22 +645,12 @@
         }
       }
     },
-    "When \"Overwrite Mode\" is disabled, the compressed image will be saved to this directory. If a file with the same name exists, it will be overwritten." : {
+    "When \"Save As Mode\" is enabled, the compressed image will be saved to this directory. If a file with the same name exists, it will be overwritten." : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "禁用“覆盖模式”时，压缩后的图片将被保存到该目录。如果该目录存在同名文件，将被覆盖。"
-          }
-        }
-      }
-    },
-    "When \"Overwrite Mode\" is enabled, the compressed image will replace the original file. The original image is kept until the app exits and can be restored during this time." : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "开启“覆盖模式”后，压缩后的图片将覆盖原始图片文件。原始图片会保留到应用退出之前，在此期间可以恢复到原始图片。"
+            "value" : "当启用“另存为模式”时，压缩后的图像将保存到该目录。如果存在同名文件，将被覆盖。"
           }
         }
       }

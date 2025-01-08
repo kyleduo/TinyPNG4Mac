@@ -15,15 +15,18 @@ struct SettingsView: View {
     @AppStorage(AppConfig.key_preserveLocation) var preserveLocation: Bool = false
 
     @AppStorage(AppConfig.key_concurrentTaskCount) var concurrentCount: Int = AppContext.shared.appConfig.concurrentTaskCount
-    let concurrentCountOptions = Array(1 ... 6)
-
-    @AppStorage(AppConfig.key_replaceMode) var replaceMode: Bool = false
-    @State var outputFilepath: String = AppContext.shared.appConfig.outputFolderUrl?.rawPath() ?? ""
+    private let concurrentCountOptions = Array(1 ... 6)
+    
+    @AppStorage(AppConfig.key_saveMode) var saveMode: String = AppContext.shared.appConfig.saveMode
+    private let saveModeOptions = AppConfig.saveModeKeys
+    
+    @AppStorage(AppConfig.key_outputDirectory)
+    var outputDirectory: String = AppContext.shared.appConfig.outputDirectoryUrl?.rawPath() ?? ""
 
     @FocusState private var isTextFieldFocused: Bool
 
     @State private var failedToSelectOutputDirectory: Bool = false
-    @State private var disableReplaceModeAfterSelect: Bool = false
+    @State private var enableSaveAsModeAfterSelect: Bool = false
     @State private var showSelectOutputFolder: Bool = false
 
     var body: some View {
@@ -63,16 +66,22 @@ struct SettingsView: View {
                             }
                         }
                         .padding(.leading, -8)
-                        .frame(maxWidth: 80)
+                        .frame(maxWidth: 160)
                     }
 
-                    SettingsItem(title: "Overwrite Mode:", desc: "When \"Overwrite Mode\" is enabled, the compressed image will replace the original file. The original image is kept until the app exits and can be restored during this time.") {
-                        Toggle(replaceMode ? "Enabled" : "Disabled", isOn: $replaceMode)
+                    SettingsItem(title: "Save Mode:", desc: "Overwrite Mode:\nThe compressed image will replace the original file. The original image is kept temporarily and can be restored before exit the app.\n\nSave As Mode:\nThe compressed image is saved as a new file, leaving the original image unchanged. You can choose where to save the compressed images.") {
+                        Picker("", selection: $saveMode) {
+                            ForEach(saveModeOptions, id: \.self) { mode in
+                                Text(mode).tag(mode)
+                            }
+                        }
+                        .padding(.leading, -8)
+                        .frame(maxWidth: 160)
                     }
 
-                    SettingsItem(title: "Output directory:", desc: "When \"Overwrite Mode\" is disabled, the compressed image will be saved to this directory. If a file with the same name exists, it will be overwritten.") {
+                    SettingsItem(title: "Output directory:", desc: "When \"Save As Mode\" is enabled, the compressed image will be saved to this directory. If a file with the same name exists, it will be overwritten.") {
                         HStack(alignment: .top) {
-                            Text(outputFilepath.isEmpty ? "--" : outputFilepath)
+                            Text(outputDirectory.isEmpty ? "--" : outputDirectory)
                                 .frame(maxWidth: .infinity, alignment: .leading)
 
                             Button {
@@ -102,15 +111,15 @@ struct SettingsView: View {
             }
         }
         .padding(16)
-        .onChange(of: replaceMode) { newValue in
-            if !newValue && outputFilepath.isEmpty {
-                replaceMode = true
+        .onChange(of: saveMode) { newValue in
+            if newValue == AppConfig.saveModeNameSaveAs && outputDirectory.isEmpty {
+                saveMode = AppConfig.saveModeNameOverwrite
+                enableSaveAsModeAfterSelect = true
                 showSelectOutputFolder = true
-                disableReplaceModeAfterSelect = true
             }
         }
         .onDisappear {
-            if outputFilepath.isEmpty {
+            if outputDirectory.isEmpty {
                 AppContext.shared.appConfig.clearOutputFolder()
             }
             AppContext.shared.appConfig.update()
@@ -125,7 +134,7 @@ struct SettingsView: View {
         .alert("Select output directory", isPresented: $showSelectOutputFolder) {
             Button("OK") {
                 DispatchQueue.main.async {
-                    disableReplaceModeAfterSelect = false
+                    enableSaveAsModeAfterSelect = false
                     showSelectFolderPanel()
                 }
             }
@@ -146,19 +155,8 @@ struct SettingsView: View {
 
         panel.begin { result in
             if result == .OK, let url = panel.url {
-                print("User granted access to: \(url.rawPath())")
-
-                do {
-                    try AppContext.shared.appConfig.saveBookmark(for: url)
-                    outputFilepath = url.rawPath()
-
-                    if disableReplaceModeAfterSelect {
-                        disableReplaceModeAfterSelect = false
-                        replaceMode = false
-                    }
-                } catch {
-                    failedToSelectOutputDirectory = true
-                }
+                print("User Select: \(url.rawPath())")
+                outputDirectory = url.rawPath()
             } else {
                 print("User did not grant access.")
             }

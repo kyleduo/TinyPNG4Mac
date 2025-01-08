@@ -90,9 +90,9 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 }
 
                 let outputUrl: URL
-                if AppContext.shared.appConfig.isReplaceModeEnabled {
+                if AppContext.shared.appConfig.isOverwriteMode() {
                     outputUrl = originUrl
-                } else if let outputFolderUrl = AppContext.shared.appConfig.outputFolderUrl {
+                } else if let outputFolderUrl = AppContext.shared.appConfig.outputDirectoryUrl {
                     let relocatedUrl = FileUtils.getRelocatedRelativePath(of: originUrl, fromDir: inputUrl, toDir: outputFolderUrl)
                     outputUrl = relocatedUrl ?? outputFolderUrl.appendingPathComponent(originUrl.lastPathComponent)
                 } else {
@@ -192,21 +192,20 @@ class MainViewModel: ObservableObject, TPClientCallback {
             return false
         }
 
-        if !config.isReplaceModeEnabled {
-            if let outputFolderUrl = config.outputFolderUrl {
+        if config.isSaveAsMode() {
+            if let outputFolderUrl = config.outputDirectoryUrl {
                 if !outputFolderUrl.fileExists() {
                     do {
                         try outputFolderUrl.ensureDirectoryExists()
+                        return true
                     } catch {
-                        // ignore error
                         DispatchQueue.main.async {
-                            self.settingsNotReadyMessage = String(localized: "Output directory not exists, please re-select the output directory.")
+                            self.settingsNotReadyMessage = String(localized: "Failed to create output directory: \(outputFolderUrl.rawPath()), please re-select the output directory.")
                         }
                         return false
                     }
-                    return true
                 }
-
+                
                 if !FileUtils.hasReadAndWritePermission(path: outputFolderUrl.rawPath()) {
                     DispatchQueue.main.async {
                         self.settingsNotReadyMessage = String(localized: "No write permission of output folder \(outputFolderUrl.rawPath()), please re-select the output directory.")
@@ -215,7 +214,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.settingsNotReadyMessage = String(localized: "\"Overwrite Mode\" is disabled. Please select the output directory first.")
+                    self.settingsNotReadyMessage = String(localized: "\"Save As Mode\" is selected. Please config the output directory first.")
                 }
                 return false
             }

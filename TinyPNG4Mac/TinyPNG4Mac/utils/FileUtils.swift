@@ -12,32 +12,14 @@ struct FileUtils {
 
     private static let sessionId = UUID().uuidString
     private static let cacheRootDir = getCachesDirectory()
-    private static let sessionRootDir = getCachesDirectory(sessionId)
+    private static let sessionRootDir = cacheRootDir.appendingPathComponent(sessionId, isDirectory: true)
 
-    private static var backupDir: URL = sessionRootDir.appendingPathComponent("backup")
-    private static var downloadDir: URL = sessionRootDir.appendingPathComponent("download")
+    private static var backupDir: URL = sessionRootDir.appendingPathComponent("backup", isDirectory: true)
+    private static var downloadDir: URL = sessionRootDir.appendingPathComponent("download", isDirectory: true)
 
     static func initPaths() {
-        let fileManager = FileManager.default
-
-        Task {
-            do {
-                let otherSessionsDir = try fileManager.contentsOfDirectory(atPath: cacheRootDir.path(percentEncoded: false))
-                for dir in otherSessionsDir {
-                    let dirUrl = cacheRootDir.appendingPathComponent(dir)
-                    if dirUrl.isSameFilePath(as: sessionRootDir) {
-                        continue
-                    }
-                    let dirPath = dirUrl.path(percentEncoded: false)
-                    try fileManager.removeItem(atPath: dirPath)
-                    print("Delete previous session folder: \(dirPath)")
-                }
-            } catch {
-                print("Error delete other session caches")
-            }
-        }
-
         let pathsToCheck = [
+            cacheRootDir,
             sessionRootDir,
             backupDir,
             downloadDir,
@@ -52,6 +34,46 @@ struct FileUtils {
             } catch {
                 print("Error creating directory at \(path.path): \(error.localizedDescription)")
             }
+        }
+
+        Task {
+            cleanSandboxCacheDir()
+            cleanPreviousSessions()
+        }
+    }
+
+    private static func cleanSandboxCacheDir() {
+        guard let identifier = Bundle.main.bundleIdentifier else {
+            return
+        }
+
+        let userHomeDir = FileManager.default.homeDirectoryForCurrentUser
+        let sandboxRootDir = URL(filePath: userHomeDir.rawPath() + "Library/Containers/\(identifier)/")
+
+        if sandboxRootDir.fileExists() {
+            do {
+                try fileManager.removeItem(at: sandboxRootDir)
+                print("Clean up sandbox dir.")
+            } catch {
+                print("Clean up sandbox dir error. \(error)")
+            }
+        }
+    }
+
+    private static func cleanPreviousSessions() {
+        do {
+            let otherSessionsDir = try fileManager.contentsOfDirectory(atPath: cacheRootDir.path(percentEncoded: false))
+            for dir in otherSessionsDir {
+                let dirUrl = cacheRootDir.appendingPathComponent(dir)
+                if dirUrl.isSameFilePath(as: sessionRootDir) {
+                    continue
+                }
+                let dirPath = dirUrl.path(percentEncoded: false)
+                try fileManager.removeItem(atPath: dirPath)
+                print("Delete previous session folder: \(dirPath)")
+            }
+        } catch {
+            print("Error delete other session caches: \(error)")
         }
     }
 
@@ -80,16 +102,12 @@ struct FileUtils {
         }
     }
 
-    private static func getCachesDirectory(_ key: String? = nil) -> URL {
-//        // If disable Sandbox mode, open these line of codes to make the cache dir consistent, otherwise "FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)" will return the global root cache dir: ~/Library/Caches
-//        let userHomeDir = FileManager.default.homeDirectoryForCurrentUser
-//        let cacheRootDir = URL(filePath: userHomeDir.rawPath() + "Library/Containers/\(Bundle.main.bundleIdentifier)/Data/Library/Caches")
-        let cacheRootDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
-        if key != nil {
-            return cacheRootDir.appendingPathComponent(key!)
-        } else {
-            return cacheRootDir
-        }
+    private static func getCachesDirectory() -> URL {
+//        // If disable Sandbox mode, "FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)" will return the global root cache dir: ~/Library/Caches
+        let userCacheRootDir = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first!
+        let identifier = Bundle.main.bundleIdentifier ?? "com.kyleduo.app.TinyPNG4Mac"
+        let cacheRootDir = userCacheRootDir.appendingPathComponent(identifier).appendingPathComponent("Caches")
+        return cacheRootDir
     }
 
     static func copyFile(sourcePath: String, targetPath: String, override: Bool = false) throws {

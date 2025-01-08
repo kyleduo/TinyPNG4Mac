@@ -33,7 +33,7 @@ struct MainContentView: View {
                         RoundedRectangle(cornerRadius: 12)
                             .stroke(style: StrokeStyle(
                                 lineWidth: 2,
-                                dash: [8, 6]
+                                dash: [6, 3]
                             ))
                             .foregroundColor(Color.white.opacity(0.1))
                             .padding()

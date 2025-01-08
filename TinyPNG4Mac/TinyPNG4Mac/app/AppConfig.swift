@@ -27,6 +27,7 @@ class AppConfig {
 
     static let saveModeNameOverwrite = "Overwrite"
     static let saveModeNameSaveAs = "Save As"
+    private static let defaultSaveModeName = saveModeNameSaveAs
     static let saveModeKeys = [
         saveModeNameOverwrite,
         saveModeNameSaveAs,
@@ -73,8 +74,8 @@ class AppConfig {
         if let saveMode = ud.string(forKey: AppConfig.key_saveMode) {
             self.saveMode = saveMode
         } else {
-            saveMode = AppConfig.saveModeNameOverwrite
-            ud.set(AppConfig.saveModeNameOverwrite, forKey: AppConfig.key_saveMode)
+            saveMode = AppConfig.defaultSaveModeName
+            ud.set(AppConfig.defaultSaveModeName, forKey: AppConfig.key_saveMode)
         }
 
         if let outputDirectoryUrl = ud.string(forKey: AppConfig.key_outputDirectory) {

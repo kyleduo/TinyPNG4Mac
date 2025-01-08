@@ -36,9 +36,11 @@ struct FileUtils {
             }
         }
 
-        Task {
-            cleanSandboxCacheDir()
-            cleanPreviousSessions()
+        if !AppUtils.isPreviewMode() {
+            Task {
+                cleanSandboxCacheDir()
+                cleanPreviousSessions()
+            }
         }
     }
 

@@ -187,7 +187,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
         let config = AppContext.shared.appConfig
         if config.apiKey.isEmpty {
             DispatchQueue.main.async {
-                self.settingsNotReadyMessage = String(localized: "Please set the API key first.")
+            self.settingsNotReadyMessage = String(localized: "Please set the API key first.")
             }
             return false
         }

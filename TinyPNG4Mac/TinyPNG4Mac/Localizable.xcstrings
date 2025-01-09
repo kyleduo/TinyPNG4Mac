@@ -27,6 +27,22 @@
     "%lld" : {
       "shouldTranslate" : false
     },
+    "%lld tasks, %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld tasks, %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld 任务，%2$@ "
+          }
+        }
+      }
+    },
     "About Tiny Image" : {
       "localizations" : {
         "zh-Hans" : {
@@ -110,6 +126,16 @@
         }
       }
     },
+    "Click to open: " : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "点击打开："
+          }
+        }
+      }
+    },
     "Completed" : {
       "localizations" : {
         "zh-Hans" : {
@@ -120,18 +146,12 @@
         }
       }
     },
-    "Completed: %lld tasks, %@" : {
+    "Completed:" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Completed: %1$lld tasks, %2$@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "已完成： %1$lld 任务，%2$@"
+            "value" : "已完成："
           }
         }
       }
@@ -346,12 +366,33 @@
         }
       }
     },
+    "Output directory is not set yet, please select it in the settings window." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输出目录尚未设置，请在设置窗口中设置。"
+          }
+        }
+      }
+    },
     "Output directory:" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "输出目录："
+          }
+        }
+      }
+    },
+    "Overwrite" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "覆盖"
           }
         }
       }
@@ -506,6 +547,17 @@
         }
       }
     },
+    "Save As" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "另存为"
+          }
+        }
+      }
+    },
     "Save Mode:" : {
       "localizations" : {
         "zh-Hans" : {
@@ -576,6 +628,16 @@
         }
       }
     },
+    "The output directory does not exist. It will be automatically created after any task is completed." : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "输出目录不存在。任意任务完成后会自动创建。"
+          }
+        }
+      }
+    },
     "There are ongoing tasks. Quitting will cancel them all." : {
       "localizations" : {
         "zh-Hans" : {
@@ -609,18 +671,12 @@
         }
       }
     },
-    "Total: %lld tasks, %@" : {
+    "Total:" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Total: %1$lld tasks, %2$@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "全部： %1$lld 任务， %2$@"
+            "value" : "全部："
           }
         }
       }

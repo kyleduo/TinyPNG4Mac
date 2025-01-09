@@ -15,6 +15,14 @@ struct MainContentView: View {
     @State private var showAlert = false
     @State private var showOpenPanel = false
     @State private var showRestoreAllConfirmAlert = false
+    @State private var alertMessage: String? = nil
+    @State private var showOutputDirectoryTips: Bool = false
+    @State private var outputDirectoryButtonPosition: CGRect = CGRect.zero
+    @State private var tipsSize: CGSize = CGSize.zero
+    @State private var rootSize: CGSize = CGSize.zero
+    @State private var hoverSaveModeButton: Bool = false
+
+    @AppStorage(AppConfig.key_saveMode) var saveMode: String = AppContext.shared.appConfig.saveMode
 
     var body: some View {
         ZStack {
@@ -76,68 +84,113 @@ struct MainContentView: View {
                     .padding(vertical: 0, horizontal: 12)
                     .padding(.top, 2)
 
-                HStack(alignment: .bottom) {
+                HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Total: \(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color("textSecondary"))
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        KeyValueLabel(key: "Total:", value: "\(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
 
-                        Text("Completed: \(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color("textSecondary"))
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        KeyValueLabel(key: "Completed:", value: "\(vm.completedTaskCount) tasks, \(vm.totalFinalSize.formatBytes())")
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
 
-                        let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
-                        Text("Images compressed this month: \(usedQuota)")
-                            .font(.system(size: 12))
-                            .foregroundStyle(Color("textSecondary"))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.top, 12)
+                    settingButton(useButtonStyle: false) {
+                        KeyValueLabel(key: "Save Mode:", value: LocalizedStringKey(saveMode))
+                            .padding(vertical: 2, horizontal: 4)
+                            .background {
+                                if hoverSaveModeButton {
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .fill(Color.white.opacity(0.15))
+                                } else {
+                                    Color.clear
+                                }
+                            }
+                            .onHover { hover in
+                                hoverSaveModeButton = hover
+                            }
+                    }
+                }
+                .padding(EdgeInsets(top: 8, leading: 12, bottom: 0, trailing: 12))
+
+                HStack(alignment: .bottom, spacing: 6) {
+                    let usedQuota = vm.monthlyUsedQuota >= 0 ? String(vm.monthlyUsedQuota) : "--"
+                    Text("Images compressed this month: \(usedQuota)")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color("textSecondary"))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    if saveMode == AppConfig.saveModeNameSaveAs {
+                        Button {
+                            if let outputDir = appContext.appConfig.outputDirectoryUrl {
+                                if outputDir.fileExists() {
+                                    NSWorkspace.shared.open(outputDir)
+                                } else {
+                                    alertMessage = String(localized: "The output directory does not exist. It will be automatically created after any task is completed.")
+                                }
+                            } else {
+                                vm.settingsNotReadyMessage = String(localized: "Output directory is not set yet, please select it in the settings window.")
+                            }
+                        } label: {
+                            Image(systemName: "folder.circle.fill")
+                                .font(.system(size: 13, weight: .medium))
+                                .foregroundStyle(Color("textSecondary"))
+                                .frame(width: 20, height: 20)
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        .background {
+                            GeometryReader { proxy in
+                                Color.clear
+                                    .onAppear {
+                                        outputDirectoryButtonPosition = proxy.frame(in: .named("root"))
+                                    }
+                                    .onChange(of: proxy.frame(in: .named("root"))) { newFrame in
+                                        outputDirectoryButtonPosition = newFrame
+                                    }
+                            }
+                        }
+                        .onHover { hover in
+                            showOutputDirectoryTips = hover
+                        }
                     }
 
-                    Menu {
-                        Button {
-                            vm.retryAllFailedTask()
-                        } label: {
-                            Text("Retry all failed tasks")
-                        }
-                        .disabled(vm.failedTaskCount == 0)
+                    menuEntry()
+                }.padding(EdgeInsets(top: 6, leading: 12, bottom: 12, trailing: 12))
+            }
 
-                        Divider()
-
-                        Button {
-                            vm.clearAllTask()
-                        } label: {
-                            Text("Clear all tasks")
-                        }
-                        .disabled(vm.tasks.count == 0)
-
-                        Button {
-                            vm.clearFinishedTask()
-                        } label: {
-                            Text("Clear all finished tasks")
-                        }
-                        .disabled(vm.tasks.count == 0)
-
-                        Divider()
-
-                        Button {
-                            showRestoreAllConfirmAlert = true
-                        } label: {
-                            Text("Restore all compressed images")
-                        }
-                        .disabled(vm.completedTaskCount == 0)
-                    } label: {
-                        Image(systemName: "ellipsis.circle.fill")
-                            .font(.system(size: 12, weight: .medium))
-                            .frame(width: 20, height: 20)
+            if let outputDir = appContext.appConfig.outputDirectoryUrl, showOutputDirectoryTips {
+                Text(String(localized: "Click to open: ") + "\n\(outputDir.rawPath())")
+                    .font(.system(size: 12))
+                    .foregroundStyle(Color("textBody"))
+                    .lineLimit(2)
+                    .padding(vertical: 6, horizontal: 12)
+                    .background {
+                        RoundedRectangle(cornerRadius: 8)
+                            .fill(Color.black.opacity(0.8))
                     }
-                    .menuStyle(.borderlessButton)
-                    .menuIndicator(.hidden)
-                    .frame(width: 20, height: 20)
-                    .tint(Color("textSecondary"))
-                }.padding(EdgeInsets(top: 8, leading: 12, bottom: 12, trailing: 12))
+                    .padding(.leading, 12)
+                    .padding(.trailing, 12)
+                    .background {
+                        GeometryReader { proxy in
+                            Color.clear
+                                .onAppear {
+                                    tipsSize = proxy.size
+                                }
+                                .onChange(of: proxy.size) { newSize in
+                                    tipsSize = newSize
+                                }
+                        }
+                    }
+                    .position(x: rootSize.width / 2 + (rootSize.width - tipsSize.width) / 2, y: outputDirectoryButtonPosition.origin.y - tipsSize.height / 2 - 4)
+            }
+        }
+        .coordinateSpace(name: "root")
+        .background {
+            GeometryReader { proxy in
+                Color.clear
+                    .onAppear {
+                        rootSize = proxy.size
+                    }
+                    .onChange(of: proxy.size) { newSize in
+                        rootSize = newSize
+                    }
             }
         }
         .ignoresSafeArea()
@@ -201,14 +254,30 @@ struct MainContentView: View {
                message: {
                    Text("There are ongoing tasks. Quitting will cancel them all.")
                })
+        .alert(alertMessage ?? "",
+               isPresented: Binding(
+                   get: { alertMessage != nil },
+                   set: { if !$0 { alertMessage = nil } }
+               ),
+               actions: {
+                   Button("OK") { }
+               }
+        )
     }
 
     private func settingButton(title: String) -> some View {
+        settingButton {
+            Text(title)
+        }
+    }
+
+    private func settingButton(useButtonStyle: Bool = true, @ViewBuilder view: () -> some View) -> some View {
         if #available(macOS 14.0, *) {
             AnyView(
                 SettingsLink {
-                    Text(title)
+                    view()
                 }
+                .modifier(PlainButtonStyleModifier(plainButtonStyle: !useButtonStyle))
             )
         } else {
             AnyView(
@@ -219,9 +288,90 @@ struct MainContentView: View {
                         NSApp.sendAction(Selector(("showPreferencesWindow:")), to: nil, from: nil)
                     }
                 } label: {
-                    Text(title)
+                    view()
                 }
+                .modifier(PlainButtonStyleModifier(plainButtonStyle: !useButtonStyle))
             )
+        }
+    }
+
+    private func menuEntry() -> some View {
+        Menu {
+            Button {
+                vm.retryAllFailedTask()
+            } label: {
+                Text("Retry all failed tasks")
+            }
+            .disabled(vm.failedTaskCount == 0)
+
+            Divider()
+
+            Button {
+                vm.clearAllTask()
+            } label: {
+                Text("Clear all tasks")
+            }
+            .disabled(vm.tasks.count == 0)
+
+            Button {
+                vm.clearFinishedTask()
+            } label: {
+                Text("Clear all finished tasks")
+            }
+            .disabled(vm.tasks.count == 0)
+
+            Divider()
+
+            Button {
+                showRestoreAllConfirmAlert = true
+            } label: {
+                Text("Restore all compressed images")
+            }
+            .disabled(vm.completedTaskCount == 0)
+        } label: {
+            Image(systemName: "ellipsis.circle.fill")
+                .font(.system(size: 12, weight: .medium))
+                .frame(width: 20, height: 20)
+        }
+        .menuStyle(.borderlessButton)
+        .menuIndicator(.hidden)
+        .frame(width: 20, height: 20)
+        .tint(Color("textSecondary"))
+    }
+
+    private func outputDirExist() -> Bool {
+        if let outputDir = appContext.appConfig.outputDirectoryUrl {
+            return outputDir.fileExists()
+        }
+        return false
+    }
+}
+
+struct KeyValueLabel: View {
+    var key: LocalizedStringKey
+    var value: LocalizedStringKey
+
+    var body: some View {
+        HStack(spacing: 2) {
+            Text(key)
+                .font(.system(size: 12))
+                .foregroundStyle(Color("textCaption"))
+
+            Text(value)
+                .font(.system(size: 12))
+                .foregroundStyle(Color("textSecondary"))
+        }
+    }
+}
+
+struct PlainButtonStyleModifier: ViewModifier {
+    var plainButtonStyle: Bool
+
+    func body(content: Content) -> some View {
+        if plainButtonStyle {
+            content.buttonStyle(PlainButtonStyle())
+        } else {
+            content
         }
     }
 }

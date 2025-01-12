@@ -145,6 +145,18 @@ struct TaskRowView: View {
                         Text(task.statusText())
                             .font(.system(size: 12, weight: statusTextWeight(task.status)))
                             .foregroundStyle(statusTextColor(task.status))
+                            
+                        if task.status == .completed, let outputUrl = task.outputUrl {
+                            Button {
+                                NSWorkspace.shared.open(outputUrl.deletingLastPathComponent())
+                            } label: {
+                                Image(systemName: "folder.fill")
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(Color("textSecondary"))
+                            }
+                            .buttonStyle(BorderlessButtonStyle())
+                            .help("Open Output Folder")
+                        }
                     }
                     .frame(height: 16)
                     .padding(.trailing, 2)

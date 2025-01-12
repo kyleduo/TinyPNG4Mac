@@ -24,6 +24,9 @@
         }
       }
     },
+    "[D]Clear output directory" : {
+      "shouldTranslate" : false
+    },
     "%lld" : {
       "shouldTranslate" : false
     },
@@ -92,16 +95,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已取消"
-          }
-        }
-      }
-    },
-    "Clear" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "清除"
           }
         }
       }

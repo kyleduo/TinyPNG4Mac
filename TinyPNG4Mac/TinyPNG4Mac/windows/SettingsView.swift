@@ -16,10 +16,10 @@ struct SettingsView: View {
 
     @AppStorage(AppConfig.key_concurrentTaskCount) var concurrentCount: Int = AppContext.shared.appConfig.concurrentTaskCount
     private let concurrentCountOptions = Array(1 ... 6)
-    
+
     @AppStorage(AppConfig.key_saveMode) var saveMode: String = AppContext.shared.appConfig.saveMode
     private let saveModeOptions = AppConfig.saveModeKeys
-    
+
     @AppStorage(AppConfig.key_outputDirectory)
     var outputDirectory: String = AppContext.shared.appConfig.outputDirectoryUrl?.rawPath() ?? ""
 
@@ -29,9 +29,13 @@ struct SettingsView: View {
     @State private var enableSaveAsModeAfterSelect: Bool = false
     @State private var showSelectOutputFolder: Bool = false
 
+    @State private var contentSize: CGSize = CGSize.zero
+
     var body: some View {
         VStack(alignment: .leading) {
+            // Used to make sure content meature correctly
             ScrollView {
+                // Content of Settings
                 VStack(alignment: .leading) {
                     Text("TinyPNG")
                         .font(.system(size: 13, weight: .bold))
@@ -66,7 +70,7 @@ struct SettingsView: View {
                             }
                         }
                         .padding(.leading, -8)
-                        .frame(maxWidth: 160)
+                        .frame(maxWidth: 60)
                     }
 
                     SettingsItem(title: "Save Mode:", desc: "Overwrite Mode:\nThe compressed image will replace the original file. The original image is kept temporarily and can be restored before exit the app.\n\nSave As Mode:\nThe compressed image is saved as a new file, leaving the original image unchanged. You can choose where to save the compressed images.") {
@@ -76,7 +80,7 @@ struct SettingsView: View {
                             }
                         }
                         .padding(.leading, -8)
-                        .frame(maxWidth: 160)
+                        .frame(maxWidth: 120)
                     }
 
                     SettingsItem(title: "Output directory:", desc: "When \"Save As Mode\" is enabled, the compressed image will be saved to this directory. If a file with the same name exists, it will be overwritten.") {
@@ -89,18 +93,34 @@ struct SettingsView: View {
                             } label: {
                                 Text("Select...")
                             }
-
-                            if AppContext.shared.isDebug {
-                                Button {
-                                    AppContext.shared.appConfig.clearOutputFolder()
-                                } label: {
-                                    Text("Clear")
-                                }
-                            }
                         }
                     }
-                }.padding(24)
+
+                    if AppContext.shared.isDebug {
+                        Button {
+                            AppContext.shared.appConfig.clearOutputFolder()
+                        } label: {
+                            Text("[D]Clear output directory")
+                        }
+                    }
+                }
+                .padding(24)
+                .frame(width: 540)
+                .background {
+                    GeometryReader { proxy in
+                        Color.clear
+                            .onAppear {
+                                contentSize = proxy.size
+                                print(contentSize)
+                            }
+                            .onChange(of: proxy.size) { newSize in
+                                contentSize = newSize
+                                print(contentSize)
+                            }
+                    }
+                }
             }
+            .scrollDisabled(true)
             .background {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color("settingViewBackground"))
@@ -111,6 +131,8 @@ struct SettingsView: View {
             }
         }
         .padding(16)
+        // Set the size of window.
+        .frame(width: contentSize.width + 32, height: contentSize.height + 32)
         .onChange(of: saveMode) { newValue in
             if newValue == AppConfig.saveModeNameSaveAs && outputDirectory.isEmpty {
                 saveMode = AppConfig.saveModeNameOverwrite

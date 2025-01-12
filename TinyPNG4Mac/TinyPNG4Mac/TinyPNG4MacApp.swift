@@ -15,6 +15,7 @@ struct TinyPNG4MacApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelgate
     @StateObject var appContext = AppContext.shared
     @StateObject var vm: MainViewModel = MainViewModel()
+    @StateObject var debugVM: DebugViewModel = DebugViewModel.shared
 
     @State var firstAppear: Bool = true
     @State var lastTaskCount = 0
@@ -38,6 +39,7 @@ struct TinyPNG4MacApp: App {
                     appDelgate.updateViewModel(vm: vm)
                 }
                 .environmentObject(appContext)
+                .environmentObject(debugVM)
         }
         .windowStyle(HiddenTitleBarWindowStyle())
         .windowResizability(.contentSize)
@@ -52,7 +54,7 @@ struct TinyPNG4MacApp: App {
                 })
             }
         }
-        
+
         // Note the id "about" here
         Window("About Tiny Image", id: "about") {
             AboutView()
@@ -82,6 +84,9 @@ struct TinyPNG4MacApp: App {
 class AppDelegate: NSObject, NSApplicationDelegate {
     private var vm: MainViewModel?
 
+    private var openUrls: [URL]?
+    private var appDidFinishLaunching = false
+
     func updateViewModel(vm: MainViewModel) {
         if self.vm == nil {
             self.vm = vm
@@ -95,11 +100,19 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             window.titleVisibility = .hidden
             window.titlebarAppearsTransparent = true
         }
+
+        appDidFinishLaunching = true
+
+        tryHandleOpenUrls()
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
-        let imageUrls = FileUtils.findImageFiles(urls: urls)
-        vm?.createTasks(imageURLs: imageUrls)
+        openUrls = urls
+        if appDidFinishLaunching {
+            DispatchQueue.main.async {
+                self.tryHandleOpenUrls()
+            }
+        }
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -116,6 +129,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return .terminateCancel
         } else {
             return .terminateNow
+        }
+    }
+
+    private func tryHandleOpenUrls() {
+        if let urls = openUrls {
+            openUrls = nil
+            let imageUrls = FileUtils.findImageFiles(urls: urls)
+            vm?.createTasks(imageURLs: imageUrls)
         }
     }
 }

@@ -42,6 +42,8 @@ struct FileUtils {
                 cleanPreviousSessions()
             }
         }
+        
+        DebugViewModel.shared.debugMessages.append("initPaths complete")
     }
 
     private static func cleanSandboxCacheDir() {

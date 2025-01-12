@@ -154,6 +154,8 @@ struct MainContentView: View {
                     menuEntry()
                 }.padding(EdgeInsets(top: 6, leading: 12, bottom: 12, trailing: 12))
             }
+            
+            DebugView()
 
             if let outputDir = appContext.appConfig.outputDirectoryUrl, showOutputDirectoryTips {
                 Text(String(localized: "Click to open: ") + "\n\(outputDir.rawPath())")

@@ -187,7 +187,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
         let config = AppContext.shared.appConfig
         if config.apiKey.isEmpty {
             DispatchQueue.main.async {
-            self.settingsNotReadyMessage = String(localized: "Please set the API key first.")
+                self.settingsNotReadyMessage = String(localized: "Please set the API key first.")
             }
             return false
         }
@@ -205,7 +205,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
                         return false
                     }
                 }
-                
+
                 if !FileUtils.hasReadAndWritePermission(path: outputFolderUrl.rawPath()) {
                     DispatchQueue.main.async {
                         self.settingsNotReadyMessage = String(localized: "No write permission of output folder \(outputFolderUrl.rawPath()), please re-select the output directory.")

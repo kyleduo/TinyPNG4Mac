@@ -111,11 +111,9 @@ struct SettingsView: View {
                         Color.clear
                             .onAppear {
                                 contentSize = proxy.size
-                                print(contentSize)
                             }
                             .onChange(of: proxy.size) { newSize in
                                 contentSize = newSize
-                                print(contentSize)
                             }
                     }
                 }

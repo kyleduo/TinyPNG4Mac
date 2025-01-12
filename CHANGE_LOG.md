@@ -1,5 +1,15 @@
 # Change Log
 
+**Version 2.0.0**
+
+1. New designed task list with more task info, such as file sizes, api usage.
+2. New overwrite mode and image restoration.
+3. Context menu and batch control.
+4. Metadata preservation. (Supported by TinyPNG)
+5. Resizible window.
+6. Both image files and directories supports.
+7. Dropping images and directories to dock icon supports.
+
 **Version 1.0.7**
 
 1. Add support for webp files.

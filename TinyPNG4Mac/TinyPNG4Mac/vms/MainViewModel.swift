@@ -109,7 +109,8 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     outputUrl: outputUrl,
                     originSize: fileSize,
                     filePermission: originUrl.posixPermissionsOfFile() ?? 0x644,
-                    previewImage: previewImage ?? NSImage(named: "placeholder")!
+                    previewImage: previewImage ?? NSImage(named: "placeholder")!,
+                    convertTypes: [.avif, .png]
                 )
 
                 print("Task created: \(task)")

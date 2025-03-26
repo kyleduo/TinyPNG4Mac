@@ -16,6 +16,9 @@ class TaskInfo: Identifiable {
     var backupUrl: URL?
     var downloadUrl: URL?
     var outputUrl: URL?
+    /// types to convert the image to
+    /// If nil or empty, do not convert. If provide multiple image types, the smallest one will be used.
+    var convertTypes: [ImageType]?
     var status: TaskStatus
     /// in byte
     var originSize: UInt64?
@@ -52,7 +55,7 @@ class TaskInfo: Identifiable {
         self.progress = progress
     }
 
-    init(originUrl: URL, backupUrl: URL, downloadUrl: URL, outputUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage) {
+    init(originUrl: URL, backupUrl: URL, downloadUrl: URL, outputUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage, convertTypes: [ImageType]? = nil) {
         id = UUID().uuidString
         status = .created
         self.previewImage = previewImage
@@ -62,6 +65,7 @@ class TaskInfo: Identifiable {
         self.outputUrl = outputUrl
         self.originSize = originSize
         self.filePermission = filePermission
+        self.convertTypes = convertTypes
     }
 
     init(originUrl: URL) {

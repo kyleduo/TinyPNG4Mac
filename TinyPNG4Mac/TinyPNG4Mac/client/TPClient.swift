@@ -148,15 +148,15 @@ class TPClient {
             (downloadUrl, [.removePreviousFile])
         }
 
-        let downloadRequestBody = getDownloadRequestBody()
+        let downloadRequestParams = prepareDownloadRequestParams(task: task)
         let request: DownloadRequest
 
-        if !downloadRequestBody.isEmpty {
+        if let params = downloadRequestParams {
             var req = URLRequest(url: URL(string: output.url)!)
             req.httpMethod = HTTPMethod.post.rawValue
             req.addValue(getAuthorization(), forHTTPHeaderField: "Authorization")
             req.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            req.httpBody = try? JSONSerialization.data(withJSONObject: downloadRequestBody, options: [])
+            req.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
 
             request = AF.download(req)
         } else {
@@ -176,12 +176,20 @@ class TPClient {
             switch response.result {
             case .success:
                 do {
-                    guard let targetUrl = task.outputUrl else {
+                    guard let presetTargetUrl = task.outputUrl else {
                         throw FileError.noOutput
+                    }
+                    
+                    var targetUrl = presetTargetUrl
+                    
+                    if let contentType = response.response?.headers["Content-Type"], !(task.convertTypes?.isEmpty ?? true) {
+                        if let suffix = ImageType.fromContentType(contentType: contentType)?.fileSuffix() {
+                            targetUrl = presetTargetUrl.replaceSuffix(suffix: suffix)
+                        }
                     }
 
                     let downloadedUrl: URL
-                    if !downloadRequestBody.isEmpty {
+                    if downloadRequestParams?.isEmpty == false {
                         try targetUrl.ensureDirectoryExists()
 
                         guard let afDownloadURL = response.fileURL else {
@@ -206,11 +214,13 @@ class TPClient {
         }
     }
 
-    private func getDownloadRequestBody() -> [String: [String]] {
+    private func prepareDownloadRequestParams(task: TaskInfo) -> [String: Any]? {
         let config = AppContext.shared.appConfig
-        if !config.needPreserveMetadata() {
-            return [:]
+        if !config.needPreserveMetadata() && (task.convertTypes?.isEmpty ?? true) {
+            return nil
         }
+
+        var params: [String: Any] = [:]
 
         var preserveList: [String] = []
         if config.preserveCopyright {
@@ -222,12 +232,26 @@ class TPClient {
         if config.preserveLocation {
             preserveList.append("location")
         }
-        if preserveList.isEmpty {
-            return [:]
+        if !preserveList.isEmpty {
+            params["preserve"] = preserveList
         }
-        return [
-            "preserve": preserveList,
-        ]
+
+        if let types = task.convertTypes, !types.isEmpty {
+            if types.count == 1 {
+                params["convert"] = [
+                    "type": types[0].toContentType(),
+                ]
+            } else {
+                let contentTypes = types.map { type in
+                    type.toContentType()
+                }
+                params["convert"] = [
+                    "type": contentTypes,
+                ]
+            }
+        }
+
+        return params
     }
 
     private func requestHeaders() -> HTTPHeaders {

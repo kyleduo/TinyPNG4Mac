@@ -178,7 +178,7 @@ struct FileUtils {
     }
 
     private static func findImageFiles(urls: [URL], originUrl: URL?, result: inout [URL: URL]) {
-        let validExtensions = ["jpeg", "jpg", "png", "webp"]
+        let validExtensions = ["jpeg", "jpg", "png", "webp", "avif"]
 
         for url in urls {
             if url.hasDirectoryPath {

@@ -84,6 +84,48 @@ struct MainContentView: View {
                     .padding(vertical: 0, horizontal: 12)
                     .padding(.top, 2)
 
+                HStack {
+                    Text("Convert Image to: ")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color("textCaption"))
+
+                    Spacer()
+
+                    Menu {
+                        Button {
+                        } label: {
+                            Text("Do not convert")
+                        }
+
+                        Divider()
+
+                        Button {
+                        } label: {
+                            Text("Auto")
+                        }
+
+                        Text("Select all types. Use the smallest one.")
+                            .font(.system(size: 10))
+
+                        Divider()
+
+                        ForEach(ImageType.allTypes, id: \.self) { type in
+                            Button {
+                            } label: {
+                                Text(type.toDisplayName())
+                            }
+                        }
+                    } label: {
+                        Text("Auto")
+                    }
+                    .frame(maxWidth: 60)
+                }
+                .padding(vertical: 8, horizontal: 12)
+
+                HorizontalDivider()
+                    .padding(vertical: 0, horizontal: 12)
+                    .padding(.top, 2)
+
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
                         KeyValueLabel(key: "Total:", value: "\(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")

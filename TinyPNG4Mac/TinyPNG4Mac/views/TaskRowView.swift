@@ -125,7 +125,7 @@ struct TaskRowView: View {
                                     Spacer()
                                         .frame(width: 2)
 
-                                    TypeConvertTag(type: outputType.toDisplayType())
+                                    TypeConvertTag(type: outputType.toDisplayName())
                                 }
                             }
                         }

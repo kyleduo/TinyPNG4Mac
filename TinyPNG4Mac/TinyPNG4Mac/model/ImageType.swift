@@ -41,7 +41,7 @@ extension ImageType {
 }
 
 extension ImageType {
-    func toDisplayType() -> String {
+    func toDisplayName() -> String {
         switch self {
         case .avif:
             return ".avif"
@@ -53,6 +53,15 @@ extension ImageType {
             return ".webp"
         }
     }
+}
+
+extension ImageType {
+    static let allTypes = [
+        ImageType.png,
+        ImageType.jpeg,
+        ImageType.webp,
+        ImageType.avif,
+    ]
 }
 
 extension ImageType {

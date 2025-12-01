@@ -79,6 +79,9 @@
     "API key:" : {
       "shouldTranslate" : false
     },
+    "Auto" : {
+
+    },
     "Cancel" : {
       "localizations" : {
         "zh-Hans" : {
@@ -199,6 +202,9 @@
         }
       }
     },
+    "Convert Image to: " : {
+
+    },
     "Copyright" : {
       "localizations" : {
         "zh-Hans" : {
@@ -228,6 +234,9 @@
           }
         }
       }
+    },
+    "Do not convert" : {
+
     },
     "Downloading" : {
       "localizations" : {
@@ -560,6 +569,9 @@
           }
         }
       }
+    },
+    "Select all types. Use the smallest one." : {
+
     },
     "Select output directory" : {
       "localizations" : {

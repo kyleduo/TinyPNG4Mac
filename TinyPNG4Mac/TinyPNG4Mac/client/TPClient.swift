@@ -95,7 +95,7 @@ class TPClient {
 
                 DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double.random(in: 5 ..< 7)) {
                     if Bool.random() {
-                        self.completeTask(task, fileSizeFromResponse: 1028)
+                        self.completeTask(task, fileSizeFromResponse: 1028, outputType: nil)
                     } else {
                         self.failTask(task, error: TaskError.apiError(statusCode: 401, message: "Unauthorised. This custom implementation provides more control"))
                     }
@@ -179,11 +179,14 @@ class TPClient {
                     guard let presetTargetUrl = task.outputUrl else {
                         throw FileError.noOutput
                     }
-                    
+
                     var targetUrl = presetTargetUrl
-                    
-                    if let contentType = response.response?.headers["Content-Type"], !(task.convertTypes?.isEmpty ?? true) {
-                        if let suffix = ImageType.fromContentType(contentType: contentType)?.fileSuffix() {
+                    var outputType: ImageType?
+
+                    if let contentType = response.response?.headers["Content-Type"], task.convertTypes?.isNotEmpty ?? false {
+                        if let type = ImageType.fromContentType(contentType: contentType) {
+                            outputType = type
+                            let suffix = type.fileSuffix()
                             targetUrl = presetTargetUrl.replaceSuffix(suffix: suffix)
                         }
                     }
@@ -204,7 +207,7 @@ class TPClient {
                     if let filePermission = task.filePermission {
                         targetUrl.setPosixPermissions(filePermission)
                     }
-                    self.completeTask(task, fileSizeFromResponse: output.size)
+                    self.completeTask(task, fileSizeFromResponse: output.size, outputType: outputType)
                 } catch {
                     self.failTask(task, error: error)
                 }
@@ -271,7 +274,7 @@ class TPClient {
         return authorization
     }
 
-    private func completeTask(_ task: TaskInfo, fileSizeFromResponse: UInt64) {
+    private func completeTask(_ task: TaskInfo, fileSizeFromResponse: UInt64, outputType: ImageType?) {
         let finalFileSize: UInt64
         do {
             finalFileSize = try task.outputUrl!.sizeOfFile()
@@ -281,6 +284,7 @@ class TPClient {
 
         task.status = .completed
         task.finalSize = finalFileSize
+        task.outputType = outputType
         notifyTaskUpdated(task)
 
         lock.withLock {

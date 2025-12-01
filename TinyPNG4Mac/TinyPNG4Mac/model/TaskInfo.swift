@@ -25,6 +25,9 @@ class TaskInfo: Identifiable {
     /// Compressed image size
     /// in byte
     var finalSize: UInt64?
+    /// The final output type. If multiple image types provided, the smallest one will be used.
+    /// This depends on the api service.
+    var outputType: ImageType?
     var error: TaskError?
     /// upload / download progress
     var progress: Double = 0

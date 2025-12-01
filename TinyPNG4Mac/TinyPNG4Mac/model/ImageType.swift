@@ -41,6 +41,21 @@ extension ImageType {
 }
 
 extension ImageType {
+    func toDisplayType() -> String {
+        switch self {
+        case .avif:
+            return ".avif"
+        case .jpeg:
+            return ".jpeg"
+        case .png:
+            return ".png"
+        case .webp:
+            return ".webp"
+        }
+    }
+}
+
+extension ImageType {
     static func fromContentType(contentType: String) -> ImageType? {
         switch contentType {
         case "image/avif":

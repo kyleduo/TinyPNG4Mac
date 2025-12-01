@@ -18,10 +18,16 @@ extension UInt64 {
             size /= 1024
             unitIndex += 1
         }
-        
+
         size = (size * 10).rounded() / 10
 
         // Return the formatted string with one decimal point
         return String(format: "%.1f %@", size, units[unitIndex])
+    }
+}
+
+extension Array {
+    var isNotEmpty: Bool {
+        return !isEmpty
     }
 }

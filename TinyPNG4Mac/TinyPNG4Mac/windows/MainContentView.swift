@@ -86,6 +86,7 @@ struct MainContentView: View {
                     .padding(.top, 2)
 
                 // Format converting
+                // TODO: add hover style
                 HStack(spacing: 2) {
                     Text("Convert Image to:")
                         .font(.system(size: 12))

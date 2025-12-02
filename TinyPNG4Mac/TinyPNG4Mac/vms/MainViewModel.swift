@@ -67,7 +67,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
         $targetConvertType
             .map {
                 if $0 == nil {
-                    String(localized: "Do not convert")
+                    String(localized: "Keep origin format")
                 } else if $0 == .auto {
                     String(localized: "Auto")
                 } else {

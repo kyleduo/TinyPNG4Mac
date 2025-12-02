@@ -6,6 +6,9 @@
 //
 
 enum ImageType {
+    /// Indicator for auto converting, not a real type.
+    case auto
+
     case avif
     case jpeg
     case png
@@ -23,6 +26,8 @@ extension ImageType {
             return "image/png"
         case .webp:
             return "image/webp"
+        default:
+            return ""
         }
     }
 
@@ -36,6 +41,8 @@ extension ImageType {
             return "png"
         case .webp:
             return "webp"
+        default:
+            return ""
         }
     }
 }
@@ -44,13 +51,15 @@ extension ImageType {
     func toDisplayName() -> String {
         switch self {
         case .avif:
-            return ".avif"
+            return "AVIF"
         case .jpeg:
-            return ".jpeg"
+            return "JPEG"
         case .png:
-            return ".png"
+            return "PNG"
         case .webp:
-            return ".webp"
+            return "WEBP"
+        default:
+            return ""
         }
     }
 }
@@ -77,6 +86,41 @@ extension ImageType {
             return .webp
         default:
             return nil
+        }
+    }
+}
+
+/// Used for config storage
+extension ImageType {
+    static func fromConfigName(name: String) -> ImageType? {
+        switch name {
+        case "avif":
+            return .avif
+        case "jpeg":
+            return .jpeg
+        case "png":
+            return .png
+        case "webp":
+            return .webp
+        case "auto":
+            return .auto
+        default:
+            return nil
+        }
+    }
+
+    func toConfigName() -> String {
+        switch self {
+        case .avif:
+            return "avif"
+        case .jpeg:
+            return "jpeg"
+        case .png:
+            return "png"
+        case .webp:
+            return "webp"
+        case .auto:
+            return "auto"
         }
     }
 }

@@ -93,6 +93,7 @@ struct MainContentView: View {
 
                     Menu {
                         Button {
+                            vm.targetConvertType = nil
                         } label: {
                             Text("Do not convert")
                         }
@@ -100,6 +101,7 @@ struct MainContentView: View {
                         Divider()
 
                         Button {
+                            vm.targetConvertType = .auto
                         } label: {
                             Text("Auto")
                         }
@@ -111,14 +113,15 @@ struct MainContentView: View {
 
                         ForEach(ImageType.allTypes, id: \.self) { type in
                             Button {
+                                vm.targetConvertType = type
                             } label: {
                                 Text(type.toDisplayName())
                             }
                         }
                     } label: {
-                        Text("Auto")
+                        Text(vm.convertTypeName)
                     }
-                    .frame(maxWidth: 60)
+                    .frame(minWidth: 0)
                 }
                 .padding(vertical: 8, horizontal: 12)
 

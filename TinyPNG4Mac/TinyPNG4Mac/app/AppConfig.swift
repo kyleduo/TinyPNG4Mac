@@ -47,8 +47,9 @@ class AppConfig {
     /// value: remaining quota from latest response
     private(set) var usedQuotaCache: [String:Int] = [:]
     /// config of format converting
-    /// list of target format, nil for don't convert, empty list for auto converting
-    private(set) var convertingConfig: [String]? = nil
+    /// list of target format, empty for don't convert.
+    /// Just use the first element so far. Use Array for extension consider.
+    private(set) var convertingConfig: [String] = []
 
     private var hasMigrated = false
 
@@ -112,11 +113,7 @@ class AppConfig {
             if configs.count != convertConfig.count {
                 ud.set(configs, forKey: AppConfig.key_convertingConfig)
             }
-            if configs.isEmpty {
-                self.convertingConfig = []
-            }
-        } else {
-            self.convertingConfig = nil
+            self.convertingConfig = configs
         }
     }
 
@@ -137,13 +134,9 @@ class AppConfig {
         UserDefaults.standard.set(self.usedQuotaCache, forKey: AppConfig.key_usedQuotaCache)
     }
 
-    func saveConvertConfig(_ config: [String]?) {
+    func saveConvertConfig(_ config: [String]) {
         self.convertingConfig = config
-        if self.convertingConfig == nil {
-            UserDefaults.standard.removeObject(forKey: AppConfig.key_convertingConfig)
-        } else {
-            UserDefaults.standard.set(self.convertingConfig, forKey: AppConfig.key_convertingConfig)
-        }
+        UserDefaults.standard.set(self.convertingConfig, forKey: AppConfig.key_convertingConfig)
     }
 
     private func migrateDeprecatedKeys() {

@@ -34,6 +34,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
 
     init() {
         TPClient.shared.callback = self
+        monthlyUsedQuota = AppContext.shared.appConfig.currentUsedQuota() ?? -1
     }
 
     var failedTaskCount: Int {
@@ -300,6 +301,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
 
     func onMonthlyUsedQuotaUpdated(quota: Int) {
         debugPrint("onMonthlyUsedQuotaUpdated \(quota)")
+        AppContext.shared.appConfig.saveUsedQuota(quota)
         monthlyUsedQuota = quota
     }
 

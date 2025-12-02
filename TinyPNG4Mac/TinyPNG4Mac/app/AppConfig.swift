@@ -15,7 +15,9 @@ class AppConfig {
     static let key_concurrentTaskCount = "concurrentTaskCount"
     static let key_saveMode = "saveMode"
     static let key_outputDirectory = "outputDirectory"
-
+    static let key_usedQuotaCache = "usedQuotaCache"
+    static let key_convertingConfig = "convertingConfig"
+    
     private static let key_migrated = "migrated"
 
     // Deprecated
@@ -40,6 +42,13 @@ class AppConfig {
     private(set) var preserveCopyright: Bool = false
     private(set) var preserveCreation: Bool = false
     private(set) var preserveLocation: Bool = false
+    /// Save the latest quota remaining for each key
+    /// key: prefix of 8 length of api_key
+    /// value: remaining quota from latest response
+    private(set) var usedQuotaCache: [String:Int] = [:]
+    /// config of format converting
+    /// list of target format, nil for don't convert, empty list for auto converting
+    private(set) var convertingConfig: [String]? = nil
 
     private var hasMigrated = false
 
@@ -82,6 +91,58 @@ class AppConfig {
             self.outputDirectoryUrl = URL(filePath: outputDirectoryUrl)
         } else {
             outputDirectoryUrl = FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first?.appendingPathComponent(AppConfig.defaultOutputDirectoryName, isDirectory: true)
+        }
+
+        if let usedQuotaCache = ud.dictionary(forKey: AppConfig.key_usedQuotaCache) {
+            usedQuotaCache.forEach { (key: String, value: Any) in
+                if let quota = value as? Int {
+                    self.usedQuotaCache[key] = quota
+                }
+            }
+        }
+
+        if let convertConfig = ud.array(forKey: AppConfig.key_convertingConfig) {
+            var configs: [String] = []
+            convertConfig.forEach { e in
+                if let format = e as? String {
+                    configs.append(format)
+                }
+            }
+            // There's error data in ud, replace it
+            if configs.count != convertConfig.count {
+                ud.set(configs, forKey: AppConfig.key_convertingConfig)
+            }
+            if configs.isEmpty {
+                self.convertingConfig = []
+            }
+        } else {
+            self.convertingConfig = nil
+        }
+    }
+
+    func currentUsedQuota() -> Int? {
+        if apiKey.isEmpty || apiKey.count < 8 {
+            return nil
+        }
+        let key = String(apiKey.prefix(8))
+        return self.usedQuotaCache[key]
+    }
+
+    func saveUsedQuota(_ quota: Int) {
+        if apiKey.isEmpty || apiKey.count < 8 {
+            return
+        }
+        let key = String(apiKey.prefix(8))
+        self.usedQuotaCache[key] = quota
+        UserDefaults.standard.set(self.usedQuotaCache, forKey: AppConfig.key_usedQuotaCache)
+    }
+
+    func saveConvertConfig(_ config: [String]?) {
+        self.convertingConfig = config
+        if self.convertingConfig == nil {
+            UserDefaults.standard.removeObject(forKey: AppConfig.key_convertingConfig)
+        } else {
+            UserDefaults.standard.set(self.convertingConfig, forKey: AppConfig.key_convertingConfig)
         }
     }
 

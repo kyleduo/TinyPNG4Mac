@@ -18,7 +18,6 @@ struct MainContentView: View {
     @State private var alertMessage: String? = nil
     @State private var showOutputDirectoryTips: Bool = false
     @State private var outputDirectoryButtonPosition: CGRect = CGRect.zero
-//    @State private var tipsSize: CGSize = CGSize.zero
     @State private var rootSize: CGSize = CGSize.zero
     @State private var hoverSaveModeButton: Bool = false
     @State private var showAutoConvertTypeTips: Bool = false
@@ -88,7 +87,7 @@ struct MainContentView: View {
 
                 // Format converting
                 HStack(spacing: 2) {
-                    Text("Convert Image to: ")
+                    Text("Convert Image to:")
                         .font(.system(size: 12))
                         .foregroundStyle(Color("textCaption"))
 

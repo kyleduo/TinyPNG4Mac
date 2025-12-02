@@ -89,17 +89,6 @@
         }
       }
     },
-    "Auto Convert" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "自动转换"
-          }
-        }
-      }
-    },
     "Cancel" : {
       "localizations" : {
         "zh-Hans" : {
@@ -220,7 +209,7 @@
         }
       }
     },
-    "Convert Image to: " : {
+    "Convert Image to:" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {

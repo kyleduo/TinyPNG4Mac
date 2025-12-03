@@ -32,7 +32,7 @@ struct TaskRowView: View {
                         RoundedRectangle(cornerRadius: 4)
                             .stroke(Color("taskPreviewStroke"), lineWidth: 1)
                     }
-           
+
                 VStack {
                     VStack(alignment: .leading, spacing: 2) {
                         // File path + Menu
@@ -50,7 +50,7 @@ struct TaskRowView: View {
                                 .onHover { hover in
                                     titleUnderline = hover
                                 }
-                            
+
                             Menu {
                                 Button {
                                     NSWorkspace.shared.open(task.originUrl)
@@ -120,6 +120,13 @@ struct TaskRowView: View {
                                 Text(finalSize.formatBytes())
                                     .font(.system(size: 10, weight: .regular))
                                     .foregroundStyle(Color("textSecondary"))
+
+                                if let outputType = task.outputType {
+                                    Spacer()
+                                        .frame(width: 2)
+
+                                    TypeConvertTag(type: outputType.toDisplayName())
+                                }
                             }
                         }
                     }
@@ -139,7 +146,7 @@ struct TaskRowView: View {
                             .buttonStyle(BorderlessButtonStyle())
                             .help("Reveal Compressed Image in Finder")
                         }
-                        
+
                         Spacer()
 
                         Text(task.statusText())
@@ -223,6 +230,31 @@ struct TaskRowView: View {
     }
 }
 
+struct TypeConvertTag: View {
+    let type: String
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Image(systemName: "repeat")
+                .font(.system(size: 10, weight: .medium))
+                .foregroundColor(Color("textSecondary"))
+
+            Text(type)
+                .font(.system(size: 10, weight: .regular))
+                .foregroundStyle(Color("textSecondary"))
+        }
+        .padding(.horizontal, 4)
+        .padding(.vertical, 2)
+        .background(
+            Color.clear
+                .overlay(
+                    Capsule()
+                        .stroke(Color("taskRowStroke"), lineWidth: 1)
+                )
+        )
+    }
+}
+
 extension TaskInfo {
     fileprivate func statusText() -> String {
         if (status == .uploading || status == .downloading) && progress > 0 {
@@ -268,7 +300,7 @@ extension TaskStatus {
 //     TaskRowView(vm: MainViewModel(), task: Binding(get: {
 //         TaskInfo(originUrl: URL(filePath: "/Users"))
 //     }, set: { _ in
-//         
+//
 //     }), last: false)
 //     .frame(height: 76)
 // }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import Combine
 
 class MainViewModel: ObservableObject, TPClientCallback {
     @Published var tasks: [TaskInfo] = []
@@ -14,6 +15,10 @@ class MainViewModel: ObservableObject, TPClientCallback {
     @Published var restoreConfirmTask: TaskInfo?
     @Published var settingsNotReadyMessage: String? = nil
     @Published var showQuitWithRunningTasksAlert: Bool = false
+    @Published var targetConvertType: ImageType? = nil
+    @Published private(set) var convertTypeName: String = ""
+    
+    private var cancellables = Set<AnyCancellable>()
 
     var totalOriginSize: UInt64 {
         tasks.reduce(0) { partialResult, task in
@@ -34,6 +39,42 @@ class MainViewModel: ObservableObject, TPClientCallback {
 
     init() {
         TPClient.shared.callback = self
+        
+        monthlyUsedQuota = AppContext.shared.appConfig.currentUsedQuota() ?? -1
+        
+        let convertingConfig = AppContext.shared.appConfig.convertingConfig
+        if let firstElement = convertingConfig.first {
+            let imageType = ImageType.fromConfigName(name: firstElement)
+            targetConvertType = imageType
+        } else {
+            targetConvertType = nil
+        }
+        
+        $targetConvertType
+            .dropFirst()
+            .sink { newValue in
+                let type = newValue
+                let config: [String]
+                if type == nil {
+                    config = []
+                } else {
+                    config = [type!.toConfigName()]
+                }
+                AppContext.shared.appConfig.saveConvertConfig(config)
+            }
+            .store(in: &cancellables)
+        
+        $targetConvertType
+            .map {
+                if $0 == nil {
+                    String(localized: "Keep origin format")
+                } else if $0 == .auto {
+                    String(localized: "Auto")
+                } else {
+                    $0!.toDisplayName()
+                }
+            }
+            .assign(to: &$convertTypeName)
     }
 
     var failedTaskCount: Int {
@@ -101,6 +142,17 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     appendTask(task: task)
                     continue
                 }
+                
+                let types: [ImageType]
+                if let convertType = targetConvertType {
+                    if convertType == .auto {
+                        types = ImageType.allTypes
+                    } else {
+                        types = [convertType]
+                    }
+                } else {
+                    types = []
+                }
 
                 let task = TaskInfo(
                     originUrl: originUrl,
@@ -109,7 +161,8 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     outputUrl: outputUrl,
                     originSize: fileSize,
                     filePermission: originUrl.posixPermissionsOfFile() ?? 0x644,
-                    previewImage: previewImage ?? NSImage(named: "placeholder")!
+                    previewImage: previewImage ?? NSImage(named: "placeholder")!,
+                    convertTypes: types
                 )
 
                 print("Task created: \(task)")
@@ -299,6 +352,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
 
     func onMonthlyUsedQuotaUpdated(quota: Int) {
         debugPrint("onMonthlyUsedQuotaUpdated \(quota)")
+        AppContext.shared.appConfig.saveUsedQuota(quota)
         monthlyUsedQuota = quota
     }
 

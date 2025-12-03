@@ -84,4 +84,12 @@ extension URL {
     func ensureDirectoryExists() throws {
         try FileUtils.ensureDirectoryExist(file: self)
     }
+    
+    func replaceSuffix(suffix: String) -> URL {
+        if self.rawPath().hasSuffix(".\(suffix)") {
+            return self
+        } else {
+            return self.deletingPathExtension().appendingPathExtension(suffix)
+        }
+    }
 }

@@ -16,12 +16,18 @@ class TaskInfo: Identifiable {
     var backupUrl: URL?
     var downloadUrl: URL?
     var outputUrl: URL?
+    /// types to convert the image to
+    /// If nil or empty, do not convert. If provide multiple image types, the smallest one will be used.
+    var convertTypes: [ImageType]?
     var status: TaskStatus
     /// in byte
     var originSize: UInt64?
     /// Compressed image size
     /// in byte
     var finalSize: UInt64?
+    /// The final output type. If multiple image types provided, the smallest one will be used.
+    /// This depends on the api service.
+    var outputType: ImageType?
     var error: TaskError?
     /// upload / download progress
     var progress: Double = 0
@@ -52,7 +58,7 @@ class TaskInfo: Identifiable {
         self.progress = progress
     }
 
-    init(originUrl: URL, backupUrl: URL, downloadUrl: URL, outputUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage) {
+    init(originUrl: URL, backupUrl: URL, downloadUrl: URL, outputUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage, convertTypes: [ImageType]? = nil) {
         id = UUID().uuidString
         status = .created
         self.previewImage = previewImage
@@ -62,6 +68,7 @@ class TaskInfo: Identifiable {
         self.outputUrl = outputUrl
         self.originSize = originSize
         self.filePermission = filePermission
+        self.convertTypes = convertTypes
     }
 
     init(originUrl: URL) {

@@ -18,9 +18,11 @@ struct MainContentView: View {
     @State private var alertMessage: String? = nil
     @State private var showOutputDirectoryTips: Bool = false
     @State private var outputDirectoryButtonPosition: CGRect = CGRect.zero
-    @State private var tipsSize: CGSize = CGSize.zero
     @State private var rootSize: CGSize = CGSize.zero
     @State private var hoverSaveModeButton: Bool = false
+    @State private var showAutoConvertTypeTips: Bool = false
+    @State private var autoConvertTypeTipsPosition: CGRect = CGRect.zero
+    @State private var hoverConvertTypeMenu: Bool = false
 
     @AppStorage(AppConfig.key_saveMode) var saveMode: String = AppContext.shared.appConfig.saveMode
 
@@ -84,6 +86,92 @@ struct MainContentView: View {
                     .padding(vertical: 0, horizontal: 12)
                     .padding(.top, 2)
 
+                // Format converting
+                HStack(spacing: 2) {
+                    Text("Convert Images to:")
+                        .font(.system(size: 12))
+                        .foregroundStyle(Color("textCaption"))
+
+                    Menu {
+                        Button {
+                            vm.targetConvertType = nil
+                        } label: {
+                            Text("Keep origin format")
+                                .font(.system(size: 12))
+                        }
+
+                        Divider()
+
+                        Button {
+                            vm.targetConvertType = .auto
+                        } label: {
+                            Text("Auto")
+                                .font(.system(size: 12))
+                        }
+
+                        Text("Use the smallest format automatically")
+                            .font(.system(size: 10))
+
+                        Divider()
+
+                        ForEach(ImageType.allTypes, id: \.self) { type in
+                            Button {
+                                vm.targetConvertType = type
+                            } label: {
+                                Text(type.toDisplayName())
+                                    .font(.system(size: 12))
+                            }
+                        }
+                    } label: {
+                        Text(vm.convertTypeName)
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color("textSecondary"))
+                            .frame(minWidth: 20)
+                    }
+                    .padding(vertical: 2, horizontal: 4)
+                    .background {
+                        if hoverConvertTypeMenu {
+                            RoundedRectangle(cornerRadius: 4)
+                                .fill(Color.white.opacity(0.15))
+                        } else {
+                            Color.clear
+                        }
+                    }
+                    .onHover { hover in
+                        hoverConvertTypeMenu = hover
+                    }
+                    .menuStyle(.borderlessButton)
+                    .menuIndicator(.hidden)
+                    .fixedSize(horizontal: true, vertical: false)
+
+                    if vm.targetConvertType == .auto {
+                        Image(systemName: "info.circle.fill")
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(Color("textSecondary"))
+                            .background {
+                                GeometryReader { proxy in
+                                    Color.clear
+                                        .onAppear {
+                                            autoConvertTypeTipsPosition = proxy.frame(in: .named("root"))
+                                        }
+                                        .onChange(of: proxy.frame(in: .named("root"))) { newFrame in
+                                            autoConvertTypeTipsPosition = newFrame
+                                        }
+                                }
+                            }
+                            .onHover { hover in
+                                showAutoConvertTypeTips = hover
+                            }
+                    }
+
+                    Spacer()
+                }
+                .padding(vertical: 8, horizontal: 12)
+
+                HorizontalDivider()
+                    .padding(vertical: 0, horizontal: 12)
+                    .padding(.top, 2)
+
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
                         KeyValueLabel(key: "Total:", value: "\(vm.tasks.count) tasks, \(vm.totalOriginSize.formatBytes())")
@@ -92,20 +180,28 @@ struct MainContentView: View {
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
 
-                    settingButton(useButtonStyle: false) {
-                        KeyValueLabel(key: "Save Mode:", value: LocalizedStringKey(saveMode))
-                            .padding(vertical: 2, horizontal: 4)
-                            .background {
-                                if hoverSaveModeButton {
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .fill(Color.white.opacity(0.15))
-                                } else {
-                                    Color.clear
+                    HStack(spacing: 2) {
+                        Text("Save Mode:")
+                            .font(.system(size: 12))
+                            .foregroundStyle(Color("textCaption"))
+
+                        settingButton(useButtonStyle: false) {
+                            Text(LocalizedStringKey(saveMode))
+                                .font(.system(size: 12))
+                                .foregroundStyle(Color("textSecondary"))
+                                .padding(vertical: 2, horizontal: 4)
+                                .background {
+                                    if hoverSaveModeButton {
+                                        RoundedRectangle(cornerRadius: 4)
+                                            .fill(Color.white.opacity(0.15))
+                                    } else {
+                                        Color.clear
+                                    }
                                 }
-                            }
-                            .onHover { hover in
-                                hoverSaveModeButton = hover
-                            }
+                                .onHover { hover in
+                                    hoverSaveModeButton = hover
+                                }
+                        }
                     }
                 }
                 .padding(EdgeInsets(top: 8, leading: 12, bottom: 0, trailing: 12))
@@ -154,33 +250,15 @@ struct MainContentView: View {
                     menuEntry()
                 }.padding(EdgeInsets(top: 6, leading: 12, bottom: 12, trailing: 12))
             }
-            
+
             DebugView()
 
             if let outputDir = appContext.appConfig.outputDirectoryUrl, showOutputDirectoryTips {
-                Text(String(localized: "Click to open: ") + "\n\(outputDir.rawPath())")
-                    .font(.system(size: 12))
-                    .foregroundStyle(Color("textBody"))
-                    .lineLimit(2)
-                    .padding(vertical: 6, horizontal: 12)
-                    .background {
-                        RoundedRectangle(cornerRadius: 8)
-                            .fill(Color.black.opacity(0.8))
-                    }
-                    .padding(.leading, 12)
-                    .padding(.trailing, 12)
-                    .background {
-                        GeometryReader { proxy in
-                            Color.clear
-                                .onAppear {
-                                    tipsSize = proxy.size
-                                }
-                                .onChange(of: proxy.size) { newSize in
-                                    tipsSize = newSize
-                                }
-                        }
-                    }
-                    .position(x: rootSize.width / 2 + (rootSize.width - tipsSize.width) / 2, y: outputDirectoryButtonPosition.origin.y - tipsSize.height / 2 - 4)
+                TipsView(message: String(localized: "Click to open: ") + "\n\(outputDir.rawPath())", alignCenterOrRight: false, rootSize: $rootSize, anchorViewFrame: $outputDirectoryButtonPosition)
+            }
+
+            if showAutoConvertTypeTips {
+                TipsView(message: String(localized: "Use the smallest format automatically"), alignCenterOrRight: true, rootSize: $rootSize, anchorViewFrame: $autoConvertTypeTipsPosition)
             }
         }
         .coordinateSpace(name: "root")
@@ -346,6 +424,42 @@ struct MainContentView: View {
             return outputDir.fileExists()
         }
         return false
+    }
+}
+
+struct TipsView: View {
+    let message: String
+    let alignCenterOrRight: Bool
+
+    @Binding var rootSize: CGSize
+    @Binding var anchorViewFrame: CGRect
+
+    @State private var tipsSize: CGSize = CGSize.zero
+
+    var body: some View {
+        Text(message)
+            .font(.system(size: 12))
+            .foregroundStyle(Color("textBody"))
+            .lineLimit(2)
+            .padding(vertical: 6, horizontal: 12)
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.black.opacity(0.8))
+            }
+            .padding(.leading, 12)
+            .padding(.trailing, 12)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear
+                        .onAppear {
+                            tipsSize = proxy.size
+                        }
+                        .onChange(of: proxy.size) { newSize in
+                            tipsSize = newSize
+                        }
+                }
+            }
+            .position(x: alignCenterOrRight ? anchorViewFrame.origin.x + anchorViewFrame.width / 2 : rootSize.width / 2 + (rootSize.width - tipsSize.width) / 2, y: anchorViewFrame.origin.y - tipsSize.height / 2 - 4)
     }
 }
 

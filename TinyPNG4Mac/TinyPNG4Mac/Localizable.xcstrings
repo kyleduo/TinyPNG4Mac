@@ -79,6 +79,16 @@
     "API key:" : {
       "shouldTranslate" : false
     },
+    "Auto" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动"
+          }
+        }
+      }
+    },
     "Cancel" : {
       "localizations" : {
         "zh-Hans" : {
@@ -199,6 +209,16 @@
         }
       }
     },
+    "Convert Images to:" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将图片格式转换为："
+          }
+        }
+      }
+    },
     "Copyright" : {
       "localizations" : {
         "zh-Hans" : {
@@ -295,6 +315,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "当月已压缩图片数量： %@"
+          }
+        }
+      }
+    },
+    "Keep origin format" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保留原格式"
           }
         }
       }
@@ -680,6 +710,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "上传中"
+          }
+        }
+      }
+    },
+    "Use the smallest format automatically" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "自动使用最小的格式"
           }
         }
       }

@@ -1,5 +1,13 @@
 # Change Log
 
+**Version 2.1.0**
+
+1. Fix issue #65: task error when drag images to dock icon when App closed.
+2. Disable SandBox mode. Now Tiny Image can automatically create output folder if it's not exits.
+3. Show current save mode (Overwrite Mode / Save As Mode) in Main window.
+4. Add output folder icon to Main window which supports click to open.
+5. Add frequency used function entries to task row.
+
 **Version 2.0.0**
 
 1. New designed task list with more task info, such as file sizes, api usage.

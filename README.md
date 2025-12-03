@@ -10,17 +10,12 @@ TinyPNG for macOS is a 3rd-party client of [TinyPNG](https://tinypng.com). With 
 
 [中文](./README_ZH.md)
 
-
-
-### 2.1.0 Release Note
+### 2.2.0 Release Note
 
 > Version 2.0.0+ supports macOS 13 Ventura and later. For lower version systems, please use the previous version.
 
-1. Fix issue #65: task error when drag images to dock icon when App closed.
-2. Disable SandBox mode. Now Tiny Image can automatically create output folder if it's not exits.
-3. Show current save mode (Overwrite Mode / Save As Mode) in Main window.
-4. Add output folder icon to Main window which supports click to open.
-5. Add frequency used function entries to task row.
+1. Support format converting. Convert image to specific format or automatically pick the smallest one in supported format list (PNG, JPEG, AVIF, WEBP).
+2. Add cache for number of image compressed.
 
 [Change Log](./CHANGE_LOG.md)
 

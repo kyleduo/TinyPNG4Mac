@@ -21,4 +21,8 @@ class AppContext: ObservableObject {
             false
         #endif
     }
+    
+    var buildForScreenShot: Bool {
+        return ProcessInfo.processInfo.environment["SCREENSHOT"] != nil
+    }
 }

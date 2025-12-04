@@ -13,7 +13,7 @@ struct DebugView: View {
     @EnvironmentObject var debugVM: DebugViewModel
 
     var body: some View {
-        if appContext.isDebug {
+        if appContext.isDebug && !appContext.buildForScreenShot {
             VStack(alignment: .trailing) {
                 ForEach(debugVM.debugMessages, id: \.self) { msg in
                     Text(msg)

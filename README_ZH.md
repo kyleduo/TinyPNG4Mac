@@ -10,7 +10,7 @@ TinyPNG for macOS 是 [TinyPNG](https://tinypng.com) 的第三方客户端，使
 
 [English](./README.md)
 
-### 2.2.0 更新说明
+### 2.2.1 更新说明
 
 > 2.0.0 及以后版本支持 macOS 13 Ventura 及更新的系统。更低版本的系统请使用历史版本。
 

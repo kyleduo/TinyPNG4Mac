@@ -10,7 +10,7 @@ TinyPNG for macOS is a 3rd-party client of [TinyPNG](https://tinypng.com). With 
 
 [中文](./README_ZH.md)
 
-### 2.2.0 Release Note
+### 2.2.1 Release Note
 
 > Version 2.0.0+ supports macOS 13 Ventura and later. For lower version systems, please use the previous version.
 

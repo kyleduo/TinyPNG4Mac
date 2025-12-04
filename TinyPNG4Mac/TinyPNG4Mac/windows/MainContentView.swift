@@ -142,6 +142,7 @@ struct MainContentView: View {
                     }
                     .menuStyle(.borderlessButton)
                     .menuIndicator(.hidden)
+                    .tint(Color("textSecondary"))
                     .fixedSize(horizontal: true, vertical: false)
 
                     if vm.targetConvertType == .auto {

@@ -11,11 +11,17 @@ import SwiftUI
 class TaskInfo: Identifiable {
     var id: String
     var originUrl: URL
+    /// Selected file or root folder from which the origin image is discovered.
+    var inputUrl: URL
     var filePermission: Int?
     var previewImage: NSImage?
     var backupUrl: URL?
     var downloadUrl: URL?
     var outputUrl: URL?
+    /// Optional task-specific save mode. Falls back to global settings when nil.
+    var saveMode: String?
+    /// Optional task-specific output directory. Falls back to global settings when nil.
+    var outputDirectoryUrl: URL?
     /// types to convert the image to
     /// If nil or empty, do not convert. If provide multiple image types, the smallest one will be used.
     var convertTypes: [ImageType]?
@@ -35,11 +41,15 @@ class TaskInfo: Identifiable {
     init(
         id: String,
         originUrl: URL,
+        inputUrl: URL? = nil,
         status: TaskStatus,
         filePermission: Int? = nil,
         previewImage: NSImage? = nil,
         backupUrl: URL? = nil,
         downloadUrl: URL? = nil,
+        outputUrl: URL? = nil,
+        saveMode: String? = nil,
+        outputDirectoryUrl: URL? = nil,
         originSize: UInt64? = nil,
         finalSize: UInt64? = nil,
         error: TaskError? = nil,
@@ -47,36 +57,47 @@ class TaskInfo: Identifiable {
     ) {
         self.id = id
         self.originUrl = originUrl
+        self.inputUrl = inputUrl ?? originUrl
         self.status = status
         self.filePermission = filePermission
         self.previewImage = previewImage
         self.backupUrl = backupUrl
         self.downloadUrl = downloadUrl
+        self.outputUrl = outputUrl
+        self.saveMode = saveMode
+        self.outputDirectoryUrl = outputDirectoryUrl
         self.originSize = originSize
         self.finalSize = finalSize
         self.error = error
         self.progress = progress
     }
 
-    init(originUrl: URL, backupUrl: URL, downloadUrl: URL, outputUrl: URL, originSize: UInt64, filePermission: Int, previewImage: NSImage, convertTypes: [ImageType]? = nil) {
+    init(originUrl: URL, inputUrl: URL, backupUrl: URL, downloadUrl: URL, outputUrl: URL? = nil, originSize: UInt64, filePermission: Int, previewImage: NSImage, saveMode: String? = nil, outputDirectoryUrl: URL? = nil, convertTypes: [ImageType]? = nil) {
         id = UUID().uuidString
         status = .created
         self.previewImage = previewImage
         self.originUrl = originUrl
+        self.inputUrl = inputUrl
         self.backupUrl = backupUrl
         self.downloadUrl = downloadUrl
         self.outputUrl = outputUrl
         self.originSize = originSize
         self.filePermission = filePermission
+        self.saveMode = saveMode
+        self.outputDirectoryUrl = outputDirectoryUrl
         self.convertTypes = convertTypes
     }
 
     init(originUrl: URL) {
         id = UUID().uuidString
         self.originUrl = originUrl
+        inputUrl = originUrl
         filePermission = nil
         backupUrl = nil
         downloadUrl = nil
+        outputUrl = nil
+        saveMode = nil
+        outputDirectoryUrl = nil
         status = .created
         originSize = 0
         finalSize = 0
@@ -101,6 +122,30 @@ extension TaskInfo: Equatable {
 }
 
 extension TaskInfo {
+    func effectiveSaveMode(config: AppConfig = AppContext.shared.appConfig) -> String {
+        if let saveMode, AppConfig.saveModeKeys.contains(saveMode) {
+            return saveMode
+        }
+        return config.saveMode
+    }
+
+    func effectiveOutputDirectoryUrl(config: AppConfig = AppContext.shared.appConfig) -> URL? {
+        outputDirectoryUrl ?? config.outputDirectoryUrl
+    }
+
+    func resolveOutputUrl(config: AppConfig = AppContext.shared.appConfig) -> URL? {
+        if effectiveSaveMode(config: config) == AppConfig.saveModeNameOverwrite {
+            return originUrl
+        }
+
+        guard let targetDirectory = effectiveOutputDirectoryUrl(config: config) else {
+            return nil
+        }
+
+        let relocatedUrl = FileUtils.getRelocatedRelativePath(of: originUrl, fromDir: inputUrl, toDir: targetDirectory)
+        return relocatedUrl ?? targetDirectory.appendingPathComponent(originUrl.lastPathComponent)
+    }
+
     func updateError(error: TaskError) {
         status = .failed
         self.error = error

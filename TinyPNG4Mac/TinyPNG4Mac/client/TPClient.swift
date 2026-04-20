@@ -6,7 +6,40 @@
 //
 
 import Alamofire
+import CFNetwork
 import Foundation
+
+private final class ProxySessionDelegate: SessionDelegate, @unchecked Sendable {
+    private let proxyCredentialProvider: () -> URLCredential?
+
+    init(proxyCredentialProvider: @escaping () -> URLCredential?) {
+        self.proxyCredentialProvider = proxyCredentialProvider
+        super.init()
+    }
+
+    override func urlSession(_ session: URLSession,
+                             task: URLSessionTask,
+                             didReceive challenge: URLAuthenticationChallenge,
+                             completionHandler: @escaping (URLSession.AuthChallengeDisposition, URLCredential?) -> Void) {
+        let authMethod = challenge.protectionSpace.authenticationMethod
+        let supportedMethods = [
+            NSURLAuthenticationMethodHTTPBasic,
+            NSURLAuthenticationMethodHTTPDigest,
+            NSURLAuthenticationMethodNTLM,
+            NSURLAuthenticationMethodNegotiate,
+        ]
+
+        if challenge.protectionSpace.isProxy(),
+           challenge.previousFailureCount == 0,
+           supportedMethods.contains(authMethod),
+           let credential = proxyCredentialProvider() {
+            completionHandler(.useCredential, credential)
+            return
+        }
+
+        super.urlSession(session, task: task, didReceive: challenge, completionHandler: completionHandler)
+    }
+}
 
 class TPClient {
     static let shared = TPClient()
@@ -27,8 +60,10 @@ class TPClient {
 
     private var taskQueue = TPQueue<TaskInfo>()
     private let lock: NSLock = NSLock()
+    private let sessionLock: NSLock = NSLock()
 
     private var currentRequests: [Request] = []
+    private var sessions: [String: Session] = [:]
 
     func addTask(task: TaskInfo) {
         lock.withLock {
@@ -103,7 +138,7 @@ class TPClient {
                 return
             }
 
-            let uploadRequest = AF.upload(data, to: TPAPI.shrink.rawValue, headers: headers)
+            let uploadRequest = session().upload(data, to: TPAPI.shrink.rawValue, headers: headers)
                 .uploadProgress { progress in
                     if progress.fractionCompleted == 1 {
                         self.updateStatus(.processing, of: task)
@@ -158,9 +193,9 @@ class TPClient {
             req.addValue("application/json", forHTTPHeaderField: "Content-Type")
             req.httpBody = try? JSONSerialization.data(withJSONObject: params, options: [])
 
-            request = AF.download(req)
+            request = session().download(req)
         } else {
-            request = AF.download(output.url, to: destination)
+            request = session().download(output.url, to: destination)
         }
 
         request.downloadProgress { progress in
@@ -205,6 +240,7 @@ class TPClient {
 
                     try targetUrl.ensureDirectoryExists()
                     try downloadedUrl.moveFileTo(targetUrl)
+                    task.outputUrl = targetUrl
                     if let filePermission = task.filePermission {
                         targetUrl.setPosixPermissions(filePermission)
                     }
@@ -275,10 +311,86 @@ class TPClient {
         return authorization
     }
 
+    private func session() -> Session {
+        let proxyConfig = AppContext.shared.appConfig.proxyConfig
+        let cacheKey = proxyConfig.sessionCacheKey()
+
+        return sessionLock.withLock {
+            if let cached = sessions[cacheKey] {
+                return cached
+            }
+
+            let session = makeSession(proxyConfig: proxyConfig)
+            sessions[cacheKey] = session
+            return session
+        }
+    }
+
+    private func makeSession(proxyConfig: ProxyConfig) -> Session {
+        let configuration = URLSessionConfiguration.af.default
+
+        if let connectionProxyDictionary = makeConnectionProxyDictionary(proxyConfig: proxyConfig) {
+            configuration.connectionProxyDictionary = connectionProxyDictionary
+        }
+
+        let delegate = ProxySessionDelegate {
+            self.makeProxyCredential(proxyConfig: proxyConfig)
+        }
+        return Session(configuration: configuration, delegate: delegate)
+    }
+
+    private func makeConnectionProxyDictionary(proxyConfig: ProxyConfig) -> [AnyHashable: Any]? {
+        guard proxyConfig.validationError() == nil,
+              proxyConfig.isEnabled,
+              let port = proxyConfig.port else {
+            return nil
+        }
+
+        var dictionary: [AnyHashable: Any] = [:]
+
+        switch proxyConfig.type {
+        case .disabled:
+            return nil
+        case .http:
+            dictionary[kCFNetworkProxiesHTTPEnable as String] = 1
+            dictionary[kCFNetworkProxiesHTTPProxy as String] = proxyConfig.trimmedServer
+            dictionary[kCFNetworkProxiesHTTPPort as String] = port
+            dictionary[kCFNetworkProxiesHTTPSEnable as String] = 1
+            dictionary[kCFNetworkProxiesHTTPSProxy as String] = proxyConfig.trimmedServer
+            dictionary[kCFNetworkProxiesHTTPSPort as String] = port
+        case .socks5:
+            dictionary[kCFNetworkProxiesSOCKSEnable as String] = 1
+            dictionary[kCFNetworkProxiesSOCKSProxy as String] = proxyConfig.trimmedServer
+            dictionary[kCFNetworkProxiesSOCKSPort as String] = port
+            dictionary[kCFStreamPropertySOCKSVersion as String] = kCFStreamSocketSOCKSVersion5
+
+            if !proxyConfig.trimmedUsername.isEmpty {
+                dictionary[kCFStreamPropertySOCKSUser as String] = proxyConfig.trimmedUsername
+            }
+            if !proxyConfig.password.isEmpty {
+                dictionary[kCFStreamPropertySOCKSPassword as String] = proxyConfig.password
+            }
+        }
+
+        return dictionary
+    }
+
+    private func makeProxyCredential(proxyConfig: ProxyConfig) -> URLCredential? {
+        guard proxyConfig.hasAuthentication else {
+            return nil
+        }
+
+        return URLCredential(
+            user: proxyConfig.trimmedUsername,
+            password: proxyConfig.password,
+            persistence: .forSession
+        )
+    }
+
     private func completeTask(_ task: TaskInfo, fileSizeFromResponse: UInt64, outputType: ImageType?) {
         let finalFileSize: UInt64
         do {
-            finalFileSize = try task.outputUrl!.sizeOfFile()
+            finalFileSize = try task.outputUrl?.sizeOfFile() ?? fileSizeFromResponse
         } catch {
             finalFileSize = fileSizeFromResponse
         }

@@ -58,6 +58,33 @@
 			<key>NSServiceDescription</key>
 			<string>TINY_IMAGE_COMPRESS_SERVICE_DESCRIPTION</string>
 		</dict>
+		<dict>
+			<key>NSMenuItem</key>
+			<dict>
+				<key>default</key>
+				<string>Compress with Tiny Image and Save As</string>
+			</dict>
+			<key>NSMessage</key>
+			<string>compressSelectionSaveAs</string>
+			<key>NSPortName</key>
+			<string>Tiny Image</string>
+			<key>NSRequiredContext</key>
+			<dict>
+				<key>NSApplicationIdentifier</key>
+				<string>com.apple.finder</string>
+			</dict>
+			<key>NSSendFileTypes</key>
+			<array>
+				<string>public.image</string>
+				<string>public.folder</string>
+			</array>
+			<key>NSSendTypes</key>
+			<array>
+				<string>public.file-url</string>
+			</array>
+			<key>NSServiceDescription</key>
+			<string>TINY_IMAGE_COMPRESS_SAVE_AS_SERVICE_DESCRIPTION</string>
+		</dict>
 	</array>
 </dict>
 </plist>

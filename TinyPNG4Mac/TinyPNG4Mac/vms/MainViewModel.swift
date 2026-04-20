@@ -81,8 +81,8 @@ class MainViewModel: ObservableObject, TPClientCallback {
         tasks.count { $0.status == .failed }
     }
 
-    func createTasks(imageURLs: [URL: URL]) {
-        if !validateSettingsBeforeStartTask() {
+    func createTasks(imageURLs: [URL: URL], saveMode: String? = nil, outputDirectoryUrl: URL? = nil) {
+        if !validateSettingsBeforeStartTask(saveMode: saveMode, outputDirectoryUrl: outputDirectoryUrl) {
             return
         }
 
@@ -130,19 +130,6 @@ class MainViewModel: ObservableObject, TPClientCallback {
                     continue
                 }
 
-                let outputUrl: URL
-                if AppContext.shared.appConfig.isOverwriteMode() {
-                    outputUrl = originUrl
-                } else if let outputFolderUrl = AppContext.shared.appConfig.outputDirectoryUrl {
-                    let relocatedUrl = FileUtils.getRelocatedRelativePath(of: originUrl, fromDir: inputUrl, toDir: outputFolderUrl)
-                    outputUrl = relocatedUrl ?? outputFolderUrl.appendingPathComponent(originUrl.lastPathComponent)
-                } else {
-                    let task = TaskInfo(originUrl: originUrl)
-                    task.updateError(error: TaskError.from(error: FileError.noOutput))
-                    appendTask(task: task)
-                    continue
-                }
-                
                 let types: [ImageType]
                 if let convertType = targetConvertType {
                     if convertType == .auto {
@@ -156,14 +143,20 @@ class MainViewModel: ObservableObject, TPClientCallback {
 
                 let task = TaskInfo(
                     originUrl: originUrl,
+                    inputUrl: inputUrl,
                     backupUrl: backupUrl,
                     downloadUrl: downloadUrl,
-                    outputUrl: outputUrl,
                     originSize: fileSize,
                     filePermission: originUrl.posixPermissionsOfFile() ?? 0x644,
                     previewImage: previewImage ?? NSImage(named: "placeholder")!,
+                    saveMode: saveMode,
+                    outputDirectoryUrl: outputDirectoryUrl,
                     convertTypes: types
                 )
+
+                if !prepareTaskForStart(task) {
+                    continue
+                }
 
                 print("Task created: \(task)")
 
@@ -175,6 +168,9 @@ class MainViewModel: ObservableObject, TPClientCallback {
     }
 
     func retry(_ task: TaskInfo) {
+        guard prepareTaskForStart(task) else {
+            return
+        }
         TPClient.shared.addTask(task: task)
     }
 
@@ -236,7 +232,7 @@ class MainViewModel: ObservableObject, TPClientCallback {
 
     /// Validate settings before create tasks.
     /// - Returns true if the settings is valid
-    private func validateSettingsBeforeStartTask() -> Bool {
+    private func validateSettingsBeforeStartTask(saveMode: String? = nil, outputDirectoryUrl: URL? = nil) -> Bool {
         let config = AppContext.shared.appConfig
         if config.apiKey.isEmpty {
             DispatchQueue.main.async {
@@ -245,12 +241,12 @@ class MainViewModel: ObservableObject, TPClientCallback {
             return false
         }
 
-        if config.isSaveAsMode() {
-            if let outputFolderUrl = config.outputDirectoryUrl {
+        let resolvedSaveMode = saveMode ?? config.saveMode
+        if resolvedSaveMode == AppConfig.saveModeNameSaveAs {
+            if let outputFolderUrl = outputDirectoryUrl ?? config.outputDirectoryUrl {
                 if !outputFolderUrl.fileExists() {
                     do {
                         try outputFolderUrl.ensureDirectoryExists()
-                        return true
                     } catch {
                         DispatchQueue.main.async {
                             self.settingsNotReadyMessage = String(localized: "Failed to create output directory: \(outputFolderUrl.rawPath()), please re-select the output directory.")
@@ -273,6 +269,29 @@ class MainViewModel: ObservableObject, TPClientCallback {
             }
         }
 
+        if let proxyValidationError = config.proxyValidationError() {
+            DispatchQueue.main.async {
+                self.settingsNotReadyMessage = proxyValidationError
+            }
+            return false
+        }
+
+        return true
+    }
+
+    private func prepareTaskForStart(_ task: TaskInfo) -> Bool {
+        if !validateSettingsBeforeStartTask(saveMode: task.saveMode, outputDirectoryUrl: task.outputDirectoryUrl) {
+            return false
+        }
+
+        guard let outputUrl = task.resolveOutputUrl() else {
+            DispatchQueue.main.async {
+                self.settingsNotReadyMessage = String(localized: "\"Save As Mode\" is selected. Please config the output directory first.")
+            }
+            return false
+        }
+
+        task.outputUrl = outputUrl
         return true
     }
 

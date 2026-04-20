@@ -1,2 +1,4 @@
 "Compress with Tiny Image" = "使用 Tiny Image 压缩";
-"TINY_IMAGE_COMPRESS_SERVICE_DESCRIPTION" = "使用 Tiny Image 压缩所选图片或文件夹。";
+"TINY_IMAGE_COMPRESS_SERVICE_DESCRIPTION" = "使用 Tiny Image 就地压缩所选图片或文件夹。";
+"Compress with Tiny Image and Save As" = "使用 Tiny Image 另存压缩";
+"TINY_IMAGE_COMPRESS_SAVE_AS_SERVICE_DESCRIPTION" = "先选择目标目录，再使用 Tiny Image 压缩所选图片或文件夹。";

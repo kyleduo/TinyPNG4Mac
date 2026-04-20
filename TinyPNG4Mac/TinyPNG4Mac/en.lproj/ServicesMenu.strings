@@ -1,2 +1,4 @@
 "Compress with Tiny Image" = "Compress with Tiny Image";
 "TINY_IMAGE_COMPRESS_SERVICE_DESCRIPTION" = "Compress the selected images or folders with Tiny Image.";
+"Compress with Tiny Image and Save As" = "Compress with Tiny Image and Save As";
+"TINY_IMAGE_COMPRESS_SAVE_AS_SERVICE_DESCRIPTION" = "Select a destination folder, then compress the selected images or folders with Tiny Image.";

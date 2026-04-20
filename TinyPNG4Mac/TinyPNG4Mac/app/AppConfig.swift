@@ -7,6 +7,82 @@
 
 import Foundation
 
+enum ProxyType: String, CaseIterable {
+    case disabled = "Disabled"
+    case http = "HTTP"
+    case socks5 = "SOCKS5"
+}
+
+struct ProxyConfig {
+    var type: ProxyType = .disabled
+    var server: String = ""
+    var portText: String = ""
+    var username: String = ""
+    var password: String = ""
+
+    var trimmedServer: String {
+        server.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var trimmedPortText: String {
+        portText.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var trimmedUsername: String {
+        username.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    var port: Int? {
+        Int(trimmedPortText)
+    }
+
+    var isEnabled: Bool {
+        type != .disabled
+    }
+
+    var hasAuthentication: Bool {
+        !trimmedUsername.isEmpty || !password.isEmpty
+    }
+
+    func validationError() -> String? {
+        guard isEnabled else {
+            return nil
+        }
+
+        if trimmedServer.isEmpty {
+            return "Please set the proxy server first."
+        }
+
+        guard let port else {
+            return "Please enter a valid proxy port number."
+        }
+
+        guard (1 ... 65535).contains(port) else {
+            return "Proxy port number must be between 1 and 65535."
+        }
+
+        if trimmedUsername.isEmpty && !password.isEmpty {
+            return "Please set the proxy username before entering a password."
+        }
+
+        return nil
+    }
+
+    func sessionCacheKey() -> String {
+        guard isEnabled else {
+            return type.rawValue
+        }
+
+        return [
+            type.rawValue,
+            trimmedServer.lowercased(),
+            trimmedPortText,
+            trimmedUsername,
+            password,
+        ].joined(separator: "|")
+    }
+}
+
 class AppConfig {
     static let key_apiKey = "apikey"
     static let key_preserveCopyright = "preserveCopyright"
@@ -17,6 +93,11 @@ class AppConfig {
     static let key_outputDirectory = "outputDirectory"
     static let key_usedQuotaCache = "usedQuotaCache"
     static let key_convertingConfig = "convertingConfig"
+    static let key_proxyType = "proxyType"
+    static let key_proxyServer = "proxyServer"
+    static let key_proxyPort = "proxyPort"
+    static let key_proxyUsername = "proxyUsername"
+    static let key_proxyPassword = "proxyPassword"
     
     private static let key_migrated = "migrated"
 
@@ -50,6 +131,7 @@ class AppConfig {
     /// list of target format, empty for don't convert.
     /// Just use the first element so far. Use Array for extension consider.
     private(set) var convertingConfig: [String] = []
+    private(set) var proxyConfig = ProxyConfig()
 
     private var hasMigrated = false
 
@@ -115,6 +197,14 @@ class AppConfig {
             }
             self.convertingConfig = configs
         }
+
+        proxyConfig = ProxyConfig(
+            type: ProxyType(rawValue: ud.string(forKey: AppConfig.key_proxyType) ?? ProxyType.disabled.rawValue) ?? .disabled,
+            server: ud.string(forKey: AppConfig.key_proxyServer) ?? "",
+            portText: ud.string(forKey: AppConfig.key_proxyPort) ?? "",
+            username: ud.string(forKey: AppConfig.key_proxyUsername) ?? "",
+            password: ud.string(forKey: AppConfig.key_proxyPassword) ?? ""
+        )
     }
 
     func currentUsedQuota() -> Int? {
@@ -206,5 +296,9 @@ class AppConfig {
 
     func needPreserveMetadata() -> Bool {
         return preserveCopyright || preserveCreation || preserveLocation
+    }
+
+    func proxyValidationError() -> String? {
+        proxyConfig.validationError()
     }
 }

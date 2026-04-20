@@ -16,11 +16,13 @@ struct TinyPNG4MacApp: App {
     @StateObject var appContext = AppContext.shared
     @StateObject var vm: MainViewModel = MainViewModel()
     @StateObject var debugVM: DebugViewModel = DebugViewModel.shared
-
-    @State var firstAppear: Bool = true
     @State var lastTaskCount = 0
 
     var body: some Scene {
+        let _ = appDelgate.configure(viewModel: vm) {
+            openWindow(id: "main")
+        }
+
         Window("Tiny Image", id: "main") {
             MainContentView(vm: vm)
                 .frame(
@@ -30,16 +32,6 @@ struct TinyPNG4MacApp: App {
                     minHeight: appContext.minSize.height,
                     idealHeight: appContext.minSize.height
                 )
-                .onAppear {
-                    if !firstAppear {
-                        return
-                    }
-                    firstAppear = false
-
-                    appDelgate.configure(viewModel: vm) {
-                        openWindow(id: "main")
-                    }
-                }
                 .environmentObject(appContext)
                 .environmentObject(debugVM)
         }
@@ -84,10 +76,22 @@ struct TinyPNG4MacApp: App {
 }
 
 class AppDelegate: NSObject, NSApplicationDelegate {
+    private struct PendingOpenRequest {
+        let urls: [URL]
+        let saveMode: String?
+        let outputDirectoryUrl: URL?
+    }
+
+    private enum WindowActivation {
+        static let retryDelay: TimeInterval = 0.1
+        static let maxRetryCount = 20
+    }
+
     private var vm: MainViewModel?
     private var openMainWindow: (() -> Void)?
 
-    private var pendingOpenUrls: [URL] = []
+    private var pendingOpenRequests: [PendingOpenRequest] = []
+    private var pendingBringAppToFront = false
     private var appDidFinishLaunching = false
 
     func configure(viewModel vm: MainViewModel, openMainWindow: @escaping () -> Void) {
@@ -96,23 +100,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
         self.openMainWindow = openMainWindow
 
+        bringMainWindowToFrontIfNeeded()
         tryHandleOpenUrls()
     }
 
     @objc(compressSelection:userData:error:)
     func compressSelection(_ pasteboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
-        let options: [NSPasteboard.ReadingOptionKey: Any] = [
-            .urlReadingFileURLsOnly: true,
-        ]
-        let urls = (pasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL])?
-            .map(\.standardizedFileURL) ?? []
+        handleServiceRequest(
+            pasteboard,
+            saveMode: AppConfig.saveModeNameOverwrite,
+            requiresOutputDirectorySelection: false,
+            error: error
+        )
+    }
 
-        if urls.isEmpty {
-            error.pointee = "No valid files were provided to Tiny Image." as NSString
-            return
-        }
-
-        enqueueOpenUrls(urls, bringAppToFront: true)
+    @objc(compressSelectionSaveAs:userData:error:)
+    func compressSelectionSaveAs(_ pasteboard: NSPasteboard, userData: String?, error: AutoreleasingUnsafeMutablePointer<NSString?>) {
+        handleServiceRequest(
+            pasteboard,
+            saveMode: AppConfig.saveModeNameSaveAs,
+            requiresOutputDirectorySelection: true,
+            error: error
+        )
     }
 
     func applicationDidFinishLaunching(_ notification: Notification) {
@@ -128,11 +137,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         appDidFinishLaunching = true
 
+        bringMainWindowToFrontIfNeeded()
         tryHandleOpenUrls()
     }
 
     func application(_ application: NSApplication, open urls: [URL]) {
         enqueueOpenUrls(urls, bringAppToFront: true)
+    }
+
+    func applicationDidBecomeActive(_ notification: Notification) {
+        bringMainWindowToFrontIfNeeded()
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
+        requestBringMainWindowToFront()
+        return true
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -153,38 +172,163 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     private func tryHandleOpenUrls() {
-        guard appDidFinishLaunching, let vm, !pendingOpenUrls.isEmpty else {
+        guard appDidFinishLaunching, let vm, !pendingOpenRequests.isEmpty else {
             return
         }
 
-        let urls = pendingOpenUrls
-        pendingOpenUrls.removeAll()
+        let requests = pendingOpenRequests
+        pendingOpenRequests.removeAll()
 
-        let imageUrls = FileUtils.findImageFiles(urls: urls)
-        if !imageUrls.isEmpty {
-            vm.createTasks(imageURLs: imageUrls)
+        for request in requests {
+            let imageUrls = FileUtils.findImageFiles(urls: request.urls)
+            if !imageUrls.isEmpty {
+                vm.createTasks(
+                    imageURLs: imageUrls,
+                    saveMode: request.saveMode,
+                    outputDirectoryUrl: request.outputDirectoryUrl
+                )
+            }
         }
     }
 
-    private func enqueueOpenUrls(_ urls: [URL], bringAppToFront: Bool) {
+    private func enqueueOpenUrls(
+        _ urls: [URL],
+        saveMode: String? = nil,
+        outputDirectoryUrl: URL? = nil,
+        bringAppToFront: Bool
+    ) {
         guard !urls.isEmpty else {
             return
         }
 
+        var uniqueUrls: [URL] = []
         for url in urls {
-            if !pendingOpenUrls.contains(where: { $0.isSameFilePath(as: url) }) {
-                pendingOpenUrls.append(url)
+            if !uniqueUrls.contains(where: { $0.isSameFilePath(as: url) }) {
+                uniqueUrls.append(url.standardizedFileURL)
             }
         }
 
+        pendingOpenRequests.append(
+            PendingOpenRequest(
+                urls: uniqueUrls,
+                saveMode: saveMode,
+                outputDirectoryUrl: outputDirectoryUrl
+            )
+        )
+
         DispatchQueue.main.async {
             if bringAppToFront {
-                self.openMainWindow?()
-                NSApp.activate(ignoringOtherApps: true)
-                NSApp.windows.first?.makeKeyAndOrderFront(nil)
+                self.requestBringMainWindowToFront()
             }
 
             self.tryHandleOpenUrls()
         }
+    }
+
+    private func handleServiceRequest(
+        _ pasteboard: NSPasteboard,
+        saveMode: String,
+        requiresOutputDirectorySelection: Bool,
+        error: AutoreleasingUnsafeMutablePointer<NSString?>
+    ) {
+        let urls = extractFileUrls(from: pasteboard)
+        if urls.isEmpty {
+            error.pointee = "No valid files were provided to Tiny Image." as NSString
+            return
+        }
+
+        let outputDirectoryUrl: URL?
+        if requiresOutputDirectorySelection {
+            guard let selectedDirectory = selectServiceOutputDirectory() else {
+                return
+            }
+            outputDirectoryUrl = selectedDirectory
+        } else {
+            outputDirectoryUrl = nil
+        }
+
+        enqueueOpenUrls(
+            urls,
+            saveMode: saveMode,
+            outputDirectoryUrl: outputDirectoryUrl,
+            bringAppToFront: true
+        )
+    }
+
+    private func extractFileUrls(from pasteboard: NSPasteboard) -> [URL] {
+        let options: [NSPasteboard.ReadingOptionKey: Any] = [
+            .urlReadingFileURLsOnly: true,
+        ]
+        return (pasteboard.readObjects(forClasses: [NSURL.self], options: options) as? [URL])?
+            .map(\.standardizedFileURL) ?? []
+    }
+
+    private func selectServiceOutputDirectory() -> URL? {
+        let panel = NSOpenPanel()
+        panel.canChooseFiles = false
+        panel.canChooseDirectories = true
+        panel.allowsMultipleSelection = false
+        panel.canCreateDirectories = true
+        panel.directoryURL = AppContext.shared.appConfig.outputDirectoryUrl ??
+            FileManager.default.urls(for: .downloadsDirectory, in: .userDomainMask).first
+        panel.title = String(localized: "Select output directory")
+        panel.prompt = String(localized: "Select")
+
+        NSApp.activate(ignoringOtherApps: true)
+
+        guard panel.runModal() == .OK else {
+            return nil
+        }
+
+        return panel.url?.standardizedFileURL
+    }
+
+    private func requestBringMainWindowToFront() {
+        pendingBringAppToFront = true
+        bringMainWindowToFrontIfNeeded()
+    }
+
+    private func bringMainWindowToFrontIfNeeded(retryCount: Int = WindowActivation.maxRetryCount) {
+        guard pendingBringAppToFront else {
+            return
+        }
+
+        openMainWindow?()
+        NSApp.setActivationPolicy(.regular)
+        NSApp.unhide(nil)
+        NSRunningApplication.current.activate(options: [.activateAllWindows, .activateIgnoringOtherApps])
+        NSApp.activate(ignoringOtherApps: true)
+
+        if let window = preferredWindowForForegrounding() {
+            if window.isMiniaturized {
+                window.deminiaturize(nil)
+            }
+            window.orderFrontRegardless()
+            window.makeKeyAndOrderFront(nil)
+
+            if isWindowFrontmost(window) {
+                pendingBringAppToFront = false
+                return
+            }
+        }
+
+        guard retryCount > 0 else {
+            return
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + WindowActivation.retryDelay) { [weak self] in
+            self?.bringMainWindowToFrontIfNeeded(retryCount: retryCount - 1)
+        }
+    }
+
+    private func preferredWindowForForegrounding() -> NSWindow? {
+        NSApp.windows.first(where: { $0.title == "Tiny Image" && !$0.isMiniaturized }) ??
+            NSApp.windows.first(where: { $0.isVisible && !$0.isMiniaturized }) ??
+            NSApp.windows.first(where: { !$0.isMiniaturized }) ??
+            NSApp.windows.first
+    }
+
+    private func isWindowFrontmost(_ window: NSWindow) -> Bool {
+        NSApp.isActive && window.isVisible && (window.isKeyWindow || window == NSApp.keyWindow || window == NSApp.mainWindow)
     }
 }
